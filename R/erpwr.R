@@ -1,4 +1,4 @@
-pEC <- function (
+pSR <- function (
   # m0 = 80, m1 = 88, sigma = 10, n = 25, sig = 0.05,
   m0 = 0, m1 = 4, sigma = 1, n = 1, sig = 0.05,
   H0 = TRUE, H1 = TRUE, body = TRUE, tail = TRUE, beta = TRUE, power = TRUE,
