@@ -2,13 +2,13 @@ This r package is only for testing.
 
 To install this package,
 
-First, you need the `r` package `devtools`
+First, you need to install the `r` package `devtools`
 ```r
 install.packages("devtools")
 ```
 
-Second, you can use this package from github:
+Second, you will use the installed package `devtools` to install this `acqr` package from github:
 
 ```r
-devtools::install_github('https://github.com/likanzhan/acqr')
+devtools::install_github('likanzhan/acqr')
 ```
