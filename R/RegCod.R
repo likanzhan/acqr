@@ -24,7 +24,9 @@ ifelse(RowCol[, "C"] == j, 1, 0))
 }
 for (i in 1:(RowLen - 1)) for (j in 1:(ColLen - 1)){
 RowCol[, paste("R", i, "C", j, sep = "")] <-
-RowCol[, paste("R", i, sep = "")] * RowCol[, paste("C", j, sep = "")]
+as.numeric(
+RowCol[, paste("R", i, sep = "")] * 
+RowCol[, paste("C", j, sep = "")] )
 }
 return(RowCol)
 }
