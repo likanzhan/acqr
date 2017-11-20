@@ -77,3 +77,12 @@ ppp <- function(){#
 }
 ppp
 ppp()
+library(acqr)
+IntAcMain()
+IntAcMain(data=c(1,1,1,2,2,2))
+IntAcMain(data=c(1,1,1,1.1,1.1,1.1))
+IntAcMain(data=c(1,2,3,2,3,4))
+IntAcMain(data=c(2,2,3,3,3,4))
+IntAcMain(data=c(2,2,5,3,3,6))
+IntAcMain(data=c(2,2,5,4,4,7))
+IntAcMain(data=c(2,2,5,4,4,7))
