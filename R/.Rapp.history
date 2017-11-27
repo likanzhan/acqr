@@ -85,4 +85,165 @@ IntAcMain(data=c(1,2,3,2,3,4))
 IntAcMain(data=c(2,2,3,3,3,4))
 IntAcMain(data=c(2,2,5,3,3,6))
 IntAcMain(data=c(2,2,5,4,4,7))
-IntAcMain(data=c(2,2,5,4,4,7))
+RegCod <- #
+function (#
+RowLevel = 2, #
+ColLevel = 3, #
+Dummy = TRUE, #
+RowNumber = 1, #
+ColNumber = 1#
+) {#
+Baseline <- ifelse(Dummy, 0, -1) #
+RowData <- gl(RowLevel, RowNumber)#
+ColData <- gl(ColLevel, ColNumber)#
+RowLen <- nlevels(RowData)#
+ColLen <- nlevels(ColData)#
+RowCol <- expand.grid(C = ColData, R = RowData)#
+RowCol <- RowCol[, c(2, 1)]#
+rownames(RowCol) <- paste("mu", RowCol[,"C"], RowCol[, "R"], sep = "")#
+if (RowLen >= 2){#
+for (i in 1:(RowLen - 1)){#
+RowCol[, paste("R", i, sep = "")] <-#
+ifelse(RowCol[, "R"] == RowLen, Baseline,#
+ifelse(RowCol[, "R"] == i, 1, 0))#
+}	#
+}#
+if (ColLen >= 2){#
+for (j in 1:(ColLen - 1)){#
+RowCol[, paste("C", j,  sep = "")] <-#
+ifelse(RowCol[, "C"] == ColLen, Baseline,#
+ifelse(RowCol[, "C"] == j, 1, 0))#
+}	#
+}#
+if (RowLen >=2 & ColLen >= 2){#
+for (i in 1:(RowLen - 1)) for (j in 1:(ColLen - 1)){#
+RowCol[, paste("R", i, "C", j, sep = "")] <-#
+RowCol[, paste("R", i, sep = "")] * #
+RowCol[, paste("C", j, sep = "")]#
+}	#
+}#
+return(RowCol)#
+}
+RegCod()
+RegCod <- #
+function (#
+RowLevel = 2, #
+ColLevel = 3, #
+Dummy = TRUE, #
+RowNumber = 1, #
+ColNumber = 1#
+) {#
+Baseline <- ifelse(Dummy, 0, -1) #
+RowData <- gl(RowLevel, RowNumber)#
+ColData <- gl(ColLevel, ColNumber)#
+RowLen <- nlevels(RowData)#
+ColLen <- nlevels(ColData)#
+RowCol <- expand.grid(C = ColData, R = RowData)#
+RowCol <- RowCol[, c(2, 1)]#
+rownames(RowCol) <- paste("mu", RowCol[,"C"], RowCol[, "R"], sep = "")#
+if (RowLen >= 2){#
+for (i in 1:(RowLen - 1)){#
+RowCol[, paste("R", i, sep = "")] <-#
+ifelse(RowCol[, "R"] == RowLen, Baseline,#
+ifelse(RowCol[, "R"] == i, 1, 0))#
+}	#
+}#
+if (ColLen >= 2){#
+for (j in 1:(ColLen - 1)){#
+RowCol[, paste("C", j,  sep = "")] <-#
+ifelse(RowCol[, "C"] == ColLen, Baseline,#
+ifelse(RowCol[, "C"] == j, 1, 0))#
+}	#
+}#
+if (RowLen >=2 & ColLen >= 2){#
+for (i in 1:(RowLen - 1)) for (j in 1:(ColLen - 1)){#
+RowCol[, paste("R", i, "C", j, sep = "")] <-#
+RowCol[, paste("R", i, sep = "")] * #
+RowCol[, paste("C", j, sep = "")]#
+}	#
+}#
+#
+mm <- RowCol[, -c(1:2)]#
+mm <- cbind(mu0 = 1, mm)#
+mminv <- solve(mm)#
+#
+res <- list(RowCol = RowCol, mm = mm, mminv = mminv)#
+return(res)#
+}
+RegCod()
+RegCod(4,4)
+RegCod(4,4)
+RegCod <- #
+function (#
+RowLevel = 2, #
+ColLevel = 3, #
+Dummy = TRUE, #
+RowNumber = 1, #
+ColNumber = 1#
+) {#
+Baseline <- ifelse(Dummy, 0, -1) #
+RowData <- gl(RowLevel, RowNumber)#
+ColData <- gl(ColLevel, ColNumber)#
+RowLen <- nlevels(RowData)#
+ColLen <- nlevels(ColData)#
+RowCol <- expand.grid(C = ColData, R = RowData)#
+RowCol <- RowCol[, c(2, 1)]#
+rownames(RowCol) <- paste("mu", RowCol[, "R"], RowCol[, "C"],  sep = "")#
+if (RowLen >= 2){#
+for (i in 1:(RowLen - 1)){#
+RowCol[, paste("R", i, sep = "")] <-#
+ifelse(RowCol[, "R"] == RowLen, Baseline,#
+ifelse(RowCol[, "R"] == i, 1, 0))#
+}	#
+}#
+if (ColLen >= 2){#
+for (j in 1:(ColLen - 1)){#
+RowCol[, paste("C", j,  sep = "")] <-#
+ifelse(RowCol[, "C"] == ColLen, Baseline,#
+ifelse(RowCol[, "C"] == j, 1, 0))#
+}	#
+}#
+if (RowLen >=2 & ColLen >= 2){#
+for (i in 1:(RowLen - 1)) for (j in 1:(ColLen - 1)){#
+RowCol[, paste("R", i, "C", j, sep = "")] <-#
+RowCol[, paste("R", i, sep = "")] * #
+RowCol[, paste("C", j, sep = "")]#
+}	#
+}#
+#
+mm <- RowCol[, -c(1:2)]#
+mm <- cbind(mu0 = 1, mm)#
+mminv <- solve(mm)#
+#
+res <- list(RowCol = RowCol, mm = mm, mminv = mminv)#
+return(res)#
+}
+RegCod(4,4)
+RegCod(4,1)
+RegCod(1,4)
+RegCod(1,4, Dummy=F)
+RegCod(1, 5, Dummy=F)
+RegCod(1, 6, Dummy=F)
+RegCod(1, 5, Dummy=F)
+RegCod(1, 5, Dummy=F)[,"RowCol"]
+RegCod(1, 5, Dummy=F)[["RowCol"]]
+RegCod(1, 5, Dummy=F)[["mm"]]
+RegCod(1, 5, Dummy=F)[["mminv"]]
+RegCod(1, 5, Dummy=T)[["mminv"]]
+RegCod(1, 5, Dummy=T,ColNumber=5)[["mminv"]]
+RegCod(1, 5, Dummy=T, ColNumber=5)[["mminv"]]
+RegCod(1, 5, Dummy=T)[["mminv"]]
+RegCod(1, 5, Dummy=T)[["mminv"]]
+RegCod(1, 5, Dummy=T)
+RegCod(1, 5, Dummy=F)
+RegCod(2, 5, Dummy=F)
+RegCod(2, 5, Dummy=T)
+RegCod(3, 3, Dummy=T)
+RegCod(3, 3, Dummy=F)
+RegCod(4, 4, Dummy=F)
+RegCod(2, 2, Dummy=F)
+RegCod(2, 3, Dummy=F)
+RegCod(4, 4, Dummy=F)
+RegCod(4, 2, Dummy=F)
+RegCod(4, 2, Dummy=T)
+RegCod
