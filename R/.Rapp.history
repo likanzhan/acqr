@@ -172,7 +172,6 @@ return(res)#
 }
 RegCod()
 RegCod(4,4)
-RegCod(4,4)
 RegCod <- #
 function (#
 RowLevel = 2, #
@@ -233,7 +232,6 @@ RegCod(1, 5, Dummy=T)[["mminv"]]
 RegCod(1, 5, Dummy=T,ColNumber=5)[["mminv"]]
 RegCod(1, 5, Dummy=T, ColNumber=5)[["mminv"]]
 RegCod(1, 5, Dummy=T)[["mminv"]]
-RegCod(1, 5, Dummy=T)[["mminv"]]
 RegCod(1, 5, Dummy=T)
 RegCod(1, 5, Dummy=F)
 RegCod(2, 5, Dummy=F)
@@ -247,3 +245,5 @@ RegCod(4, 4, Dummy=F)
 RegCod(4, 2, Dummy=F)
 RegCod(4, 2, Dummy=T)
 RegCod
+library(acqr)
+RegCod()
