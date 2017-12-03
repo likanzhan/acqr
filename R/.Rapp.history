@@ -247,3 +247,271 @@ RegCod(4, 2, Dummy=T)
 RegCod
 library(acqr)
 RegCod()
+StudRes <- function(formula, data){#
+ if ( class(formula) == "lm") {#
+  fm <- formula#
+  data <- formula[["model"]]#
+} else {	#
+  fm <- lm(formula, data = data)#
+  data <- data	#
+}#
+  n <- nrow(model.matrix(formula))#
+  k <- ncol(model.matrix(formula)) - 1#
+  SRI <- function (i) {#
+	 Rei <- residuals(fm)[i]#
+     SEi <- sqrt (deviance(update(fm, data = data[-i, ])) / (n - k - 2))#
+     Hi <- hatvalues(fm)[i]#
+	 StuResi <- Rei / (SEi * sqrt(1 - Hi))#
+	 return(StuResi)#
+  }	#
+  StuRes <- sapply(1:n, FUN = SRI)#
+  p.val <- 2 * pt(abs(StuRes), n - k - 2, lower.tail = FALSE)#
+  adjusted.p <- 1 - (1 - p.val) ^ n#
+  Bonfer.p <- 2 * n * p.val / 2#
+  StudRes <- data.frame(#
+    Student.Res = StuRes, #
+    p.values = p.val, #
+    Bonfer.p = Bonfer.p)#
+  return(StudRes)#
+}
+suppressWarnings(suppressMessages(library(car)))#
+Davis <- Davis[!is.na (Davis[, "repwt"]), ]#
+Davis[, "sex"] <- factor(#
+   Davis[, "sex"], levels = c("M", "F"))#
+fm1101 <- lm(repwt ~ weight * sex, data = Davis)
+rstudent(fm1101)#
+StudRes(fm1101)
+rstudent(fm1101)#
+StudRes(repwt ~ weight * sex, data = Davis)
+StudRes <- function(formula, data){#
+ if ( class(formula) == "lm") {#
+  fm <- formula#
+  data <- formula[["model"]]#
+} else {	#
+  fm <- lm(formula, data = data)#
+}#
+  n <- nrow(model.matrix(fm))#
+  k <- ncol(model.matrix(fm)) - 1#
+  SRI <- function (i) {#
+	 Rei <- residuals(fm)[i]#
+     SEi <- sqrt (deviance(update(fm, data = data[-i, ])) / (n - k - 2))#
+     Hi <- hatvalues(fm)[i]#
+	 StuResi <- Rei / (SEi * sqrt(1 - Hi))#
+	 return(StuResi)#
+  }	#
+  StuRes <- sapply(1:n, FUN = SRI)#
+  p.val <- 2 * pt(abs(StuRes), n - k - 2, lower.tail = FALSE)#
+  adjusted.p <- 1 - (1 - p.val) ^ n#
+  Bonfer.p <- 2 * n * p.val / 2#
+  StudRes <- data.frame(#
+    Student.Res = StuRes, #
+    p.values = p.val, #
+    Bonfer.p = Bonfer.p)#
+  return(StudRes)#
+}
+rstudent(fm1101)#
+StudRes(repwt ~ weight * sex, data = Davis)
+rstudent(fm1101)#
+StudRes(fm1101)
+MeanShift <- function(formula, data) {#
+ if (class(formula) == "lm") {#
+  fmO <- formula#
+  data <- formula[["model"]]#
+ } else {	#
+  fmO <- lm(formula, data = data)#
+ }#
+MeanShiftI <- function (i) {#
+data[, "D"] <- replace(rep(0, nrow(data)), i, 1)#
+fmN <- update(fmO, .~. + D)#
+fmNS <- summary(fmN)#
+res <- as.data.frame(coefficients(fmNS))["D", ]#
+res[, "adj.p"] <-  2 * nrow(data) * res[, 4] / 2#
+return(res)#
+}	#
+  MeanShift <- sapply(1:nrow(data), FUN = MeanShiftI)	#
+  MeanShift <- t(MeanShift)#
+  return(MeanShift)#
+}
+library(car)#
+Davis <- Davis[!is.na (Davis[, "repwt"]), ]#
+Davis[, "sex"] <- factor(#
+   Davis[, "sex"], levels = c("M", "F"))#
+fm01 <- lm(repwt ~ weight * sex, data = Davis)#
+rstudent(fm01)#
+MeanShift(repwt ~ weight * sex, data = Davis)#
+MeanShift(fm01)#
+#
+fm02 <- lm(prestige ~ education + income, data = Duncan)#
+rstudent(fm02)#
+MeanShift(prestige ~ education + income, data = Duncan)#
+MeanShift(fm02)
+MeanShift <- function(formula, data) {#
+ if (class(formula) == "lm") {#
+  fmO <- formula#
+  data <- formula[["model"]]#
+ } else {	#
+  fmO <- lm(formula, data = data)#
+ }#
+MeanShiftI <- function (i) {#
+data[, "D"] <- replace(rep(0, nrow(data)), i, 1)#
+fmN <- update(fmO, .~. + D, data = data)#
+fmNS <- summary(fmN)#
+res <- as.data.frame(coefficients(fmNS))["D", ]#
+res[, "adj.p"] <-  2 * nrow(data) * res[, 4] / 2#
+return(res)#
+}	#
+  MeanShift <- sapply(1:nrow(data), FUN = MeanShiftI)	#
+  MeanShift <- t(MeanShift)#
+  return(MeanShift)#
+}
+library(car)#
+Davis <- Davis[!is.na (Davis[, "repwt"]), ]#
+Davis[, "sex"] <- factor(#
+   Davis[, "sex"], levels = c("M", "F"))#
+fm01 <- lm(repwt ~ weight * sex, data = Davis)#
+rstudent(fm01)#
+MeanShift(repwt ~ weight * sex, data = Davis)#
+MeanShift(fm01)#
+#
+fm02 <- lm(prestige ~ education + income, data = Duncan)#
+rstudent(fm02)#
+MeanShift(prestige ~ education + income, data = Duncan)#
+MeanShift(fm02)
+libraru(acqr)
+library(acqr)
+fm02 <- lm(prestige ~ education + income, data = Duncan)#
+rstudent(fm02)#
+MeanShift(prestige ~ education + income, data = Duncan)#
+MeanShift(fm02)
+library(car)
+fm02 <- lm(prestige ~ education + income, data = Duncan)#
+rstudent(fm02)#
+MeanShift(prestige ~ education + income, data = Duncan)#
+MeanShift(fm02)
+fm02 <- lm(prestige ~ education + income, data = Duncan)#
+rstudent(fm02)#
+MeanShift(prestige ~ education + income, data = Duncan)#
+StudRes(fm02)
+suppressWarnings(suppressMessages(library(car)))#
+Davis <- Davis[!is.na (Davis[, "repwt"]), ]#
+Davis[, "sex"] <- factor(#
+   Davis[, "sex"], levels = c("M", "F"))#
+fm1101 <- lm(repwt ~ weight * sex, data = Davis)
+MeanShift <- function(formula, data) {#
+ if (class(formula) == "lm") {#
+  fmO <- formula#
+  data <- formula[["model"]]#
+ } else {	#
+  fmO <- lm(formula, data = data)#
+ }#
+MeanShiftI <- function (i) {#
+data[, "D"] <- replace(rep(0, nrow(data)), i, 1)#
+fmN <- update(fmO, .~. + D, data = data)#
+fmNS <- summary(fmN)#
+res <- coefficients(fmNS)["D", c(3:4)]#
+#res["Bonfer.p", ] <-  2 * nrow(data) * res[2, ] / 2#
+return(res)#
+}	#
+  MeanShift <- sapply(1:nrow(data), FUN = MeanShiftI)#
+  MeanShift <- t(MeanShift)#
+  #MeanShift[, 3] <- 2 * nrow(data) * MeanShift[, 2] / 2#
+  #colnames(MeanShift) <- c("Student.Res", "p.values", "Bonfer.p")#
+#  MeanShift <- as.matrix(MeanShift, nrow = nrow(data), byrow = FALSE)#
+#  MeanShift <- as.data.frame(MeanShift)#
+#  colnames(MeanShift) <- c("Student.Res", "p.values", "Bonfer.p")	#
+  return(MeanShift)#
+}
+sr<-MeanShift(fm1101)
+str(sr)
+as.data.frame(sr)
+MeanShift <- function(formula, data) {#
+ if (class(formula) == "lm") {#
+  fmO <- formula#
+  data <- formula[["model"]]#
+ } else {	#
+  fmO <- lm(formula, data = data)#
+ }#
+MeanShiftI <- function (i) {#
+data[, "D"] <- replace(rep(0, nrow(data)), i, 1)#
+fmN <- update(fmO, .~. + D, data = data)#
+fmNS <- summary(fmN)#
+res <- coefficients(fmNS)["D", c(3:4)]#
+#res["Bonfer.p", ] <-  2 * nrow(data) * res[2, ] / 2#
+return(res)#
+}	#
+  MeanShift <- sapply(1:nrow(data), FUN = MeanShiftI)#
+  MeanShift <- as.data.frame(t(MeanShift))#
+  MeanShift[, 3] <- 2 * nrow(data) * MeanShift[, 2] / 2#
+  #colnames(MeanShift) <- c("Student.Res", "p.values", "Bonfer.p")#
+#  MeanShift <- as.matrix(MeanShift, nrow = nrow(data), byrow = FALSE)#
+#  MeanShift <- as.data.frame(MeanShift)#
+#  colnames(MeanShift) <- c("Student.Res", "p.values", "Bonfer.p")	#
+  return(MeanShift)#
+}
+sr<-MeanShift(fm1101)
+str(sr)
+MeanShift <- function(formula, data) {#
+ if (class(formula) == "lm") {#
+  fmO <- formula#
+  data <- formula[["model"]]#
+ } else {	#
+  fmO <- lm(formula, data = data)#
+ }#
+MeanShiftI <- function (i) {#
+data[, "D"] <- replace(rep(0, nrow(data)), i, 1)#
+fmN <- update(fmO, .~. + D, data = data)#
+fmNS <- summary(fmN)#
+res <- coefficients(fmNS)["D", c(3:4)]#
+#res["Bonfer.p", ] <-  2 * nrow(data) * res[2, ] / 2#
+return(res)#
+}	#
+  MeanShift <- sapply(1:nrow(data), FUN = MeanShiftI)#
+  MeanShift <- as.data.frame(t(MeanShift))#
+  MeanShift[, 3] <- 2 * nrow(data) * MeanShift[, 2] / 2#
+  colnames(MeanShift) <- c("Student.Res", "p.values", "Bonfer.p")	#
+  return(MeanShift)#
+}
+sr<-MeanShift(fm1101)
+str(sr)
+library(acqr)
+JointInfl
+?JointInfl
+cor(Duncan)
+library(car)
+cor(Duncan)
+str(Duncan)
+str(Duncan[, -"type"])
+str(Duncan[, -c("type")])
+Duncan[, -c("type")]
+Duncan[, -1]
+str(Duncan[, -1])
+cor(Duncan[, -1])
+cor(Duncan[, -c("type")])
+cor(Duncan[, -1])
+?summary
+methods(class="summary.lm")
+methods(summary.lm)
+?summary.lm
+?plot
+?plot.fwdlm
+library(foward)
+install.packages(forward)
+install.packages("forward", dependencies=T)
+library(foward)
+library(forward)
+?fwdlm
+suppressWarnings(suppressMessages(library(forward)))#
+fm1107 <- fwdlm(prestige ~ -1 + education + income, data = Duncan, trace = FALSE)#
+summary(fm1107)
+fm1107
+Duncan[6, ]
+Duncan[15, ]
+Duncan[16, ]
+str(fm1107)
+fm1107[["Unit"]]
+x<-fm1107[["Unit"]]
+str(x)
+x<-fm1107[["Unit"]][41:44]
+x
+fm1107$Unit
+fm1107
