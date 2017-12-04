@@ -1,0 +1,1350 @@
+cooks.distance(fm1101)
+suppressWarnings(suppressMessages(library(car)))#
+Davis <- Davis[!is.na (Davis[, "repwt"]), ]#
+Davis[, "sex"] <- factor(#
+   Davis[, "sex"], levels = c("M", "F"))#
+fm1101 <- lm(repwt ~ weight * sex, data = Davis)
+cooks.distance(fm1101)
+sort(cooks.distance(fm1101))
+sort(cooks.distance(fm1101), decreasing = TRUE)[1:2]
+order(cooks.distance(fm1101), decreasing = TRUE)
+?dfbetas
+?dfbetas
+?nfluence.measures (
+.
+w
+?influence.measures
+influence.measures(fm1101)
+x<-influence.measures(fm1101)
+str(x)
+head(x, 3)
+str(x)
+head(x)
+head(x, 3)
+head(x, c(3,3,3))
+?hatvalues
+hat <- hatvalues(fm1101)#
+covratio <- covratio(fm1101)#
+plot(covratio ~ hat, xlab = "hat-values", ylab = "COVRATIO")#
+text(hat ^ 2 >= 0.15], hat ^ 2 >= 0.15], #
+     row.names(hat)[hat >= 0.15],   adj = 1.3)
+hat <- hatvalues(fm1101)#
+covratio <- covratio(fm1101)#
+plot(covratio ~ hat, xlab = "hat-values", ylab = "COVRATIO")#
+text(hat ^ 2 >= 0.15, hat ^ 2 >= 0.15, #
+     row.names(hat)[hat >= 0.15],   adj = 1.3)
+hat <- hatvalues(fm1101)#
+covratio <- covratio(fm1101)#
+plot(covratio ~ hat, xlab = "hat-values", ylab = "COVRATIO")#
+text(hat ^ 2 >= 0.15], hat * covratio >= 0.15], #
+     row.names(hat)[hat >= 0.15],   adj = 1.3)
+hat <- hatvalues(fm1101)#
+covratio <- covratio(fm1101)#
+plot(covratio ~ hat, xlab = "hat-values", ylab = "COVRATIO")#
+text(hat ^ 2 >= 0.15, hat * covratio >= 0.15, #
+     row.names(hat)[hat >= 0.15],   adj = 1.3)
+hat <- hatvalues(fm1101)#
+covratio <- covratio(fm1101)#
+plot(covratio ~ hat, xlab = "hat-values", ylab = "COVRATIO")#
+text(hat >= 0.15, covratio >= 0.15, #
+     row.names(hat)[hat >= 0.15],   adj = 1.3)
+im1105 <- influence.measures(fm1105)[["infmat"]]
+im1105 <- influence.measures(fm1101)[["infmat"]]
+im1105
+im1105[, "hat"][im1105[, "hat"]
+>=0.15]
+hat <- hatvalues(fm1101)#
+covratio <- covratio(fm1101)#
+plot(covratio ~ hat, xlab = "hat-values", ylab = "COVRATIO")#
+text(hat[hat >= 0.15], covratio[covratio >= 0.15], #
+     row.names(hat)[hat >= 0.15],   adj = 1.3)
+hat <- hatvalues(fm1101)#
+covratio <- covratio(fm1101)#
+plot(covratio ~ hat, xlab = "hat-values", ylab = "COVRATIO")#
+text(hat[hat >= 0.15], covratio[covratio >= 0.15], #
+     row.names(hat)[hat >= 0.15],   adj = 1.3)
+?text
+?text
+hat <- hatvalues(fm1101)#
+covratio <- covratio(fm1101)#
+plot(covratio ~ hat, xlab = "hat-values", ylab = "COVRATIO")#
+text(x = hat[hat >= 0.15], #
+     y = covratio[covratio >= 0.15], #
+     labels =row.names(hat)[hat >= 0.15], adj = 1.3)
+hat <- hatvalues(fm1101)#
+covratio <- covratio(fm1101)#
+plot(covratio ~ hat, xlab = "hat-values", ylab = "COVRATIO")#
+text(x = hat[hat >= 0.15], #
+     y = covratio[covratio >= 0.15], #
+     labels =row.names(hat)[hat >= 0.15], adj = 1.3)
+hat <- hatvalues(fm1101)#
+covratio <- covratio(fm1101)#
+plot(covratio ~ hat, xlab = "hat-values", ylab = "COVRATIO")#
+text(x = hat[hat >= 0.1], #
+     y = covratio[covratio >= 0.15], #
+     labels =row.names(hat)[hat >= 0.15], adj = 1.3)
+hat <- hatvalues(fm1101)#
+covratio <- covratio(fm1101)#
+plot(covratio ~ hat, xlab = "hat-values", ylab = "COVRATIO")#
+text(x = hat[hat >= 0.15], #
+     y = covratio[covratio >= 0.15], #
+     labels =row.names(hat)[hat >= 0.15], adj = 1.3)
+row.names(hat)
+rownames(hat)
+hat <- hatvalues(fm1101)#
+covratio <- covratio(fm1101)#
+plot(covratio ~ hat, xlab = "hat-values", ylab = "COVRATIO")#
+text(x = hat[hat >= 0.15], #
+     y = covratio[covratio >= 0.15], #
+     labels =row.names(fm1101[["model"]])[hat >= 0.15], adj = 1.3)
+hat <- hatvalues(fm1101)#
+covratio <- covratio(fm1101)#
+plot(covratio ~ hat, xlab = "hat-values", ylab = "COVRATIO")#
+text(x = hat[hat >= 0.15], #
+     y = covratio[covratio >= 0.15], #
+     labels =row.names(fm1101[["model"]])[hat >= 0.15], adj = 1.3)
+row.names(fm1101[["model"]])
+fm(model)
+hat <- hatvalues(fm1101)#
+covratio <- covratio(fm1101)#
+plot(covratio ~ hat, xlab = "hat-values", ylab = "COVRATIO")#
+text(x = hat[hat >= 0.15], #
+     y = covratio[covratio >= 0.15], #
+     labels =row.names(influence.measures(fm1105))[hat >= 0.15], #
+     adj = 1.3)
+hat <- hatvalues(fm1101)#
+covratio <- covratio(fm1101)#
+plot(covratio ~ hat, xlab = "hat-values", ylab = "COVRATIO")#
+text(x = hat[hat >= 0.15], #
+     y = covratio[covratio >= 0.15], #
+     labels =row.names(influence.measures(fm1101))[hat >= 0.15], #
+     adj = 1.3)
+im1105 <- influence.measures(fm1105)[["infmat"]]
+im1105 <- influence.measures(fm1101)[["infmat"]]
+im1105
+hatvalues(fm1101)
+ht>-hatvalues(fm1101)
+ht<-hatvalues(fm1101)
+str(ht)
+hat <- hatvalues(fm1101)#
+covratio <- covratio(fm1101)#
+plot(covratio ~ hat, xlab = "hat-values", ylab = "COVRATIO")#
+text(x = hat[hat >= 0.15], #
+     y = covratio[covratio >= 0.15], #
+     labels =names(ht)[hat >= 0.15], #
+     adj = 1.3)
+names(ht)[hat >= 0.15]
+hat[hat >= 0.15]
+covratio[covratio >= 0.15]
+hat <- hatvalues(fm1101)#
+covratio <- covratio(fm1101)#
+plot(covratio ~ hat, xlab = "hat-values", ylab = "COVRATIO")#
+text(x = hat[hat >= 0.15], #
+     y = covratio[hat >= 0.15], #
+     labels =names(ht)[hat >= 0.15], #
+     adj = 1.3)
+hat <- hatvalues(fm1105)
+fm1105 <- lm(prestige ~ education + income, data = Duncan)
+hat <- hatvalues(fm1105)
+hat
+names(hat)
+points <- c(7, 8, 7, 9)
+Points <- matrix(points, nrow = 2, byrow = FALSE)
+Points
+n <- 5#
+slope <- 1#
+NP <- c(7, 8, 7, 9)#
+#
+XO <- 1:n#
+YO <- slope * X#
+Points <- matrix(points, nrow = 2, byrow = FALSE)#
+XN <- c(XO, points[1, ])#
+YN <- c(YO, Points[2, ])
+n <- 5#
+slope <- 1#
+NP <- c(7, 8, 7, 9)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(points, nrow = 2, byrow = FALSE)#
+XN <- c(XO, points[1, ])#
+YN <- c(YO, Points[2, ])
+Xn <- 5#
+slope <- 1#
+NP <- c(7, 8, 7, 9)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(points, nrow = 2, byrow = FALSE)#
+XN <- c(XO, Points[1, ])#
+YN <- c(YO, Points[2, ])
+n <- 5#
+slope <- 1#
+NP <- c(7, 8, 7, 9)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(points, nrow = 2, byrow = FALSE)#
+XN <- c(XO, Points[1, ])#
+YN <- c(YO, Points[2, ])
+XN
+TN
+YN
+n <- 5#
+slope <- 1#
+NP <- c(7, 8, 7, 9)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(points, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XO, XN)#
+YT <- c(YO, YN)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 19, 1:length(XN))#
+     )
+n <- 5#
+slope <- 1#
+NP <- c(7, 8, 7, 9)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(points, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XO, XN)#
+YT <- c(YO, YN)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 2, 3:length(XN))#
+     )
+?pch
+n <- 5#
+slope <- 1#
+NP <- c(7, 8, 7, 9)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(points, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XO, XN)#
+YT <- c(YO, YN)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 2, c(21, 16, 10)[1:length(XN)])#
+     )
+n <- 5#
+slope <- 1#
+NP <- c(7, 8, 7, 9)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(points, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XO, XN)#
+YT <- c(YO, YN)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(21, 16, 10)[1:length(XN)])#
+     )
+c(21, 16, 10)[1]
+c(21, 16, 10)[1]
+c(21, 16, 10)[1:2]
+c(21, 16, 10)[1:2]
+XN
+length(XN)
+length(XN)
+n <- 5#
+slope <- 1#
+NP <- c(7, 8, 7, 9)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(points, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XO, XN)#
+YT <- c(YO, YN)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(21, 16, 10)[1:length(XN)])#
+     )
+n <- 5#
+slope <- 1#
+NP <- c(7, 8, 7, 9)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(points, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XO, XN)#
+YT <- c(YO, YN)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(21, 16, 10)[length(XN)])#
+     )
+n <- 5#
+slope <- 1#
+NP <- c(7, 8, 7, 9)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(points, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XO, XN)#
+YT <- c(YO, YN)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(21, 16, 10)[1:length(XN)])#
+     )
+n <- 5#
+slope <- 1#
+NP <- c(7, 8, 7, 9)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(points, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XO, XN)#
+YT <- c(YO, YN)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(21, 16, 10)[1:length(XN)])#
+     )
+n <- 5#
+slope <- 1#
+NP <- c(7, 8, 7, 9)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(points, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XO, XN)#
+YT <- c(YO, YN)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(22, 16, 10)[1:length(XN)])#
+     )
+n <- 5#
+slope <- 1#
+NP <- c(7, 8, 7, 9)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(points, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XO, XN)#
+YT <- c(YO, YN)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(21, 16, 10)[1:length(XN)])#
+     )
+n <- 5#
+slope <- 1#
+NP <- c(7, 8, 7, 9)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(points, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XO, XN)#
+YT <- c(YO, YN)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )
+n <- 5#
+slope <- 1#
+NP <- c(7, 8, 7, 9)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(points, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XO, XN)#
+YT <- c(YO, YN)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+abline(lm(YO ~ XO), lty = 1)
+n <- 5#
+slope <- -1#
+NP <- c(7, 8, 7, 9)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(points, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XO, XN)#
+YT <- c(YO, YN)
+n <- 5#
+slope <- -1#
+NP <- c(7, 8, 7, 9)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(points, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XO, XN)#
+YT <- c(YO, YN)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+abline(lm(YO ~ XO), lty = 1)
+n <- 5#
+slope <- -1#
+NP <- c(7, 8, 7, 9)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(points, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XO, XN)#
+YT <- c(YO, YN)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+abline(lm(YO ~ XO), lty = 1)
+n <- 5#
+slope <- -2#
+NP <- c(7, 8, 7, 9)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(points, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XO, XN)#
+YT <- c(YO, YN)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+abline(lm(YO ~ XO), lty = 1)
+n <- 5#
+slope <- -1#
+NP <- c(7, 6, 7, 5)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(points, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XO, XN)#
+YT <- c(YO, YN)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+abline(lm(YO ~ XO), lty = 1)
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 1)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(points, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XO, XN)#
+YT <- c(YO, YN)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+abline(lm(YO ~ XO), lty = 1)
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 1)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XO, XN)#
+YT <- c(YO, YN)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+abline(lm(YO ~ XO), lty = 1)
+n <- 5#
+slope <- -1#
+NP <- c(7, 2, 7, 1)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XO, XN)#
+YT <- c(YO, YN)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+abline(lm(YO ~ XO), lty = 1)
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XO, XN)#
+YT <- c(YO, YN)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+abline(lm(YO ~ XO), lty = 1)
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XO, XN)#
+YT <- c(YO, YN)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+abline(lm(YO ~ XO), lty = 1)#
+abline(lm(X0 ~ XT), lty = 2)
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XO, XN)#
+YT <- c(YO, YN)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+abline(lm(YO ~ XO), lty = 1)#
+abline(lm(YT ~ XT), lty = 2)
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 1: length(NP){#
+	abline(lm(YT[-c(1:i)] ~ XT[-c(1:i)]), lty = i)#
+}
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 1: length(XN){#
+	abline(lm(YT[-c(1:i)] ~ XT[-c(1:i)]), lty = i)#
+}
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 1: length(XN)) {#
+	abline(lm(YT[-c(1:i)] ~ XT[-c(1:i)]), lty = i)#
+}
+length(XN)
+1:2
+YT
+YT[-c(1)]
+YT[-c(2)]
+YT[-c(1:2)]
+XT
+XT[-c(1:2)]
+XT[-c(1:1)]
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 1:length(XN)) {#
+	abline(lm(YT[-c(1:i)] ~ XT[-c(1:i)]), lty = i)#
+}
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0, 7, 2)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 1:length(XN)) {#
+	abline(lm(YT[-c(1:i)] ~ XT[-c(1:i)]), lty = i)#
+}
+XN
+YN
+XT
+YT
+n <- 5#
+slope <- 1#
+NP <- c(7, 1, 7, 0, 7, 2)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 1:length(XN)) {#
+	abline(lm(YT[-c(1:i)] ~ XT[-c(1:i)]), lty = i)#
+}
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 1:length(XN)) {#
+	abline(lm(YT[-c(1:i)] ~ XT[-c(1:i)]), lty = i)#
+}
+n <- 5#
+slope <- 1#
+NP <- c(7, 1, 7, 0)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 1:length(XN)) {#
+	abline(lm(YT[-c(1:i)] ~ XT[-c(1:i)]), lty = i)#
+}
+abline(lm(YT[-c(1:i)] ~ XT[-c(1:i)]), lty = i)
+abline(lm(YT[-c(1:i)] ~ XT[-c(1:i)]), lty = i)
+i <- 1
+abline(lm(YT[-c(1:i)] ~ XT[-c(1:i)]), lty = i)
+i <- 2
+abline(lm(YT[-c(1:i)] ~ XT[-c(1:i)]), lty = i)
+YT[-c(1:i)]
+XT[-c(1:i)]
+XT[-c(1:i)]
+i <- 1
+XT[-c(1:i)]
+XT[-c(1:i)]
+YT[-c(1:i)]
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0, 7, 2)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 0:length(XN)) {#
+	abline(lm(YT[-c(1:i)] ~ XT[-c(1:i)]), lty = i)#
+}
+?lty
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 0:length(XN)) {#
+	abline(lm(YT[-c(1:i)] ~ XT[-c(1:i)]), lty = i)#
+}
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 0:length(XN)) {#
+	abline(lm(YT[-c(0:i)] ~ XT[-c(1:i)]), lty = i)#
+}
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 0:length(XN)) {#
+	abline(lm(YT[-c(0:i)] ~ XT[-c(1:i)]), lty = i+1)#
+}
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 0:length(XN)) {#
+	abline(lm(YT[-c(0:i)] ~ XT[-c(0:i)]), lty = i+1)#
+}
+XT[-c(0)]
+YN[0:i]
+i <- 0
+YN[0:i]
+i <- 1
+YN[0:i]
+i <- 2
+YN[0:i]
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 0:length(XN)) {#
+	abline(lm(c(YO, YN[0:i]) ~ c(XO, XN[0:i])), lty = i+1)#
+}
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 0:length(XN)) {#
+	abline(lm(c(YO, YN[0:i]) ~ c(XO, XN[0:i])), lty = i+1)#
+}#
+mtext("Y", side = 2, adj = 1.5, #
+     at = max(data0[, "y"]), las = 2)#
+mtext("X", side = 1, las = 1)
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0)#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - 1, max(XT) + 1), #
+     ylim = c(min(YT) - 1, max(YT) + 1),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 0:length(XN)) {#
+	abline(lm(c(YO, YN[0:i]) ~ c(XO, XN[0:i])), lty = i+1)#
+}#
+mtext("Y", side = 2, adj = 1.5, at = max(YT), las = 2)#
+mtext("X", side = 1, las = 1)
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0)#
+adj <- 1#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - adj, max(XT) + adj), #
+     ylim = c(min(YT) - adj, max(YT) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 0:length(XN)) {#
+	abline(lm(c(YO, YN[0:i]) ~ c(XO, XN[0:i])), lty = i+1)#
+}#
+mtext("Y", side = 2, adj = 1.5, at = max(YT) + adj, las = 2)#
+mtext("X", side = 1, las = 1)
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0)#
+adj <- 1#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - adj, max(XT) + adj), #
+     ylim = c(min(YT) - adj, max(YT) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 0:length(XN)) {#
+	abline(lm(c(YO, YN[0:i]) ~ c(XO, XN[0:i])), lty = i+1)#
+}#
+mtext("Y", side = 2, adj = 1.5, at = max(YT) + adj, las = 2)#
+mtext("X", side = 1, at = max(XT) + adj, las = 1)
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0)#
+adj <- 1#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - adj, max(XT) + adj), #
+     ylim = c(min(YT) - adj, max(YT) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 0:length(XN)) {#
+	abline(lm(c(YO, YN[0:i]) ~ c(XO, XN[0:i])), lty = i+1)#
+}#
+mtext("Y", side = 2, at = max(YT) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(XT) + adj, las = 1, adj = 1.5)
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0)#
+adj <- 1#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - adj, max(XT) + adj), #
+     ylim = c(min(YT) - adj, max(YT) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 0:length(XN)) {#
+	abline(lm(c(YO, YN[0:i]) ~ c(XO, XN[0:i])), lty = i+1)#
+}#
+mtext("Y", side = 2, at = max(YT) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(XT) + adj, las = 1, padj = 1.5)
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0)#
+adj <- 1#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - adj, max(XT) + adj), #
+     ylim = c(min(YT) - adj, max(YT) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 0:length(XN)) {#
+	abline(lm(c(YO, YN[0:i]) ~ c(XO, XN[0:i])), lty = i+1)#
+}#
+mtext("Y", side = 2, at = max(YT) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(XT) + adj, las = 1)
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0)#
+adj <- 1#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - adj, max(XT) + adj), #
+     ylim = c(min(YT) - adj, max(YT) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 0:length(XN)) {#
+	abline(lm(c(YO, YN[0:i]) ~ c(XO, XN[0:i])), lty = i+1)#
+}#
+mtext("Y", side = 2, at = max(YT) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(XT) + adj, las = 1, padj = 0.5)
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0)#
+adj <- 1#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - adj, max(XT) + adj), #
+     ylim = c(min(YT) - adj, max(YT) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 0:length(XN)) {#
+	abline(lm(c(YO, YN[0:i]) ~ c(XO, XN[0:i])), lty = i+1)#
+}#
+mtext("Y", side = 2, at = max(YT) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(XT) + adj, las = 1, padj = 0.2)
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0)#
+adj <- 1#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - adj, max(XT) + adj), #
+     ylim = c(min(YT) - adj, max(YT) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 0:length(XN)) {#
+	abline(lm(c(YO, YN[0:i]) ~ c(XO, XN[0:i])), lty = i+1)#
+}#
+mtext("Y", side = 2, at = max(YT) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(XT) + adj, las = 1, padj = 0.2)
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0)#
+adj <- 3#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - adj, max(XT) + adj), #
+     ylim = c(min(YT) - adj, max(YT) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 0:length(XN)) {#
+	abline(lm(c(YO, YN[0:i]) ~ c(XO, XN[0:i])), lty = i+1)#
+}#
+mtext("Y", side = 2, at = max(YT) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(XT) + adj, las = 1, padj = 0.2)
+n <- 5#
+slope <- -1#
+NP <- c(7, 1, 7, 0)#
+adj <- 2#
+#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - adj, max(XT) + adj), #
+     ylim = c(min(YT) - adj, max(YT) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 0:length(XN)) {#
+	abline(lm(c(YO, YN[0:i]) ~ c(XO, XN[0:i])), lty = i+1)#
+}#
+mtext("Y", side = 2, at = max(YT) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(XT) + adj, las = 1, padj = 0.2)
+JointInfl <- function(#
+n = 5,#
+slope = -1, #
+NP = c(7, 1, 7, 0), #
+adj = 1#
+){#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - adj, max(XT) + adj), #
+     ylim = c(min(YT) - adj, max(YT) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 0:length(XN)) {#
+	abline(lm(c(YO, YN[0:i]) ~ c(XO, XN[0:i])), lty = i+1)#
+}#
+mtext("Y", side = 2, at = max(YT) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(XT) + adj, las = 1, padj = 0.2)	#
+}
+JointInfl()
+JointInfl(n=7)
+JointInfl(n=9)
+JointInfl(n=3)
+JointInfl(n=4)
+JointInfl(n=5)
+JointInfl(n=6)
+JointInfl(n=7)
+JointInfl <- function(#
+n = 5,#
+slope = -1, #
+NP = c(n + 1, 1, n+1, 0), #
+adj = 1#
+){#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - adj, max(XT) + adj), #
+     ylim = c(min(YT) - adj, max(YT) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 0:length(XN)) {#
+	abline(lm(c(YO, YN[0:i]) ~ c(XO, XN[0:i])), lty = i+1)#
+}#
+mtext("Y", side = 2, at = max(YT) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(XT) + adj, las = 1, padj = 0.2)	#
+}
+JointInfl(n=7)
+JointInfl(NP=c(n+1, 4, n+1, 8))
+JointInfl <- function(#
+n = 5,#
+slope = 1, #
+NP = c(n + 1, 6, n+1, 5), #
+adj = 1#
+){#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - adj, max(XT) + adj), #
+     ylim = c(min(YT) - adj, max(YT) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "",#
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 0:length(XN)) {#
+	abline(lm(c(YO, YN[0:i]) ~ c(XO, XN[0:i])), lty = i+1)#
+}#
+mtext("Y", side = 2, at = max(YT) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(XT) + adj, las = 1, padj = 0.2)	#
+}
+JointInfl()
+JointInfl <- function(#
+n = 5,#
+slope = -1, #
+NP = c(n + 1, 0, n+1, -1), #
+adj = 1#
+){#
+XO <- 1:n#
+YO <- slope * XO#
+Points <- matrix(NP, nrow = 2, byrow = FALSE)#
+XN <- Points[1, ]#
+YN <- Points[2, ]#
+XT <- c(XN, XO)#
+YT <- c(YN, YO)#
+plot(YT ~ XT, cex = 2.5,#
+     xlim = c(min(XT) - adj, max(XT) + adj), #
+     ylim = c(min(YT) - adj, max(YT) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = ifelse(XT %in% XO, 1, c(19, 10)[1:length(XN)])#
+     )#
+for (i in 0:length(XN)) {#
+	abline(#
+	lm(c(YO, YN[0:i]) ~ c(XO, XN[0:i])), #
+	lty = ifelse(i %in% c(0, length(XN)), 1, 1 + i)#
+	lwd = i+1)#
+}#
+mtext("Y", side = 2, at = max(YT) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(XT) + adj, las = 1, padj = 0.2)	#
+}
