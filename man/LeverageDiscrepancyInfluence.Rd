@@ -1,8 +1,8 @@
-\name{JointInfl}
-\alias{JointInfl}
-\title{Joint Influence}
+\name{LeverageDiscrepancyInfluence}
+\alias{LeverageDiscrepancyInfluence}
+\title{LeverageDiscrepancyInfluence}
 \description{
-Plot Joint Influence
+Plot the relation between leverage, discrepancy, and influence
 }
 \arguments{
   \item{n=5}{Length of original observations}

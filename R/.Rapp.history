@@ -515,3 +515,1003 @@ x<-fm1107[["Unit"]][41:44]
 x
 fm1107$Unit
 fm1107
+n = 5;#
+slope = -1;#
+NP = c(n + 1, 0, n+1, -1);#
+adj = 1
+n
+slope
+NP
+adj
+XO <- 1:n#
+YO <- slope * XO#
+df0 <- data.frame(X = 1:n, Y = YO, GR = 1)
+df0
+Points <- matrix(NP, ncol = 2, byrow = FALSE)
+Points
+Points <- matrix(NP, ncol = 2, byrow = T)
+Points
+df1 <- as.data.frame(Points)
+df2
+df2
+df1 <- as.data.frame(Points)
+df1
+df2 <- rbind(df0, df1)
+XO <- 1:n#
+YO <- slope * XO#
+df0 <- data.frame(X = 1:n, Y = YO, GR = 1)#
+Points <- matrix(NP, ncol = 2, byrow = TRUE)#
+df1 <- as.data.frame(Points)#
+df2 <- rbind(df0, df1)
+df2
+df1
+df0
+XO <- 1:n#
+YO <- slope * XO#
+df0 <- data.frame(X = 1:n, Y = YO, GR = 1)#
+Points <- matrix(NP, ncol = 2, byrow = TRUE)#
+df1 <- cbind(Points, GR = 2)#
+df2 <- rbind(df0, df1)
+df1
+XO <- 1:n#
+YO <- slope * XO#
+df0 <- data.frame(X = 1:n, Y = YO, GR = 1)#
+Points <- matrix(NP, ncol = 2, byrow = TRUE, dimnames = c("XX", "YY"))#
+df1 <- cbind(Points, GR = 2)#
+df2 <- rbind(df0, df1)
+df1
+PP <- matrix(NP, ncol = 2, byrow = TRUE)
+PP
+PP <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))
+PP
+XO <- 1:n#
+YO <- slope * XO#
+df0 <- data.frame(X = 1:n, Y = YO, GR = 1)#
+PP <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+PP[, "GR"] <- 2
+PP
+XO <- 1:n#
+YO <- slope * XO#
+df0 <- data.frame(X = 1:n, Y = YO, GR = 1)#
+PP <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+PP[, "GR"] <- 2#
+colnames(PP) <- c("X", "Y", "GR")#
+df2 <- rbind(df0, PP)
+df2
+XO <- 1:n#
+YO <- slope * XO#
+df0 <- data.frame(X = 1:n, Y = YO, GR = 1)#
+PP <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+PP[, "GR"] <- 2:(nrow(PP) + 1)#
+colnames(PP) <- c("X", "Y", "GR")#
+df2 <- rbind(df0, PP)
+df2
+JointInfl <- function(#
+n = 5,#
+slope = -1, #
+NP = c(n + 1, 0, n+1, -1), #
+adj = 1#
+){#
+XO <- 1:n#
+YO <- slope * XO#
+df0 <- data.frame(X = 1:n, Y = YO, GR = 1)#
+PP <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+PP[, "GR"] <- 2:(nrow(PP) + 1)#
+colnames(PP) <- c("X", "Y", "GR")#
+df1 <- rbind(df0, PP)#
+plot(Y ~ X, data = df1, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = GR#
+     )#
+for (i in 0:max(GR)) {#
+	abline(#
+	lm(Y ~ X, data = df[1:(n + i), ]), #
+	lty = ifelse(i == 1, 1, 1 + i),#
+	lwd = ifelse(i == max(GR), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df[, "X"]) + adj, las = 1, padj = 0.2)	#
+}
+JointInfl()
+JointInfl <- function(#
+n = 5,#
+slope = -1, #
+NP = c(n + 1, 0, n+1, -1), #
+adj = 1#
+){#
+XO <- 1:n#
+YO <- slope * XO#
+df0 <- data.frame(X = 1:n, Y = YO, GR = 1)#
+PP <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+PP[, "GR"] <- 2:(nrow(PP) + 1)#
+colnames(PP) <- c("X", "Y", "GR")#
+df1 <- rbind(df0, PP)#
+plot(Y ~ X, data = df1, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = GR#
+     )#
+for (i in 0:max(df1[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df[1:(n + i), ]), #
+	lty = ifelse(i == 1, 1, 1 + i),#
+	lwd = ifelse(i == max(df1[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df[, "X"]) + adj, las = 1, padj = 0.2)	#
+}
+JointInfl()
+JointInfl <- function(#
+n = 5,#
+slope = -1, #
+NP = c(n + 1, 0, n+1, -1), #
+adj = 1#
+){#
+XO <- 1:n#
+YO <- slope * XO#
+df0 <- data.frame(X = 1:n, Y = YO, GR = 1)#
+PP <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+PP[, "GR"] <- 2:(nrow(PP) + 1)#
+colnames(PP) <- c("X", "Y", "GR")#
+df1 <- rbind(df0, PP)#
+plot(Y ~ X, data = df1, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = GR#
+     )#
+for (i in 0:max(df1[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df[1:(n+i), ]), #
+	lty = ifelse(df1[, "GR"] == 1, 1, 1 + i),#
+	lwd = ifelse(df1[, "GR"] == max(df1[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df[, "X"]) + adj, las = 1, padj = 0.2)	#
+}
+JointInfl()
+JointInfl <- function(#
+n = 5,#
+slope = -1, #
+NP = c(n + 1, 0, n+1, -1), #
+adj = 1#
+){#
+XO <- 1:n#
+YO <- slope * XO#
+df0 <- data.frame(X = 1:n, Y = YO, GR = 1)#
+PP <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+PP[, "GR"] <- 2:(nrow(PP) + 1)#
+colnames(PP) <- c("X", "Y", "GR")#
+df1 <- rbind(df0, PP)#
+plot(Y ~ X, data = df1, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = GR#
+     )#
+for (i in 0:max(df1[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df1[1:(n+i), ]), #
+	lty = ifelse(df1[, "GR"] == 1, 1, 1 + i),#
+	lwd = ifelse(df1[, "GR"] == max(df1[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df[, "X"]) + adj, las = 1, padj = 0.2)	#
+}
+JointInfl()
+JointInfl <- function(#
+n = 5,#
+slope = -1, #
+NP = c(n + 1, 0, n+1, -1), #
+adj = 1#
+){#
+XO <- 1:n#
+YO <- slope * XO#
+df0 <- data.frame(X = 1:n, Y = YO, GR = 1)#
+PP <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+PP[, "GR"] <- 2:(nrow(PP) + 1)#
+colnames(PP) <- c("X", "Y", "GR")#
+df1 <- rbind(df0, PP)#
+plot(Y ~ X, data = df1, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = GR#
+     )#
+for (i in 0:max(df1[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df1[1:(n+i), ]), #
+	lty = ifelse(df1[, "GR"] == 1, 1, 1 + i),#
+	lwd = ifelse(df1[, "GR"] == max(df1[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df1[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df1[, "X"]) + adj, las = 1, padj = 0.2)	#
+}#
+JointInfl()
+JointInfl <- function(#
+n = 5,#
+slope = -1, #
+NP = c(n + 1, 0, n+1, -1), #
+adj = 1#
+){#
+XO <- 1:n#
+YO <- slope * XO#
+df0 <- data.frame(X = 1:n, Y = YO, GR = 1)#
+PP <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+PP[, "GR"] <- 2:(nrow(PP) + 1)#
+colnames(PP) <- c("X", "Y", "GR")#
+df1 <- rbind(df0, PP)#
+plot(Y ~ X, data = df1, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = GR#
+     )#
+for (i in 0:max(df1[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df1[1:(n+i), ]), #
+	lty = ifelse(i == 1, 1, 1 + i),#
+	lwd = ifelse(i == max(df1[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df1[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df1[, "X"]) + adj, las = 1, padj = 0.2)	#
+}#
+JointInfl()
+JointInfl <- function(#
+n = 5,#
+slope = -1, #
+NP = c(n + 1, 0, n+1, -1), #
+adj = 1#
+){#
+XO <- 1:n#
+YO <- slope * XO#
+df0 <- data.frame(X = 1:n, Y = YO, GR = 1)#
+PP <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+PP[, "GR"] <- 2:(nrow(PP) + 1)#
+colnames(PP) <- c("X", "Y", "GR")#
+df1 <- rbind(df0, PP)#
+plot(Y ~ X, data = df1, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = c(1, 10, 19)[GR]#
+     )#
+for (i in 0:max(df1[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df1[1:(n+i), ]), #
+	lty = ifelse(i == 1, 1, 1 + i),#
+	lwd = ifelse(i == max(df1[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df1[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df1[, "X"]) + adj, las = 1, padj = 0.2)	#
+}#
+JointInfl()
+JointInfl <- function(#
+n = 5,#
+slope = -1, #
+NP = c(n + 1, 0, n+1, -1), #
+adj = 1#
+){#
+XO <- 1:n#
+YO <- slope * XO#
+df0 <- data.frame(X = 1:n, Y = YO, GR = 1)#
+PP <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+PP[, "GR"] <- 2:(nrow(PP) + 1)#
+colnames(PP) <- c("X", "Y", "GR")#
+df1 <- rbind(df0, PP)#
+plot(Y ~ X, data = df1, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = c(1, 10, 19)[GR]#
+     )#
+for (i in 0:max(df1[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df1[1:(n+i), ]), #
+	lty = ifelse(i == 1, 1, 1 + i),#
+	lwd = ifelse(i == max(df1[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df1[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df1[, "X"]) + adj, las = 1, padj = 0.2)	#
+}#
+JointInfl(slope = 1, NP=c(2.5, 1))
+JointInfl <- function(#
+n = 5,#
+slope = -1, #
+NP = c(n + 1, 0, n+1, -1), #
+adj = 1#
+){#
+XO <- 1:n#
+YO <- slope * XO#
+df0 <- data.frame(X = 1:n, Y = YO, GR = 1)#
+PP <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+PP[, "GR"] <- 2:(nrow(PP) + 1)#
+colnames(PP) <- c("X", "Y", "GR")#
+df1 <- rbind(df0, PP)#
+plot(Y ~ X, data = df1, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = c(1, 10, 19)[GR]#
+     )#
+for (i in 0:max(df1[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df1[1:(n+i), ]), #
+	lty = ifelse(i == 1, 1, 1 + i),#
+	lwd = ifelse(i == max(df1[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df1[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df1[, "X"]) + adj, las = 1, padj = 0.2)	#
+}#
+JointInfl(slope = 1, NP=c(mean(1:5), 1))
+JointInfl <- function(#
+n = 5,#
+slope = -1, #
+NP = c(n + 1, 0, n+1, -1), #
+adj = 1#
+){#
+XO <- 1:n#
+YO <- slope * XO#
+df0 <- data.frame(X = 1:n, Y = YO, GR = 1)#
+PP <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+PP[, "GR"] <- 2:(nrow(PP) + 1)#
+colnames(PP) <- c("X", "Y", "GR")#
+df1 <- rbind(df0, PP)#
+plot(Y ~ X, data = df1, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = c(1, 10, 19)[GR]#
+     )#
+for (i in 1:max(df1[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df1[1:(n+i-1), ]), #
+	lty = ifelse(i == 1, 1, 1 + i),#
+	lwd = ifelse(i == max(df1[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df1[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df1[, "X"]) + adj, las = 1, padj = 0.2)	#
+}#
+JointInfl(slope = 1, NP=c(mean(1:5), 1))
+JointInfl <- function(#
+n = 5,#
+slope = -1, #
+NP = c(n + 1, 0, n+1, -1), #
+adj = 1#
+){#
+XO <- 1:n#
+YO <- slope * XO#
+df0 <- data.frame(X = 1:n, Y = YO, GR = 1)#
+PP <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+PP[, "GR"] <- 2:(nrow(PP) + 1)#
+colnames(PP) <- c("X", "Y", "GR")#
+df1 <- rbind(df0, PP)#
+plot(Y ~ X, data = df1, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = c(1, 10, 19)[GR]#
+     )#
+for (i in 1:max(df1[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df1[1:(n+i-1), ]), #
+	lty = ifelse(i == 1, 1, 1 + i),#
+	lwd = ifelse(i == max(df1[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df1[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df1[, "X"]) + adj, las = 1, padj = 0.2)	#
+}#
+JointInfl(slope = 1)
+JointInfl <- function(#
+n = 5,#
+slope = -1, #
+NP = c(n + 1, 0, n+1, -1), #
+adj = 1#
+){#
+XO <- 1:n#
+YO <- slope * XO#
+df0 <- data.frame(X = 1:n, Y = YO, GR = 1)#
+PP <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+PP[, "GR"] <- 2:(nrow(PP) + 1)#
+colnames(PP) <- c("X", "Y", "GR")#
+df1 <- rbind(df0, PP)#
+plot(Y ~ X, data = df1, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = c(1, 10, 19)[GR]#
+     )#
+for (i in 1:max(df1[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df1[1:(n+i-1), ]), #
+	lty = ifelse(i == 1, 1, 1 + i),#
+	lwd = ifelse(i == max(df1[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df1[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df1[, "X"]) + adj, las = 1, padj = 0.2)	#
+}#
+JointInfl(slope = 1)
+JointInfl <- function(#
+n = 5,#
+slope = -1, #
+NP = c(n + 1, 0, n+1, -1), #
+adj = 1#
+){#
+XO <- 1:n#
+YO <- slope * XO#
+df0 <- data.frame(X = 1:n, Y = YO, GR = 1)#
+PP <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+PP[, "GR"] <- 2:(nrow(PP) + 1)#
+colnames(PP) <- c("X", "Y", "GR")#
+df1 <- rbind(df0, PP)#
+plot(Y ~ X, data = df1, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = c(1, 10, 19)[GR]#
+     )#
+for (i in 1:max(df1[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df1[1:(n+i-1), ]), #
+	lty = ifelse(i == 1, 1, 1 + i),#
+	lwd = ifelse(i == max(df1[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df1[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df1[, "X"]) + adj, las = 1, padj = 0.2)	#
+}#
+JointInfl(slope = 1, NP = c(3, 1, 4, 1, 5, 1))
+JointInfl <- function(#
+n = 5,#
+slope = -1, #
+NP = c(n + 1, 0, n+1, -1), #
+adj = 1#
+){#
+XO <- 1:n#
+YO <- slope * XO#
+df0 <- data.frame(X = 1:n, Y = YO, GR = 1)#
+PP <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+PP[, "GR"] <- 2:(nrow(PP) + 1)#
+colnames(PP) <- c("X", "Y", "GR")#
+df1 <- rbind(df0, PP)#
+plot(Y ~ X, data = df1, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = c(1, 10, 19)[GR]#
+     )#
+for (i in 1:max(df1[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df1[1:(n+i-1), ]), #
+	lty = ifelse(i == 1, 1, 1 + i),#
+	lwd = ifelse(i == max(df1[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df1[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df1[, "X"]) + adj, las = 1, padj = 0.2)	#
+}#
+JointInfl(slope = 1, NP = c(3, 1, 4, 1, 5, 1, 6, 1))
+c(1, 10, 19)[5]
+JointInfl <- function(#
+n = 5,#
+slope = -1, #
+NP = c(n + 1, 0, n+1, -1), #
+adj = 1#
+){#
+XO <- 1:n#
+YO <- slope * XO#
+df0 <- data.frame(X = 1:n, Y = YO, GR = 1)#
+PP <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+PP[, "GR"] <- 2:(nrow(PP) + 1)#
+colnames(PP) <- c("X", "Y", "GR")#
+df1 <- rbind(df0, PP)#
+plot(Y ~ X, data = df1, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = c(1, 10, 19, 20, 21)[GR]#
+     )#
+for (i in 1:max(df1[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df1[1:(n+i-1), ]), #
+	lty = ifelse(i == 1, 1, 1 + i),#
+	lwd = ifelse(i == max(df1[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df1[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df1[, "X"]) + adj, las = 1, padj = 0.2)	#
+}#
+JointInfl(slope = 1, NP = c(3, 1, 4, 1, 5, 1, 6, 1))
+?pch
+JointInfl <- function(#
+n = 5,#
+slope = -1, #
+NP = c(n + 1, 0, n+1, -1), #
+adj = 1#
+){#
+XO <- 1:n#
+YO <- slope * XO#
+df0 <- data.frame(X = 1:n, Y = YO, GR = 1)#
+PP <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+PP[, "GR"] <- 2:(nrow(PP) + 1)#
+colnames(PP) <- c("X", "Y", "GR")#
+df1 <- rbind(df0, PP)#
+plot(Y ~ X, data = df1, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = GR#
+     )#
+for (i in 1:max(df1[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df1[1:(n+i-1), ]), #
+	lty = ifelse(i == 1, 1, 1 + i),#
+	lwd = ifelse(i == max(df1[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df1[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df1[, "X"]) + adj, las = 1, padj = 0.2)	#
+}#
+JointInfl(slope = 1, NP = c(3, 1, 4, 1, 5, 1, 6, 1))
+JointInfl <- function(#
+n = 5,#
+slope = -1, #
+NP = c(n + 1, 0, n+1, -1), #
+adj = 1#
+){#
+XO <- 1:n#
+YO <- slope * XO#
+df0 <- data.frame(X = 1:n, Y = YO, GR = 1)#
+PP <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+PP[, "GR"] <- 2:(nrow(PP) + 1)#
+colnames(PP) <- c("X", "Y", "GR")#
+df1 <- rbind(df0, PP)#
+plot(Y ~ X, data = df1, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = GR *2#
+     )#
+for (i in 1:max(df1[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df1[1:(n+i-1), ]), #
+	lty = ifelse(i == 1, 1, 1 + i),#
+	lwd = ifelse(i == max(df1[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df1[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df1[, "X"]) + adj, las = 1, padj = 0.2)	#
+}#
+JointInfl(slope = 1, NP = c(3, 1, 4, 1, 5, 1, 6, 1))
+JointInfl <- function(#
+n = 5,#
+slope = -1, #
+NP = c(n + 1, 0, n+1, -1), #
+adj = 1#
+){#
+df0 <- data.frame(X = 1:n, Y = slope * XO, GR = 1)#
+df1 <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+df1[, "GR"] <- 2:(nrow(df1) + 1)#
+colnames(df1) <- c("X", "Y", "GR")#
+df2 <- rbind(df0, df1)#
+plot(Y ~ X, data = df2, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = c(1, 10, 19)[GR]#
+     )#
+for (i in 0:max(df2[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df2[1:(n+i), ]), #
+	lty = ifelse(i == 1, 1, 1 + i),#
+	lwd = ifelse(i == max(df2[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df2[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df2[, "X"]) + adj, las = 1, padj = 0.2)	#
+}#
+JointInfl()
+JointInfl <- function(#
+n = 5,#
+slope = 1, #
+NP = c(mean(1:5), 1), #
+adj = 1#
+){#
+df0 <- data.frame(X = 1:n, Y = slope * XO, GR = 1)#
+df1 <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+df1[, "GR"] <- 2:(nrow(df1) + 1)#
+colnames(df1) <- c("X", "Y", "GR")#
+df2 <- rbind(df0, df1)#
+plot(Y ~ X, data = df2, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = c(1, 10, 19)[GR]#
+     )#
+for (i in 1:max(df2[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df2[1:(n + i - 1), ]), #
+	lty = ifelse(i == 1, 1, 1 + i),#
+	lwd = ifelse(i == max(df2[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df2[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df2[, "X"]) + adj, las = 1, padj = 0.2)	#
+}#
+JointInfl()
+JointInfl <- function(#
+n = 5,#
+slope = 1, #
+NP = c(mean(1:5), 1), #
+adj = 1#
+){#
+df0 <- data.frame(X = 1:n, Y = slope * XO, GR = 1)#
+df1 <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+df1[, "GR"] <- 2:(nrow(df1) + 1)#
+colnames(df1) <- c("X", "Y", "GR")#
+df2 <- rbind(df0, df1)#
+plot(Y ~ X, data = df2, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = c(1, 10, 19)[GR]#
+     )#
+for (i in 1:max(df2[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df2[1:(n + i - 1), ]), #
+	lty = ifelse(i == 1, 1, 1 + i),#
+	lwd = ifelse(i == max(df2[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df2[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df2[, "X"]) + adj, las = 1, padj = 0.2)	#
+}#
+JointInfl(NP= NULL)
+JointInfl <- function(#
+n = 5,#
+slope = 1, #
+NP = c(mean(1:5), 1), #
+adj = 1#
+){#
+df0 <- data.frame(X = 1:n, Y = slope * XO, GR = 1)#
+df1 <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+df1[, "GR"] <- 2:(nrow(df1) + 1)#
+colnames(df1) <- c("X", "Y", "GR")#
+df2 <- rbind(df0, df1)#
+plot(Y ~ X, data = df2, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = c(1, 10, 19)[GR]#
+     )#
+for (i in 1:max(df2[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df2[1:(n + i - 1), ]), #
+	lty = ifelse(i == 1, 1, 1 + i),#
+	lwd = ifelse(i == max(df2[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df2[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df2[, "X"]) + adj, las = 1, padj = 0.2)	#
+}#
+JointInfl(NP= NA)
+?isna
+?is.na
+JointInfl <- function(#
+n = 5,#
+slope = 1, #
+NP = c(mean(1:5), 1), #
+adj = 1#
+){#
+if ( ! is.na(NP) ){#
+df0 <- data.frame(X = 1:n, Y = slope * XO, GR = 1)#
+df1 <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+df1[, "GR"] <- 2:(nrow(df1) + 1)#
+colnames(df1) <- c("X", "Y", "GR")#
+df2 <- rbind(df0, df1)	#
+} else {#
+	df2 <- df0#
+}#
+#
+plot(Y ~ X, data = df2, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = c(1, 10, 19)[GR]#
+     )#
+for (i in 1:max(df2[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df2[1:(n + i - 1), ]), #
+	lty = ifelse(i == 1, 1, 1 + i),#
+	lwd = ifelse(i == max(df2[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df2[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df2[, "X"]) + adj, las = 1, padj = 0.2)	#
+}#
+JointInfl()
+NP = c(mean(1:5), 1)
+is.na(NP)
+! is.na(NP)
+length(NP)
+length(NA)
+JointInfl <- function(#
+n = 5,#
+slope = 1, #
+NP = c(mean(1:5), 1), #
+adj = 1#
+){#
+if ( length(NP) >= 2 ){#
+df0 <- data.frame(X = 1:n, Y = slope * XO, GR = 1)#
+df1 <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+df1[, "GR"] <- 2:(nrow(df1) + 1)#
+colnames(df1) <- c("X", "Y", "GR")#
+df2 <- rbind(df0, df1)	#
+} else {#
+	df2 <- df0#
+}#
+#
+plot(Y ~ X, data = df2, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = c(1, 10, 19)[GR]#
+     )#
+for (i in 1:max(df2[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df2[1:(n + i - 1), ]), #
+	lty = ifelse(i == 1, 1, 1 + i),#
+	lwd = ifelse(i == max(df2[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df2[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df2[, "X"]) + adj, las = 1, padj = 0.2)	#
+}#
+JointInfl()
+JointInfl <- function(#
+n = 5,#
+slope = 1, #
+NP = c(mean(1:5), 1), #
+adj = 1#
+){#
+if ( length(NP) >= 2 ){#
+df0 <- data.frame(X = 1:n, Y = slope * XO, GR = 1)#
+df1 <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+df1[, "GR"] <- 2:(nrow(df1) + 1)#
+colnames(df1) <- c("X", "Y", "GR")#
+df2 <- rbind(df0, df1)	#
+} else {#
+	df2 <- df0#
+}#
+#
+plot(Y ~ X, data = df2, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = c(1, 10, 19)[GR]#
+     )#
+for (i in 1:max(df2[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df2[1:(n + i - 1), ]), #
+	lty = ifelse(i == 1, 1, 1 + i),#
+	lwd = ifelse(i == max(df2[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df2[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df2[, "X"]) + adj, las = 1, padj = 0.2)	#
+}#
+JointInfl(NP=NA)
+JointInfl <- function(#
+n = 5,#
+slope = 1, #
+NP = c(mean(1:5), 1), #
+adj = 1#
+){#
+if ( length(NP) >= 2 ){#
+df0 <- data.frame(X = 1:n, Y = slope * XO, GR = 1)#
+df1 <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+df1[, "GR"] <- 2:(nrow(df1) + 1)#
+colnames(df1) <- c("X", "Y", "GR")#
+df2 <- rbind(df0, df1)	#
+} else {#
+	df2 <- df0#
+}#
+#
+plot(Y ~ X, data = df2, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = c(1, 10, 19)[GR]#
+     )#
+for (i in 1:max(df2[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df2[1:(n + i - 1), ]), #
+	lty = ifelse(i == 1, 1, 1 + i),#
+	lwd = ifelse(i == max(df2[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df2[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df2[, "X"]) + adj, las = 1, padj = 0.2)	#
+}#
+JointInfl()
+JointInfl <- function(#
+n = 5,#
+slope = 1, #
+NP = c(mean(1:5), 1), #
+adj = 1#
+){#
+if ( length(NP) >= 2 ){#
+df0 <- data.frame(X = 1:n, Y = slope * XO, GR = 1)#
+df1 <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+df1[, "GR"] <- 2:(nrow(df1) + 1)#
+colnames(df1) <- c("X", "Y", "GR")#
+df2 <- rbind(df0, df1)	#
+} else {#
+	df2 <- df0#
+}#
+#
+plot(Y ~ X, data = df2, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = c(1, 10, 19)[GR]#
+     )#
+for (i in 1:max(df2[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df2[1:(n + i - 1), ]), #
+	lty = ifelse(i == 1, 1, 1 + i),#
+	lwd = ifelse(i == max(df2[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df2[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df2[, "X"]) + adj, las = 1, padj = 0.2)	#
+}#
+JointInfl(NP= c(3, 1, 4, 2))
+JointInfl <- function(#
+n = 5,#
+slope = 1, #
+NP = c(mean(1:5), 1), #
+adj = 1#
+){#
+if ( length(NP) >= 2 ){#
+df0 <- data.frame(X = 1:n, Y = slope * XO, GR = 1)#
+df1 <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+df1[, "GR"] <- 2:(nrow(df1) + 1)#
+colnames(df1) <- c("X", "Y", "GR")#
+df2 <- rbind(df0, df1)	#
+} else {#
+	df2 <- df0#
+}#
+#
+plot(Y ~ X, data = df2, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = c(1, 10, 19)[GR]#
+     )#
+for (i in 1:max(df2[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df2[1:(n + i - 1), ]), #
+	lty = ifelse(i == 1, 1, 1 + i),#
+	lwd = ifelse(i == max(df2[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df2[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df2[, "X"]) + adj, las = 1, padj = 0.2)	#
+}#
+JointInfl(NP= c(3, 1, 4, 2))
+JointInfl <- function(#
+n = 5,#
+slope = 1, #
+NP = c(mean(1:5), 1), #
+adj = 1#
+){#
+if ( length(NP) >= 2 ){#
+df0 <- data.frame(X = 1:n, Y = slope * XO, GR = 1)#
+df1 <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+df1[, "GR"] <- 2:(nrow(df1) + 1)#
+colnames(df1) <- c("X", "Y", "GR")#
+df2 <- rbind(df0, df1)	#
+} else {#
+	df2 <- df0#
+}#
+#
+plot(Y ~ X, data = df2, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = c(1, 10, 19)[GR]#
+     )#
+for (i in 1:max(df2[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df2[1:(n + i - 1), ]), #
+	lty = ifelse(i == 1 | i == max(df2[, "GR"]), 1, 1 + i),#
+	lwd = ifelse(i == max(df2[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df2[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df2[, "X"]) + adj, las = 1, padj = 0.2)	#
+}#
+JointInfl()
+?pch
+JointInfl <- function(#
+n = 5,#
+slope = 1, #
+NP = c(mean(1:5), 1), #
+adj = 1#
+){#
+if ( length(NP) >= 2 ){#
+df0 <- data.frame(X = 1:n, Y = slope * XO, GR = 1)#
+df1 <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+df1[, "GR"] <- 2:(nrow(df1) + 1)#
+colnames(df1) <- c("X", "Y", "GR")#
+df2 <- rbind(df0, df1)	#
+} else {#
+	df2 <- df0#
+}#
+#
+plot(Y ~ X, data = df2, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = rep(c(1, 10, 19, 5, 9, 23), ceiling(max(GR) / 6))[GR]#
+     )#
+for (i in 1:max(df2[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df2[1:(n + i - 1), ]), #
+	lty = ifelse(i == 1 | i == max(df2[, "GR"]), 1, 1 + i),#
+	lwd = ifelse(i == max(df2[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df2[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df2[, "X"]) + adj, las = 1, padj = 0.2)	#
+}#
+JointInfl()
+JointInfl <- function(#
+n = 5,#
+slope = 1, #
+NP = c(mean(1:5), 1), #
+adj = 1#
+){#
+if ( length(NP) >= 2 ){#
+df0 <- data.frame(X = 1:n, Y = slope * XO, GR = 1)#
+df1 <- as.data.frame(matrix(NP, ncol = 2, byrow = TRUE))#
+df1[, "GR"] <- 2:(nrow(df1) + 1)#
+colnames(df1) <- c("X", "Y", "GR")#
+df2 <- rbind(df0, df1)	#
+} else {#
+	df2 <- df0#
+}#
+#
+plot(Y ~ X, data = df2, cex = 2.5,#
+     xlim = c(min(X) - adj, max(X) + adj), #
+     ylim = c(min(Y) - adj, max(Y) + adj),#
+     xaxt = "n", yaxt = "n", xlab = "", ylab = "", font.lab = 2, #
+     pch = rep(c(1, 10, 19, 5, 9, 23), ceiling(max(GR) / 6))[GR]#
+     )#
+for (i in 1:max(df2[, "GR"])) {#
+	abline(#
+	lm(Y ~ X, data = df2[1:(n + i - 1), ]), #
+	lty = ifelse(i == 1 | i == max(df2[, "GR"]), 1, 1 + i),#
+	lwd = ifelse(i == max(df2[, "GR"]), 2, 1)#
+	)#
+}#
+mtext("Y", side = 2, at = max(df2[, "Y"]) + adj, las = 2, adj = 1.5)#
+mtext("X", side = 1, at = max(df2[, "X"]) + adj, las = 1, padj = 0.2)	#
+}#
+JointInfl(NP = c(mean(1:5), -3))

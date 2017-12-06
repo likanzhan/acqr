@@ -1,6 +1,5 @@
 R2LateX <- function(
   TeXFile,
-  FileName = deparse(substitute(TeXFile)),
   Options = "12pt, a4paper",
   class = "article",
   packages = c("ctex", "[a4paper, tmargin=1in]{geometry}"),
@@ -17,6 +16,5 @@ LaTeX <- c(
   "\\documentclass[", Options, "]{", class, "}", sep = ""),
   PKGs, moreoptions, "\\begin{document}", TeXFile, "\\end{document}"
 )
-FileName <- paste(FileName, ".tex", sep = "")
-write.table(LaTeX, FileName, row.names = FALSE, col.names = FALSE, quote = FALSE)
+return(LaTeX)
 }
