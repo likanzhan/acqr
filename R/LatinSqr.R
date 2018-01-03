@@ -7,7 +7,6 @@ if (Latin) {
 x[1, c(1, 1 : floor(n / 2) * 2)]  <- 1 : (floor(n / 2) + 1)
 x[1, (2 : ceiling(n / 2)) * 2 - 1 ] <- n + 2  - (2: ceiling(n / 2))
 }
-
-for (i in 2:n)  x[i, ] <- x[i-1, c(2:n, 1)]
+for (i in 2:n)  x[i, ] <- ifelse(x[i-1, ] + 1 <= n, x[i-1, ] + 1, x[i-1, ] + 1 - n)
 return(x)	
 }
