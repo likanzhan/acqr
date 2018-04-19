@@ -1,8 +1,8 @@
-Modified_Frequency_Distribution <- function(data, ...){
+Modified_Frequency_Distribution <- function(data, adjx = 1, ...){
   Table <- as.data.frame(table(data))
   Table[, "data"] <- as.numeric(as.character(Table[, "data"]))
   ylim <- c(0, max(Table[, "Freq"]) + 1)
-  xlim <- c(min(Table[, "data"]) - 1, max(Table[, "data"]) + 1)
+  xlim <- c(min(Table[, "data"]) - adjx, max(Table[, "data"]) + 1)
   xlabel <- seq(min(Table[, "data"]), max(Table[, "data"]), by = 1)
   ylabel <- seq(0, max(Table[, "Freq"]), by = 1)
 

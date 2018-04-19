@@ -1,225 +1,3 @@
-ppp <- function(){#
-  #graph margins#
-  pow1 = c(5 : 999) / 1000 # power range for 0.005 tests#
-  pow2 = c(50 : 999) / 1000 # power range for 0.05 tests#
-#
-  pow   <- c("pow1", "pow2", "pow2", "pow1",  "pow2",  "pow1")#
-  alpha <- c( 0.005,   0.05,   0.05,  0.005,    0.05,   0.005)#
-  pi0   <- c(   5/6,    5/6,  10/11,  10/11,   40/41,   40/41)#
-  lty   <- c(     1,      2,      2,      1,       2,       1)#
-  col   <- c("blue", "blue",  "red",  "red", "green", "green")#
-  df <- data.frame(pow, alpha, pi0, lty, col, stringsAsFactors=FALSE)#
-#
-  ddata <- function(#
-    pow = "pow1",#
-    alpha = 0.005,#
-    pi0 = 5/6,#
-    id#
-  ){#
-    N = 10^6#
-    pow = eval(parse(text = pow))#
-    # yy = alpha * N * pi0 / (alpha * N * pi0 + pow[id] * (1 - pi0) * N)#
-    yy = alpha * pi0 /(alpha * pi0 + pow[id] * (1 - pi0))#
-    return(yy)#
-  }#
-#
-  lline <- function(x#
-  ){#
-    pow = df[x, 1]#
-    alpha = df[x, 2]#
-    pi0 = df[x, 3]#
-    lty = df[x, 4]#
-    col = df[x, 5]#
-    xx = eval(parse(text = pow))#
-    yy = ddata(pow = pow, alpha = alpha, pi0 = pi0)#
-    lines(xx, yy, lty = lty, col = col, lwd = 2)#
-  }#
-#
-  # png("Figure_2.png", width = 10, height = 8, units = "in", res = 600) # Print the plot#
-  #par(family = "Source Han Serif CN") # STKaiti#
-  par(mai = c(0.8, 0.8, 0.1, 0.1))#
-  par(mgp = c(2, 1, 0))#
-  plot(x = pow1, y = ddata(), type='n', ylim = c(0, 1), xlim = c(0, 1.5),#
-       xlab = 'Power',#
-       ylab = 'False positive rate',#
-       bty = "n", xaxt = "n", yaxt = "n")#
-  #grid lines#
-  segments(x0 = -0.058, y0 = (0:5) * 0.2, x1 = 1, lty = 1, col = "gray92")#
-  for (x in 1:6) lline(x)#
-#
-  #customizing axes#
-  aat <- c(-0.5, 0, 0.2, 0.4, 0.6, 0.8, 1.0)#
-  llabels <- c("", "0.0", "0.2", "0.4", "0.6", "0.8", "1.0")#
-  llegend <- c("Prior odds = 1:40", "Prior odds = 1:10", "Prior odds = 1:5")#
-  #llegend <- c("先验概率 = 1:40", "先验概率 = 1:10", "先验概率 = 1:5")#
-  axis(side = 2, at = aat, labels = llabels,#
-       lwd = 1, las = 1, tck = -0.01, hadj = 0.4, cex.axis = .8)#
-  axis(side = 1, at = aat, labels = llabels,#
-       lwd = 1, las = 1, tck = -0.01, padj = -1.1, cex.axis = .8)#
-  legend(x = 1.05, y = 1, legend = llegend,#
-         pch = c(15, 15, 15), col = c("green", "red", "blue"), cex = 1)#
-#
-  library(pBrackets)#
-  odd_1_5_1  <- ddata(pow = "pow1", alpha = 0.005, pi0 = 5/6, id = 995)#
-  odd_1_5_2  <- ddata(pow = "pow2", alpha = 0.05, pi0 = 5/6, id = 950)#
-  odd_1_10_2 <- ddata(pow = "pow2", alpha = 0.05, pi0 = 10/11, id = 950)#
-  odd_1_10_1 <- ddata(pow = "pow1", alpha = 0.005, pi0 = 10/11, id = 995)#
-  odd_1_40_2 <- ddata(pow = "pow2", alpha = 0.05, pi0 = 40/41, id = 950)#
-  odd_1_40_1 <- ddata(pow = "pow1", alpha = 0.005, pi0 = 40/41, id = 995)#
-#
-  t1label <- expression(paste(italic(P), " < 0.05 threshold"))#
-  t2label <- expression(paste(italic(P), " < 0.005 threshold"))#
-  text(1.11, (odd_1_5_2 + odd_1_40_2)/2, label = t1label, cex = 0.9,adj=0)#
-  text(1.11, (odd_1_5_1 + odd_1_40_1)/2, label = t2label, cex = 0.9,adj=0)#
-  brackets(1.03, odd_1_40_1, 1.03, odd_1_5_1, h = NULL, ticks = 0.5, curvature = 0.7, type = 1, col = 1, lwd = 1, lty = 1, xpd = FALSE)#
-  brackets(1.03, odd_1_40_2, 1.03, odd_1_5_2, h = NULL, ticks = 0.5, curvature = 0.7, type = 1, col = 1, lwd = 1, lty = 1, xpd = FALSE)#
-  #dev.off()#
-}
-ppp
-ppp()
-library(acqr)
-IntAcMain()
-IntAcMain(data=c(1,1,1,2,2,2))
-IntAcMain(data=c(1,1,1,1.1,1.1,1.1))
-IntAcMain(data=c(1,2,3,2,3,4))
-IntAcMain(data=c(2,2,3,3,3,4))
-IntAcMain(data=c(2,2,5,3,3,6))
-IntAcMain(data=c(2,2,5,4,4,7))
-RegCod <- #
-function (#
-RowLevel = 2, #
-ColLevel = 3, #
-Dummy = TRUE, #
-RowNumber = 1, #
-ColNumber = 1#
-) {#
-Baseline <- ifelse(Dummy, 0, -1) #
-RowData <- gl(RowLevel, RowNumber)#
-ColData <- gl(ColLevel, ColNumber)#
-RowLen <- nlevels(RowData)#
-ColLen <- nlevels(ColData)#
-RowCol <- expand.grid(C = ColData, R = RowData)#
-RowCol <- RowCol[, c(2, 1)]#
-rownames(RowCol) <- paste("mu", RowCol[,"C"], RowCol[, "R"], sep = "")#
-if (RowLen >= 2){#
-for (i in 1:(RowLen - 1)){#
-RowCol[, paste("R", i, sep = "")] <-#
-ifelse(RowCol[, "R"] == RowLen, Baseline,#
-ifelse(RowCol[, "R"] == i, 1, 0))#
-}	#
-}#
-if (ColLen >= 2){#
-for (j in 1:(ColLen - 1)){#
-RowCol[, paste("C", j,  sep = "")] <-#
-ifelse(RowCol[, "C"] == ColLen, Baseline,#
-ifelse(RowCol[, "C"] == j, 1, 0))#
-}	#
-}#
-if (RowLen >=2 & ColLen >= 2){#
-for (i in 1:(RowLen - 1)) for (j in 1:(ColLen - 1)){#
-RowCol[, paste("R", i, "C", j, sep = "")] <-#
-RowCol[, paste("R", i, sep = "")] * #
-RowCol[, paste("C", j, sep = "")]#
-}	#
-}#
-return(RowCol)#
-}
-RegCod()
-RegCod <- #
-function (#
-RowLevel = 2, #
-ColLevel = 3, #
-Dummy = TRUE, #
-RowNumber = 1, #
-ColNumber = 1#
-) {#
-Baseline <- ifelse(Dummy, 0, -1) #
-RowData <- gl(RowLevel, RowNumber)#
-ColData <- gl(ColLevel, ColNumber)#
-RowLen <- nlevels(RowData)#
-ColLen <- nlevels(ColData)#
-RowCol <- expand.grid(C = ColData, R = RowData)#
-RowCol <- RowCol[, c(2, 1)]#
-rownames(RowCol) <- paste("mu", RowCol[,"C"], RowCol[, "R"], sep = "")#
-if (RowLen >= 2){#
-for (i in 1:(RowLen - 1)){#
-RowCol[, paste("R", i, sep = "")] <-#
-ifelse(RowCol[, "R"] == RowLen, Baseline,#
-ifelse(RowCol[, "R"] == i, 1, 0))#
-}	#
-}#
-if (ColLen >= 2){#
-for (j in 1:(ColLen - 1)){#
-RowCol[, paste("C", j,  sep = "")] <-#
-ifelse(RowCol[, "C"] == ColLen, Baseline,#
-ifelse(RowCol[, "C"] == j, 1, 0))#
-}	#
-}#
-if (RowLen >=2 & ColLen >= 2){#
-for (i in 1:(RowLen - 1)) for (j in 1:(ColLen - 1)){#
-RowCol[, paste("R", i, "C", j, sep = "")] <-#
-RowCol[, paste("R", i, sep = "")] * #
-RowCol[, paste("C", j, sep = "")]#
-}	#
-}#
-#
-mm <- RowCol[, -c(1:2)]#
-mm <- cbind(mu0 = 1, mm)#
-mminv <- solve(mm)#
-#
-res <- list(RowCol = RowCol, mm = mm, mminv = mminv)#
-return(res)#
-}
-RegCod()
-RegCod(4,4)
-RegCod <- #
-function (#
-RowLevel = 2, #
-ColLevel = 3, #
-Dummy = TRUE, #
-RowNumber = 1, #
-ColNumber = 1#
-) {#
-Baseline <- ifelse(Dummy, 0, -1) #
-RowData <- gl(RowLevel, RowNumber)#
-ColData <- gl(ColLevel, ColNumber)#
-RowLen <- nlevels(RowData)#
-ColLen <- nlevels(ColData)#
-RowCol <- expand.grid(C = ColData, R = RowData)#
-RowCol <- RowCol[, c(2, 1)]#
-rownames(RowCol) <- paste("mu", RowCol[, "R"], RowCol[, "C"],  sep = "")#
-if (RowLen >= 2){#
-for (i in 1:(RowLen - 1)){#
-RowCol[, paste("R", i, sep = "")] <-#
-ifelse(RowCol[, "R"] == RowLen, Baseline,#
-ifelse(RowCol[, "R"] == i, 1, 0))#
-}	#
-}#
-if (ColLen >= 2){#
-for (j in 1:(ColLen - 1)){#
-RowCol[, paste("C", j,  sep = "")] <-#
-ifelse(RowCol[, "C"] == ColLen, Baseline,#
-ifelse(RowCol[, "C"] == j, 1, 0))#
-}	#
-}#
-if (RowLen >=2 & ColLen >= 2){#
-for (i in 1:(RowLen - 1)) for (j in 1:(ColLen - 1)){#
-RowCol[, paste("R", i, "C", j, sep = "")] <-#
-RowCol[, paste("R", i, sep = "")] * #
-RowCol[, paste("C", j, sep = "")]#
-}	#
-}#
-#
-mm <- RowCol[, -c(1:2)]#
-mm <- cbind(mu0 = 1, mm)#
-mminv <- solve(mm)#
-#
-res <- list(RowCol = RowCol, mm = mm, mminv = mminv)#
-return(res)#
-}
-RegCod(4,4)
-RegCod(4,1)
-RegCod(1,4)
 RegCod(1,4, Dummy=F)
 RegCod(1, 5, Dummy=F)
 RegCod(1, 6, Dummy=F)
@@ -1517,3 +1295,1356 @@ mtext("Y", side = 2, at = max(df2[, "Y"]) + adj, las = 2, adj = 1.5)#
 mtext("X", side = 1, at = max(df2[, "X"]) + adj, las = 1, padj = 0.2)	#
 }
 LeverageDiscrepancyInfluence()
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2)#
+mtext(expression(mu), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+}
+Density_Plot(0,2)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2)#
+mtext(bquote(mu = .(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+}
+Density_Plot(0,2)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2)#
+mtext(expression(mu) = bquote(mean), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+}
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2)#
+mtext(bquote(mean), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+}
+Density_Plot(0,2)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2)#
+mtext(bquote(.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+}
+Density_Plot(0,2)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2)#
+mtext(bquote(mu = .(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+}
+Density_Plot(0,2)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2)#
+mtext(bquote(mu, = , .(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+}
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2)#
+mtext(bquote(mu, = , .(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+}Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2)#
+mtext(bquote(mu, = , .(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+}
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2)#
+mtext(bquote(mu, = , .(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+}
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2)#
+mtext(bquote(mu == ~.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+}
+Density_Plot(0,2)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE, MM = TRUE#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2)#
+mtext(bquote(mu == ~.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (MM) {#
+ abline(v = mean)#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+}
+Density_Plot(0,2)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE, MM = TRUE#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2)#
+mtext(bquote(mu==~.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (MM) {#
+ abline(v = mean)#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+}
+Density_Plot(0,2)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE, MM = TRUE#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2)#
+mtext(bquote(mu==~.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (MM) {#
+ abline(v = mean, lty = 2)#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+}
+Density_Plot(0,2)
+Density_Plot(0,2, arrow=T)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE, MM = TRUE#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2)#
+mtext(bquote(mu==~.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (MM) {#
+ abline(v = mean, lty = 2)#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma == ~.(sd)))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+}
+Density_Plot(0,2, arrow=T)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE, MM = TRUE#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2)#
+mtext(bquote(mu==~.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (MM) {#
+ abline(v = mean, lty = 2)#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + 1.1 * sd, mean, sd),#
+  pos = 3, label = bquote(sigma == ~.(sd)))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+}
+Density_Plot(0,2, arrow=T)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE, MM = TRUE#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2)#
+mtext(bquote(mu==~.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (MM) {#
+ abline(v = mean, lty = 2)#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma == ~.(sd)))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+}
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE, MM = TRUE#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2)#
+mtext(bquote(mu==~.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (MM) {#
+ abline(v = mean, lty = 2)#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 2, label = bquote(sigma == ~.(sd)))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+}
+Density_Plot(0,2, arrow=T)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2)#
+mtext(bquote(mu==~.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma == ~.(sd)))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+}
+Density_Plot(0,2, arrow=T)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE, point = 5#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2)#
+mtext(bquote(mu==~.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma == ~.(sd)))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+#
+mtext(bquote(X == ~.(point))), side = 1, adj = (3 + 6 / sd ) /6, padj = 2)#
+arrows(point, -dnorm(mean + sd, mean, sd) / 6, point, 0, xpd = TRUE, length = 0.08)#
+#
+}
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE, point = 5#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2)#
+mtext(bquote(mu==~.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma == ~.(sd)))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+#
+mtext(bquote(X == ~.(point)), side = 1, adj = (3 + 6 / sd ) /6, padj = 2)#
+arrows(point, -dnorm(mean + sd, mean, sd) / 6, point, 0, xpd = TRUE, length = 0.08)#
+#
+}
+Density_Plot(0,2, arrow=T)
+Density_Plot(0,2, arrow=T)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE, point = 5#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2)#
+mtext(bquote(mu==~.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma == ~.(sd)))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+#
+mtext(bquote(X == ~.(point)), side = 1, adj = (3 + 6 / sd ) /6)#
+arrows(point, -dnorm(mean + sd, mean, sd) / 6, point, 0, xpd = TRUE, length = 0.08)#
+#
+}
+Density_Plot(0,2, arrow=T)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE, point = 5#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2)#
+mtext(bquote(mu==~.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma == ~.(sd)))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+#
+mtext(bquote(X == ~.(point)), side = 1, adj = (3 + 6 / sd ) /6)#
+arrows(point, -dnorm(mean + sd, mean, sd) / 6, point, 0, xpd = F, length = 0.08)#
+#
+}
+Density_Plot(0,2, arrow=T)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE, point = 5#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2)#
+mtext(bquote(mu==~.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma == ~.(sd)))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+#
+mtext(bquote(X == ~.(point)), side = 1, adj = (3 + 6 / sd ) /6)#
+arrows(point, -dnorm(mean + sd, mean, sd) / 6, point, 0, xpd = TRUE, length = 0.08)#
+#
+}
+Density_Plot(0,2, arrow=T)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE, point = 5#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2, xaxs = "i")#
+mtext(bquote(mu==~.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma == ~.(sd)))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+#
+mtext(bquote(X == ~.(point)), side = 1, adj = (3 + 6 / sd ) /6)#
+arrows(point, -dnorm(mean + sd, mean, sd) / 6, point, 0, xpd = TRUE, length = 0.08)#
+#
+}
+Density_Plot(0,2, arrow=T)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE, point = 5#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2, yaxs = "i")#
+mtext(bquote(mu==~.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma == ~.(sd)))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+#
+mtext(bquote(X == ~.(point)), side = 1, adj = (3 + 6 / sd ) /6)#
+arrows(point, -dnorm(mean + sd, mean, sd) / 6, point, 0, xpd = TRUE, length = 0.08)#
+#
+}
+Density_Plot(0,2, arrow=T)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE, point = 5#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2, yaxs = "i")#
+mtext(bquote(mu==~.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma == ~.(sd)))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+#
+mtext(bquote(X == ~.(point)), side = 1, adj = (3 + 6 / sd ) /6)#
+arrows(point, -dnorm(mean + sd, mean, sd) / 6, point, 0, xpd = FALSE, length = 0.08)#
+#
+}
+Density_Plot(0,2, arrow=T)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE, point = 5#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2, yaxs = "i")#
+mtext(bquote(mu==~.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma == ~.(sd)))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+#
+mtext(bquote(X == ~.(point)), side = 1, adj = (3 + 6 / sd ) /6)#
+arrows(point, -dnorm(mean + sd, mean, sd) / 6, point, 0, xpd = TRUE, length = 0.08)#
+#
+}
+Density_Plot(0,2, arrow=T)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE, point = 5#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2, yaxs = "i")#
+mtext(bquote(mu==~.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma == ~.(sd)))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+#
+mtext(bquote(X == ~.(point)), side = 1)#
+arrows(point, -dnorm(mean + sd, mean, sd) / 6, point, 0, xpd = TRUE, length = 0.08)#
+#
+}
+Density_Plot(0,2, arrow=T)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE, point = 5#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2, yaxs = "i")#
+mtext(bquote(mu==~.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma == ~.(sd)))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+#
+mtext(bquote(X == ~.(point)), side = 1, adj = point - mean)#
+arrows(point, -dnorm(mean + sd, mean, sd) / 6, point, 0, xpd = TRUE, length = 0.08)#
+#
+}
+Density_Plot(0,2, arrow=T)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE, point = 5#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2, yaxs = "i")#
+mtext(bquote(mu==~.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma == ~.(sd)))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+#
+mtext(bquote(X == ~.(point)), side = 1, adj = point)#
+arrows(point, -dnorm(mean + sd, mean, sd) / 6, point, 0, xpd = TRUE, length = 0.08)#
+#
+}
+Density_Plot(0,2, arrow=T)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE, point = 5#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2, yaxs = "i")#
+mtext(bquote(mu==~.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma == ~.(sd)))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+#
+mtext(bquote(X == ~.(point)), side = 1, adj = point - mean)#
+arrows(point, -dnorm(mean + sd, mean, sd) / 6, point, 0, xpd = TRUE, length = 0.08)#
+#
+}
+Density_Plot(0,2, arrow=T)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE, point = 5#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2, yaxs = "i")#
+mtext(bquote(mu==~.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma == ~.(sd)))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+#
+mtext(bquote(X == ~.(point)), side = 1, at = point)#
+arrows(point, -dnorm(mean + sd, mean, sd) / 6, point, 0, xpd = TRUE, length = 0.08)#
+#
+}
+Density_Plot(0,2, arrow=T)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE, point = 5#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2, yaxs = "i")#
+mtext(bquote(mu==~.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.05)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma == ~.(sd)))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+#
+mtext(bquote(X == ~.(point)), side = 1, at = point, line = 2)#
+arrows(point, -dnorm(mean + sd, mean, sd) / 6, point, 0, xpd = TRUE, length = 0.08)#
+#
+}
+Density_Plot(0,2, arrow=T)
+Density_Plot(0,2, arrow=T)
+Density_Plot(0,2, arrow=T, point = 3)
+Density_Plot(70, 3, arrow=T, point = 78)
+Density_Plot(70, 3, arrow=T, point = 76)
+Density_Plot(70, 4, arrow=T, point = 76)
+Density_Plot(70, 12, arrow=T, point = 76)
+Density_Plot(70, 3, arrow=T, point = 76)
+Density_Plot(70, 3, arrow=T, point = 76, AX = F)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE, point = 5#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2, yaxs = "i")#
+mtext(bquote(mu==~.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.02)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma == ~.(sd)))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+#
+mtext(bquote(X == ~.(point)), side = 1, at = point, line = 2)#
+arrows(point, -dnorm(mean + sd, mean, sd) / 6, point, 0, xpd = TRUE, length = 0.08)#
+#
+}
+Density_Plot(70, 3, arrow=T, point = 76, AX = F)
+Density_Plot <- function(#
+mean, sd,#
+X = seq((mean - 3 * sd),  (mean + 3 * sd), by = 0.01),#
+AZ = FALSE, AX = TRUE, arrow = FALSE, point = NULL#
+){#
+plot(#
+  X, dnorm(X, mean, sd), xlim = c(min(X), max(X)),#
+  type = "l", xlab = "", ylab = "", axes = FALSE, col = "#af1e23", lwd = 2, yaxs = "i")#
+mtext(bquote(mu==~.(mean)), 1, line = 0.3)#
+axis(1, at = c(min(X) - 1.5 * sd, max(X) + 1.5 * sd), labels = c("", ""), line = 0, lwd.ticks = 0)#
+if (AX) {#
+axis(1, at = seq(min(X) - 1 * sd, max(X) + 1 * sd, by = sd), lwd = 0, line = 0, lwd.ticks = 1)	#
+}#
+mtext(expression(italic("X")), side = 1, line = -0.5, adj = 1.02)#
+if (AZ){#
+axis(1, at = c(mean - 3.5 * sd, mean + 3.5 * sd), labels = c("", ""), line = 2.5, lwd.ticks = 0)#
+axis(#
+  1, at = seq(mean - 3 * sd, mean + 3 * sd, by = sd), #
+  labels = seq(-3, 3, by = 1), line = 2.5, lwd.ticks = 1)#
+mtext(expression(italic("z")), side = 1, line = 2, adj = 1.05)	#
+}#
+if (arrow){#
+segments(#
+  x0 = seq(mean - 2 * sd, mean + 2 * sd, by = sd), y0 = 0,#
+  y1 = c(rep(dnorm(mean + sd, mean, sd), 2), dnorm(mean, mean, sd), rep(dnorm(mean + sd, mean, sd), 2)),#
+  lty = 5)#
+text(#
+  x = mean + sd / 2, y = dnorm(mean + sd, mean, sd),#
+  pos = 3, label = bquote(sigma == ~.(sd)))#
+arrows(#
+  x0 = c(mean, mean, mean + sd, mean - sd), y0 = dnorm(mean + sd, mean, sd),#
+  x1 = c(mean + sd, mean - sd, mean + 2 * sd, mean - 2 * sd), length = 0.08)	#
+}#
+if (!is.null(point)) {#
+mtext(bquote(X == ~.(point)), side = 1, at = point, line = 2)#
+arrows(point, -dnorm(mean + sd, mean, sd) / 6, point, 0, xpd = TRUE, length = 0.08)	#
+}#
+#
+}
+Density_Plot(70, 3, arrow=T, point = 76, AX = F)
+Density_Plot(70, 3, arrow=T, AX = F)
