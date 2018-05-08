@@ -1,27 +1,28 @@
+# Add alpha to colors
+col2alpha <- function(col, alpha) {
+  col_rgb <- col2rgb(col)/255
+  rgb(col_rgb[1], col_rgb[2], col_rgb[3], alpha = alpha)
+}
+
+### pPower
 pPower <- function (
-  # m0 = 80, m1 = 88, sigma = 10, n = 25, sig = 0.05,
-  m0 = 0, m1 = 4, sigma = 1, n = 1, sig = 0.05,
+  m0 = 0, m1 = 4, sigma = 1, x_range = 5, n = 1, sig = 0.05,
   H0 = TRUE, H1 = TRUE, body = TRUE, tail = TRUE, beta = TRUE, power = TRUE,
-  reject = TRUE, level = TRUE, AxisZ = FALSE
+  reject = TRUE, level = TRUE, AX = TRUE, AZ = FALSE, points = NULL
 )
 {
   # Calculate critical values
   sigma_m <- sigma / sqrt(n)
   d <- (m1 - m0) / sigma
   # X and Ys
-  X0s <- seq(m0 - 5 * sigma_m, m0 + 5 * sigma_m,by = 0.01 * sigma_m)
-  X1s <- seq(m1 - 5 * sigma_m, m1 + 5 * sigma_m, by = 0.01 * sigma_m)
+  X0s <- seq(m0 - x_range * sigma_m, m0 + x_range * sigma_m, by = 0.01 * sigma_m)
+  X1s <- seq(m1 - x_range * sigma_m, m1 + x_range * sigma_m, by = 0.01 * sigma_m)
   Xs <- sort(cbind(X0s, X1s))
   Y0s <- dnorm(Xs, mean = m0, sd = sigma_m)
   Y1s <- dnorm(Xs, mean = m1, sd = sigma_m)
   # Critical X values
   X_min <- qnorm(sig / 2, mean = m0, sd = sigma_m, lower.tail = TRUE)
   X_max <- qnorm(sig / 2, mean = m0, sd = sigma_m, lower.tail = FALSE)
-  # polygons
-  col2alpha <- function(col, alpha) {
-    col_rgb <- col2rgb(col)/255
-    rgb(col_rgb[1], col_rgb[2], col_rgb[3], alpha = alpha)
-  }
   ## Tail
   low_tail <- seq(min(Xs), X_min, by = sigma_m * 0.001)
   high_tail <- seq (X_max, max(Xs), by = sigma_m * 0.001)
@@ -49,8 +50,9 @@ pPower <- function (
   power_x <- c(X_max, power_range, max(X1s))
   power_y <- c(0, dnorm(power_range, mean = m1, sd = sigma_m), 0)
   power_col <- col2alpha("#1E90FF", alpha = 0.5)
-  #label_pos <- seq(60, 105, by = sigma_m)
   label_pos <- seq(min(Xs), max(Xs), by = sigma_m)
+  label_pos <- unique(c(label_pos, points))
+
   ## plot
   plot(NULL, NULL, xlim = range(Xs), # c(60, 105)
        ylim = c(0, (1 + 0.01) * max(Y0s) ),
@@ -87,31 +89,40 @@ pPower <- function (
     }
   }
   # H_0
+
   if (H0){
     lines(Xs, Y0s, col = "#cf232a", lwd = 2)
-    abline(v = m0, lwd = 1, col = "gray")
-    mtext(expression(H[0]), side = 3, at = m0)
+    abline(v = m0, lwd = 1)
     arrows(x0 = m0, y0 = dnorm(m0 + sigma_m, m0, sigma_m),
            x1 = m0 + sigma_m, y1 = dnorm(m0 + sigma_m, m0, sigma_m),
-           length = 0.1,  col = "gray")
-    text(labels = bquote(sigma[M] == .(round(sigma_m, 2))), x = m0 + sigma_m / 2,
-         y = dnorm(m0 + sigma_m, m0, sigma_m), pos = 3, col = "gray")
+           length = 0.1)
+    if (AX) sigma_mm <- sigma_m else sigma_mm <- 1
+    text(x = m0 + sigma_m / 2, y = dnorm(m0 + sigma_m, m0, sigma_m), pos = 1,
+         labels = bquote(sigma[M] == .(round(sigma_mm, 2))))
   }
   # H_1
   if (H1){
     lines(Xs, Y1s, col = "#d5493a", lwd = 2)
     abline(v = m1, lwd = 1, col = "gray")
+    mtext(expression(H[0]), side = 3, at = m0)
     mtext(expression(H[1]),  side = 3, at = m1)
     mtext(text = bquote("Cohen's d" == .(d)~", n"==.(n)), side = 3, at = (m0 + m1) / 2,
           padj = -2)
   }
-  ## X-Axes
+  ## X-Axes and Z-Axes
+  AXZ <- function (Baseline = 2.5, Axis = "z") {
+  	llabel <- if (Axis == "X") {round(label_pos, 2)} else {round((label_pos - m0) / sigma_m, 2)}
+    axis(1, at = c(min(label_pos) - 0.5 * sigma_m, max(label_pos) + 0.5 * sigma_m), labels = c("", ""), lwd.ticks = 0, line = Baseline)
+    axis(1, at = label_pos, label = rep("", length(label_pos)), lwd = 0, lwd.ticks = 1, line = Baseline)
+    axis(1, at = label_pos, label = llabel, lwd = 0, lwd.ticks = 0, line = Baseline - 0.5)
+    mtext(text = bquote(italic(.(Axis))), side = 1, adj = 1.03, line = Baseline - 0.6)
+  }
 
-  axis(1, at = label_pos, label = round(label_pos, 2))
-  mtext(text = "X", side = 1, adj = 1, line = -0.6)
-  if (AxisZ){
-    axis(side = 1, at = label_pos, label = (label_pos - m0) / sigma_m , line = 2.5)
-    mtext(text = "Z", side = 1, adj = 1, line = 1.9)
+  if (AX) {
+    AXZ(0, "X")
+    if (AZ) AXZ(2.5, "z")
+  } else {
+  	AXZ(0, "z")
   }
 
   ## Critical lines
