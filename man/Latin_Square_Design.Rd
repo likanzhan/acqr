@@ -1,5 +1,5 @@
-\name{LatinSqr}
-\alias{LatinSqr}
+\name{Latin_Square_Design}
+\alias{Latin_Square_Design}
 \title{Show the Latin Square Experimental Design}
 \description{
 Show the Latin Square Experimental Design
@@ -9,8 +9,8 @@ Show the Latin Square Experimental Design
   \item{Latin = TRUE}{Whether to use Latin Square method or not}
 }
 \usage{
-LatinSqr(n = 5, Latin = TRUE)
+Latin_Square_Design(n = 5, Latin = TRUE)
 }
 \examples{
-LatinSqr()
+Latin_Square_Design()
 }

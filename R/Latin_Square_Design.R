@@ -1,7 +1,8 @@
-LatinSqr <- function(n = 5, Latin = TRUE){
+Latin_Sqare_Design <- function(n = 5, Latin = TRUE){
 
 x <- matrix(1:n, n, n, byrow = TRUE)
-colnames(x) <- if (n <= 26) LETTERS[1:n] else sprintf(paste("C%0", max(nchar(n)), "d", sep=""), 1:n)
+colnames(x) <- if (n <= 26) LETTERS[1:n]
+                      else sprintf(paste("C%0", max(nchar(n)), "d", sep = ""), 1:n)
 
 if (Latin) {
 x[1, c(1, 1 : floor(n / 2) * 2)]  <- 1 : (floor(n / 2) + 1)

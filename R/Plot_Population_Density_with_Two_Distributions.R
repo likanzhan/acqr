@@ -6,18 +6,19 @@ col2alpha <- function(col, alpha) {
 
 ### pPower
 pPower <- function (
-  m0 = 0, m1 = 4, sigma = 1, x_range = 5, n = 1, sig = 0.05,
+  m0 = 0, m1 = 4, sigma = 1, sd_range = 5, n = 1, sig = 0.05,
   H0 = TRUE, H1 = TRUE, body = TRUE, tail = TRUE, beta = TRUE, power = TRUE,
-  reject = TRUE, level = TRUE, AX = TRUE, AZ = FALSE, points = NULL
+  reject = TRUE, level = TRUE, AX = TRUE, AZ = FALSE, points = NULL #, x_range = NULL
 )
 {
   # Calculate critical values
   sigma_m <- sigma / sqrt(n)
   d <- (m1 - m0) / sigma
   # X and Ys
-  X0s <- seq(m0 - x_range * sigma_m, m0 + x_range * sigma_m, by = 0.01 * sigma_m)
-  X1s <- seq(m1 - x_range * sigma_m, m1 + x_range * sigma_m, by = 0.01 * sigma_m)
+  X0s <- seq(m0 - sd_range * sigma_m, m0 + sd_range * sigma_m, by = 0.01 * sigma_m)
+  X1s <- seq(m1 - sd_range * sigma_m, m1 + sd_range * sigma_m, by = 0.01 * sigma_m)
   Xs <- sort(cbind(X0s, X1s))
+  # if (is.null(x_range)) Xs <- Xs else Xs <- x_range
   Y0s <- dnorm(Xs, mean = m0, sd = sigma_m)
   Y1s <- dnorm(Xs, mean = m1, sd = sigma_m)
   # Critical X values

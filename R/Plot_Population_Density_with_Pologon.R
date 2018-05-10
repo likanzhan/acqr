@@ -1,8 +1,8 @@
-Density_Plot_with_Pologon <- function (p1 = mean, p2 = mean + sd, mean = 100, sd = 15, AX = TRUE, AZ = TRUE, show_area_size = TRUE)
+Plot_Population_Density_with_Pologon <- function (p1 = mean, p2 = mean + sd, mean = 100, sd = 15, sd_range = 4, AX = TRUE, AZ = TRUE, show_area_size = TRUE)
 {
   points <- c(p1, p2)
   points <- points[is.finite(points)]
-  acqr::pPower(m0 = mean, x_range = 4, m1 = mean, sigma = sd, H1 = F, reject = F, level = F, beta = F, power = F, body = F, tail = F, AX = AX, AZ = AZ, points = points)
+  acqr::pPower(m0 = mean, sd_range = sd_range, m1 = mean, sigma = sd, H1 = F, reject = F, level = F, beta = F, power = F, body = F, tail = F, AX = AX, AZ = AZ, points = points)
   cnvtp <- function(pp) if (pp == Inf) mean + 4 * sd else if (pp == -Inf) mean - 4 * sd else pp
   if (! is.na(p1) & ! is.na(p2)){
     pt1 <- cnvtp(p1)

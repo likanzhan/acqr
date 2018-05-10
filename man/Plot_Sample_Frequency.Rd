@@ -1,6 +1,6 @@
-\name{Modified_Frequency_Distribution}
-\alias{Modified_Frequency_Distribution}
-\title{Modified_Frequency_Distribution}
+\name{Sample_Frequency_Plot}
+\alias{Sample_Frequency_Plot}
+\title{Sample_Frequency_Plot}
 \description{
 Modified_Frequency_Distribution_Mean
 }
@@ -10,7 +10,7 @@ Modified_Frequency_Distribution_Mean
   \item{mean_sd}{mean_sd=FALSE(default)}
   \item{AZ}{AZ=FALSE(default), if TRUE to show the z axis}
   \item{fill}{filled color of each cell}
-  \item{border}{border color of each cell}  
+  \item{border}{border color of each cell}
   \item{...}{arguments passed to hist}
 }
 \usage{
