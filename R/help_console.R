@@ -1,9 +1,13 @@
-help_console <- function(topic, format=c("text", "html", "latex", "Rd"),
-                         lines=NULL, before=NULL, after=NULL) {  
+help_console <- function(
+ topic, 
+ format=c("text", "html", "latex", "Rd"),
+ lines=NULL, 
+ before=NULL, 
+ after=NULL
+ ){  
   format=match.arg(format)
   if (!is.character(topic)) topic <- deparse(substitute(topic))
   helpfile = utils:::.getHelpFile(help(topic))
-
   hs <- capture.output(switch(format, 
                               text=tools:::Rd2txt(helpfile),
                               html=tools:::Rd2HTML(helpfile),
@@ -11,6 +15,7 @@ help_console <- function(topic, format=c("text", "html", "latex", "Rd"),
                               Rd=tools:::prepare_Rd(helpfile)
                               )
                       )
+  hs <- gsub("_\b", "", hs)                      
   if(!is.null(lines)) hs <- hs[lines]
   hs <- c(before, hs, after)
   cat(hs, sep="\n")

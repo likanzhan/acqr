@@ -4,11 +4,26 @@ col2alpha <- function(col, alpha) {
   rgb(col_rgb[1], col_rgb[2], col_rgb[3], alpha = alpha)
 }
 
-### pPower
-pPower <- function (
-  m0 = 0, m1 = 4, sigma = 1, sd_range = 5, n = 1, sig = 0.05,
-  H0 = TRUE, H1 = TRUE, body = TRUE, tail = TRUE, beta = TRUE, power = TRUE,
-  reject = TRUE, level = TRUE, AX = TRUE, AZ = FALSE, points = NULL #, x_range = NULL
+### Plot_Population_Density_with_Two_Distributions
+ZZPlot_Population_Density_with_Two_Distributions <- function (
+  m0 = 0, 
+  m1 = 4, 
+  sigma = 1, 
+  sd_range = 5, 
+  n = 1, 
+  sig = 0.05,
+  H0 = TRUE, 
+  H1 = TRUE, 
+  body = TRUE, 
+  tail = TRUE, 
+  beta = TRUE, 
+  power = TRUE,
+  reject = TRUE, 
+  level = TRUE, 
+  AX = TRUE, 
+  AZ = FALSE, 
+  points = NULL, 
+  x_range = NULL
 )
 {
   # Calculate critical values
