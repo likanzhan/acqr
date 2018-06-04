@@ -19,8 +19,7 @@ Plot_Population_Density <- function (
   data_points = NULL, 
   arrow = FALSE,
   area = NULL
-)
-{
+ ) {
   #### Define the colors
   plot_colors <- c("#008744", "#0057e7", "#d62d20", "#ffa700") # google
   # plot_colors <- c("#008744", "#0057e7", "#d62d20", "#ffa700")
