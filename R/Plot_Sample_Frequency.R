@@ -7,7 +7,8 @@ AHZ = FALSE, AVD = TRUE,
 show_population_curve = FALSE,
 population_mean = mean(data),
 population_sd = sd(data),
-fill = "#fce6bf", border = "#b78135",
+fill = "#fce6bf", border = "#b78135", 
+xlab = "", ylab = "Frequency",
 ...
 ){
   ##### 1. Calculate the required value ######
@@ -27,7 +28,7 @@ fill = "#fce6bf", border = "#b78135",
   ##### 2. Do the plotting ######
   par(mar = c(5, 4, 4, 5) + 0.1)
   hist(data, ylim = ylim, xlim = xlim, breaks = breaks, 
-    col = fill, border = border, main = "", xlab = "",
+    col = fill, border = border, main = "", xlab = xlab, ylab = ylab,
     yaxs = "i", xaxs = "i", xaxt = "n", yaxt = "n", ...)
   mtext(expression(italic("X")), side = 1, line = 0, adj = 0.99)
   axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0)

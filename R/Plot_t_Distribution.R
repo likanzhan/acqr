@@ -24,7 +24,8 @@ plot(x = xx, y = zy, ylim = c(0, 1.2 * maxy),
      bty = "l", yaxs = "i"
  )
  lines(xx, ty, col = ggsci::pal_aaas("default")(10)[3])
- text( x = 0, y = maxy / 2, labels = bquote(n == .(n)), col = tcolor)
+ text( x = 0, y = maxy / 1.75, labels = bquote(n == .(n)), col = tcolor)
+ text( x = 0, y = maxy / 2, labels = bquote(df == .(n - 1)), col = tcolor)
  legend("top", lty = c(1, 1),  col = c(zcolor, tcolor), bty = "n",
    legend = c("unit normal distribution", "t distribution")
  )
