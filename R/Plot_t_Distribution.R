@@ -102,4 +102,4 @@ data_points = NULL
 }
 
 ###
-Plot_t_Distribution(n=9, show_critical_region=T, fill_critical_region=T, show_normal_curve=F, data_points= 2.5)
+# Plot_t_Distribution(n=9, show_critical_region=T, fill_critical_region=T, show_normal_curve=F, data_points= 2.5)

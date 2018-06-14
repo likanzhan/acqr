@@ -1,4 +1,4 @@
-Latin_Sqare_Design <- function(n = 5, Latin = TRUE){
+Latin_Square_Design <- function(n = 5, Latin = TRUE){
 
 x <- matrix(1:n, n, n, byrow = TRUE)
 colnames(x) <- if (n <= 26) LETTERS[1:n]

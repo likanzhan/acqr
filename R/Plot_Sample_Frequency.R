@@ -158,4 +158,4 @@ xlab = "", ylab = "Frequency",
 
 sample1 <- c(11, 9, 4, 5, 6, 7, 12, 10)
 sample2 <- c(7, 13, 14, 16, 9, 11, 15, 11)
-Plot_Sample_Frequency(sample1, sample2, show_sample_deviation = F, show_SST = F)
+# Plot_Sample_Frequency(sample1, sample2, show_sample_deviation = F, show_SST = F)
