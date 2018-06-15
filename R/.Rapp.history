@@ -8,1483 +8,6 @@ AHZ = FALSE, AVD = TRUE,#
 show_population_curve = FALSE,#
 population_mean = mean(c(sample1, sample2)),#
 population_sd = sd(c(sample1, sample2)),#
-fill = "#a0d5cf", border = "#009f9b", #
-#fill = "#fce6bf", border = "#b78135", #
-xlab = "", ylab = "Frequency",#
-show_SST = TRUE,#
-...#
-){#
-  ##### 1. Calculate the required value #######
-  sample_tidy <- function (sample) {#
-    Mean <- mean(sample)#
-    Table <- as.data.frame(table(sample, dnn = "data"))#
-    names(Table)[names(Table) == "Freq"] <- "Frequency"#
-    Table[, "data"] <- as.numeric(as.character(Table[, "data"]))#
-    Table_Unique <- Table[Table[, "data"] != Mean, ]#
-    res <- list(Table = Table, Table_Unique = Table_Unique, Mean = Mean)#
-    return(res)	#
-  }#
-  sample_1_tidy <- sample_tidy(sample1)#
-  sample_2_tidy <- if (!is.null(sample2)) sample_tidy(sample2) else sample_1_tidy#
-#
-  sample_total <- c(sample1, sample2)#
-  sample_total_tidy <- sample_tidy(sample_total)#
-  sample_total_values_x <- sample_total_tidy[["Table"]][["data"]]#
-  sample_total_values_x <- sort(sample_total_values_x)#
-  sample_total_frequency_x <- sample_total_tidy[["Table"]][["Frequency"]]#
-  sample_total_unique_x <- sample_total_tidy[["Table_Unique"]][["data"]]#
-  sample_total_unique_x <- sort(sample_total_unique_x)#
-  sample_total_unique_frequency <- sample_total_tidy[["Table_Unique"]][["Frequency"]]#
-  sample_total_unique_length <- nrow(sample_total_tidy[["Table_Unique"]])#
-  sample_1_values_x <- sample_total_values_x[sample_total_values_x %in% sample1]#
-  sample_1_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_1_values_x, "Frequency"]#
-  sample_1_valus_length <- length(sample_1_values_x)#
-  sample_2_values_x <- sample_total_values_x[sample_total_values_x %in% sample2]#
-  sample_2_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_2_values_x, "Frequency"]#
-  sample_2_valus_length <- length(sample_2_values_x)#
-  bin_width <- min(sample_total_values_x[-1] - sample_total_values_x[-length(sample_total_values_x)])#
-  xlim <- c(min(sample_total_values_x) - bin_width, max(sample_total_values_x) + bin_width)#
-  ylim <- c(0, max(sample_total_frequency_x) + 1)#
-  breaks <- seq(min(sample_total_values_x) - bin_width / 2, max(sample_total_values_x) + bin_width / 2, by = bin_width)#
-  xlabel <- round(seq(min(sample_total_values_x), max(sample_total_values_x), by = bin_width), 2)#
-  xzlabel <- round((xlabel - population_mean) / population_sd, 2)#
-  ylabel <- seq(0, max(sample_total_frequency_x), by = 1)#
-  ydensitylabel <- format(ylabel / length(sample_total), digits = 2)#
-#
-  ##### 2. Do the plotting #######
-  par(mar = c(5, 4, 4, 5) + 0.1)#
-  hist(sample_total, ylim = ylim, xlim = xlim, breaks = breaks, #
-    col = fill, border = border, main = "", xlab = xlab, ylab = ylab,#
-    yaxs = "i", xaxs = "i", xaxt = "n", yaxt = "n", ...)#
-  if (!is.null(sample2)) {#
-  hist(x = sample1, breaks = breaks, col = "#f8cea2", border = "#b78135", add = TRUE)  	#
-  }#
-  mtext(expression(italic("X")), side = 1, line = 0, adj = 0.99)#
-  axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0)#
-  axis(1, at = xlabel, labels = xlabel, lwd = 0, lwd.ticks = 1, padj = -0.5)#
-  axis(2, at = ylim, labels = c("",""), lwd.ticks = 0)#
-  axis(2, at = ylabel, labels = ylabel, lwd = 0, lwd.ticks = 1, las = 1)#
-#
-  ##### 3. Add more axes #######
-  if (AVD){#
-    axis(4, at = ylim, labels = c("",""), lwd.ticks = 0)#
-    axis(4, at = ylabel, labels = ydensitylabel, lwd = 0, lwd.ticks = 1, las = 1)#
-    mtext("Density", side = 4, line = 4, padj = - 1)#
-  }#
-#
-  if (AHZ) {#
-    axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0, line = 2.5)#
-    axis(1, at = xlabel, labels = xzlabel, lwd = 0, lwd.ticks = 1, line = 2.5, padj = -0.5)#
-    mtext(expression(italic("z")), side = 1, line = 2.5, adj = 0.99)#
-  }#
-#
-  ##### 4. Add more information concerning the sample data #######
-  if (show_sample_grid){#
-    invisible(lapply(1:nrow(sample_total_tidy[["Table"]]), function(i) {#
-    invisible(lapply(1:sample_total_frequency_x[i], function(j){#
-      segments(sample_total_values_x[i]  - bin_width / 2, 1:j, sample_total_values_x[i]  + bin_width / 2, 1:j, col = border)#
-              }))#
-      }))#
-    }#
-#
-  if (show_sample_sigma) {#
-  	segment_y0 <- Table_1[Table_1[, "data"] == round(mean(sample1), 0), "Freq"]#
-  	segments(x0 = mean(sample1), y0 = segment_y0, x1 = mean(sample1), y1 = max(freq) + 2)#
-    arrows(mean(sample1)- sd(sample1), ylim[2]-0.5, mean(sample1) + sd(sample1), ylim[2] - 0.5, code = 3, length = 0.1)#
-    mtext(side = 3, at = mean(sample1), text = bquote(italic(M) == .(round(mean(sample1), 2))))#
-    text(x = mean(sample1) + sd(sample1) / 2, y = ylim[2] - 0.5, label = bquote(s == .(round(sd(sample1), 2))), pos = 3)#
-    text(x = mean(sample1) - sd(sample1) / 2, y = ylim[2] - 0.5, label = bquote(s == .(round(sd(sample1), 2))), pos = 3)#
-  }#
- add_vertical_horizontal_lines <- function(sample, center = mean(sample), values, frequency, length, color, start, end) {#
-     ## vertical line above mu#
-    segments(x0 = center, y0 = length(frequency[frequency == center]), y1 = max(frequency) + 1, col = "gray")#
-    ## vertical lines above each unique observation#
-    segments(x0 = values, y0 = frequency, y1 = seq(max(frequency) + start, max(frequency) + end, length.out = length), col = "gray")#
-    ## horizontal lines connecting the vertical lines and the population mean#
-    segments(x0 = values, y0 = seq(max(frequency) + start, max(frequency) + end, length.out = length), x1 = rep(center, sample_total_unique_length), col = color)#
-    ## #
-    mtext(side = 3, at = mean(sample), text = bquote(italic(M) == .(round(mean(sample), 2))))#
-    mtext(side = 3, at = center, text = bquote(italic(mu[0]) == .(center)), line = 1)#
- }#
- add_lines_together <- function(center) {#
-  	break_point <- (sample_1_valus_length / sample_total_unique_length) * 0.8#
-    add_vertical_horizontal_lines(sample1, center, sample_1_values_x, sample_1_values_frequency, sample_1_valus_length, color = "red", 0.1, break_point)#
-    if(!is.null(sample2)) {#
-    add_vertical_horizontal_lines(sample2, center, sample_2_values_x, sample_2_values_frequency, sample_2_valus_length, color = "blue", break_point, 0.9)    	#
-    }	#
- }#
-  if (show_sample_deviation) {#
-  	if (show_SST) {#
-  	  add_lines_together(population_mean)#
-     } else  {#
-   	  add_lines_together(mean(c(sample1, sample2)))    	#
-     } #
-  	}#
-#
-  ##### 5. Add population curve #######
-  if (show_population_curve){#
-    zx <- seq(population_mean - 3 * population_sd, population_mean + 3 * population_sd, len = 100)#
-    zy <- dnorm(zx, mean = population_mean, sd = population_sd) * length(sample1)#
-    lines(zx, zy, col = "#cf232a", lwd = 2)#
-  }#
-}#
-#
-sample1 = c(11, 9, 4, 5, 6, 7, 12, 10)#
-sample2 = c(7, 13, 14, 16, 9, 11, 15, 11)#
-#
-Plot_Sample_FrequencyN(sample1, sample2, show_sample_deviation = T, show_SST = F)
-rm(list = ls())#
-Plot_Sample_FrequencyN <- function(#
-sample1, sample2 = NULL, #
-show_sample_deviation = FALSE,#
-show_sample_grid = TRUE,#
-show_sample_sigma = FALSE,#
-AHZ = FALSE, AVD = TRUE,#
-show_population_curve = FALSE,#
-population_mean = mean(c(sample1, sample2)),#
-population_sd = sd(c(sample1, sample2)),#
-fill = "#a0d5cf", border = "#009f9b", #
-#fill = "#fce6bf", border = "#b78135", #
-xlab = "", ylab = "Frequency",#
-show_SST = TRUE,#
-...#
-){#
-  ##### 1. Calculate the required value #######
-  sample_tidy <- function (sample) {#
-    Mean <- mean(sample)#
-    Table <- as.data.frame(table(sample, dnn = "data"))#
-    names(Table)[names(Table) == "Freq"] <- "Frequency"#
-    Table[, "data"] <- as.numeric(as.character(Table[, "data"]))#
-    Table_Unique <- Table[Table[, "data"] != Mean, ]#
-    res <- list(Table = Table, Table_Unique = Table_Unique, Mean = Mean)#
-    return(res)	#
-  }#
-  sample_1_tidy <- sample_tidy(sample1)#
-  sample_2_tidy <- if (!is.null(sample2)) sample_tidy(sample2) else sample_1_tidy#
-#
-  sample_total <- c(sample1, sample2)#
-  sample_total_tidy <- sample_tidy(sample_total)#
-  sample_total_values_x <- sample_total_tidy[["Table"]][["data"]]#
-  sample_total_values_x <- sort(sample_total_values_x)#
-  sample_total_frequency_x <- sample_total_tidy[["Table"]][["Frequency"]]#
-  sample_total_unique_x <- sample_total_tidy[["Table_Unique"]][["data"]]#
-  sample_total_unique_x <- sort(sample_total_unique_x)#
-  sample_total_unique_frequency <- sample_total_tidy[["Table_Unique"]][["Frequency"]]#
-  sample_total_unique_length <- nrow(sample_total_tidy[["Table_Unique"]])#
-  sample_1_values_x <- sample_total_values_x[sample_total_values_x %in% sample1]#
-  sample_1_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_1_values_x, "Frequency"]#
-  sample_1_valus_length <- length(sample_1_values_x)#
-  sample_2_values_x <- sample_total_values_x[sample_total_values_x %in% sample2]#
-  sample_2_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_2_values_x, "Frequency"]#
-  sample_2_valus_length <- length(sample_2_values_x)#
-  bin_width <- min(sample_total_values_x[-1] - sample_total_values_x[-length(sample_total_values_x)])#
-  xlim <- c(min(sample_total_values_x) - bin_width, max(sample_total_values_x) + bin_width)#
-  ylim <- c(0, max(sample_total_frequency_x) + 1)#
-  breaks <- seq(min(sample_total_values_x) - bin_width / 2, max(sample_total_values_x) + bin_width / 2, by = bin_width)#
-  xlabel <- round(seq(min(sample_total_values_x), max(sample_total_values_x), by = bin_width), 2)#
-  xzlabel <- round((xlabel - population_mean) / population_sd, 2)#
-  ylabel <- seq(0, max(sample_total_frequency_x), by = 1)#
-  ydensitylabel <- format(ylabel / length(sample_total), digits = 2)#
-#
-  ##### 2. Do the plotting #######
-  par(mar = c(5, 4, 4, 5) + 0.1)#
-  hist(sample_total, ylim = ylim, xlim = xlim, breaks = breaks, #
-    col = fill, border = border, main = "", xlab = xlab, ylab = ylab,#
-    yaxs = "i", xaxs = "i", xaxt = "n", yaxt = "n", ...)#
-  if (!is.null(sample2)) {#
-  hist(x = sample1, breaks = breaks, col = "#f8cea2", border = "#b78135", add = TRUE)  	#
-  }#
-  mtext(expression(italic("X")), side = 1, line = 0, adj = 0.99)#
-  axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0)#
-  axis(1, at = xlabel, labels = xlabel, lwd = 0, lwd.ticks = 1, padj = -0.5)#
-  axis(2, at = ylim, labels = c("",""), lwd.ticks = 0)#
-  axis(2, at = ylabel, labels = ylabel, lwd = 0, lwd.ticks = 1, las = 1)#
-#
-  ##### 3. Add more axes #######
-  if (AVD){#
-    axis(4, at = ylim, labels = c("",""), lwd.ticks = 0)#
-    axis(4, at = ylabel, labels = ydensitylabel, lwd = 0, lwd.ticks = 1, las = 1)#
-    mtext("Density", side = 4, line = 4, padj = - 1)#
-  }#
-#
-  if (AHZ) {#
-    axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0, line = 2.5)#
-    axis(1, at = xlabel, labels = xzlabel, lwd = 0, lwd.ticks = 1, line = 2.5, padj = -0.5)#
-    mtext(expression(italic("z")), side = 1, line = 2.5, adj = 0.99)#
-  }#
-#
-  ##### 4. Add more information concerning the sample data #######
-  if (show_sample_grid){#
-    invisible(lapply(1:nrow(sample_total_tidy[["Table"]]), function(i) {#
-    invisible(lapply(1:sample_total_frequency_x[i], function(j){#
-      segments(sample_total_values_x[i]  - bin_width / 2, 1:j, sample_total_values_x[i]  + bin_width / 2, 1:j, col = border)#
-              }))#
-      }))#
-    }#
-#
-  if (show_sample_sigma) {#
-  	segment_y0 <- Table_1[Table_1[, "data"] == round(mean(sample1), 0), "Freq"]#
-  	segments(x0 = mean(sample1), y0 = segment_y0, x1 = mean(sample1), y1 = max(freq) + 2)#
-    arrows(mean(sample1)- sd(sample1), ylim[2]-0.5, mean(sample1) + sd(sample1), ylim[2] - 0.5, code = 3, length = 0.1)#
-    mtext(side = 3, at = mean(sample1), text = bquote(italic(M) == .(round(mean(sample1), 2))))#
-    text(x = mean(sample1) + sd(sample1) / 2, y = ylim[2] - 0.5, label = bquote(s == .(round(sd(sample1), 2))), pos = 3)#
-    text(x = mean(sample1) - sd(sample1) / 2, y = ylim[2] - 0.5, label = bquote(s == .(round(sd(sample1), 2))), pos = 3)#
-  }#
- add_vertical_horizontal_lines <- function(sample, center = mean(sample), values, frequency, length, color, start, end) {#
-     ## vertical line above mu#
-    segments(x0 = center, y0 = length(frequency[frequency == center]), y1 = max(frequency) + 1, col = "gray")#
-    ## vertical lines above each unique observation#
-    segments(x0 = values, y0 = frequency, y1 = seq(max(frequency) + start, max(frequency) + end, length.out = length), col = "gray")#
-    ## horizontal lines connecting the vertical lines and the population mean#
-    segments(x0 = values, y0 = seq(max(frequency) + start, max(frequency) + end, length.out = length), x1 = rep(center, sample_total_unique_length), col = color)#
-    ## #
-    mtext(side = 3, at = mean(sample), text = bquote(italic(M) == .(round(mean(sample), 2))))#
-    mtext(side = 3, at = center, text = bquote(italic(mu[0]) == .(center)), line = 1)#
- }#
- add_lines_together <- function(center1, center2) {#
-  	break_point <- (sample_1_valus_length / sample_total_unique_length) * 0.8#
-    add_vertical_horizontal_lines(sample1, center1, sample_1_values_x, sample_1_values_frequency, sample_1_valus_length, color = "red", 0.1, break_point)#
-    if(!is.null(sample2)) {#
-    add_vertical_horizontal_lines(sample2, center2, sample_2_values_x, sample_2_values_frequency, sample_2_valus_length, color = "blue", break_point, 0.9)    	#
-    }	#
- }#
-  if (show_sample_deviation) {#
-  	if (show_SST) {#
-  	  add_lines_together(population_mean, population_mean)#
-     } else  {#
-   	  add_lines_together(mean(sample1), mean(sample2))    	#
-     } #
-  	}#
-#
-  ##### 5. Add population curve #######
-  if (show_population_curve){#
-    zx <- seq(population_mean - 3 * population_sd, population_mean + 3 * population_sd, len = 100)#
-    zy <- dnorm(zx, mean = population_mean, sd = population_sd) * length(sample1)#
-    lines(zx, zy, col = "#cf232a", lwd = 2)#
-  }#
-}#
-#
-sample1 = c(11, 9, 4, 5, 6, 7, 12, 10)#
-sample2 = c(7, 13, 14, 16, 9, 11, 15, 11)#
-#
-Plot_Sample_FrequencyN(sample1, sample2, show_sample_deviation = T, show_SST = F)
-rm(list = ls())#
-Plot_Sample_FrequencyN <- function(#
-sample1, sample2 = NULL, #
-show_sample_deviation = FALSE,#
-show_sample_grid = TRUE,#
-show_sample_sigma = FALSE,#
-AHZ = FALSE, AVD = TRUE,#
-show_population_curve = FALSE,#
-population_mean = mean(c(sample1, sample2)),#
-population_sd = sd(c(sample1, sample2)),#
-fill = "#a0d5cf", border = "#009f9b", #
-#fill = "#fce6bf", border = "#b78135", #
-xlab = "", ylab = "Frequency",#
-show_SST = TRUE,#
-...#
-){#
-  ##### 1. Calculate the required value #######
-  sample_tidy <- function (sample) {#
-    Mean <- mean(sample)#
-    Table <- as.data.frame(table(sample, dnn = "data"))#
-    names(Table)[names(Table) == "Freq"] <- "Frequency"#
-    Table[, "data"] <- as.numeric(as.character(Table[, "data"]))#
-    Table_Unique <- Table[Table[, "data"] != Mean, ]#
-    res <- list(Table = Table, Table_Unique = Table_Unique, Mean = Mean)#
-    return(res)	#
-  }#
-  sample_1_tidy <- sample_tidy(sample1)#
-  sample_2_tidy <- if (!is.null(sample2)) sample_tidy(sample2) else sample_1_tidy#
-#
-  sample_total <- c(sample1, sample2)#
-  sample_total_tidy <- sample_tidy(sample_total)#
-  sample_total_values_x <- sample_total_tidy[["Table"]][["data"]]#
-  sample_total_values_x <- sort(sample_total_values_x)#
-  sample_total_frequency_x <- sample_total_tidy[["Table"]][["Frequency"]]#
-  sample_total_unique_x <- sample_total_tidy[["Table_Unique"]][["data"]]#
-  sample_total_unique_x <- sort(sample_total_unique_x)#
-  sample_total_unique_frequency <- sample_total_tidy[["Table_Unique"]][["Frequency"]]#
-  sample_total_unique_length <- nrow(sample_total_tidy[["Table_Unique"]])#
-  sample_1_values_x <- sample_total_values_x[sample_total_values_x %in% sample1]#
-  sample_1_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_1_values_x, "Frequency"]#
-  sample_1_valus_length <- length(sample_1_values_x)#
-  sample_2_values_x <- sample_total_values_x[sample_total_values_x %in% sample2]#
-  sample_2_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_2_values_x, "Frequency"]#
-  sample_2_valus_length <- length(sample_2_values_x)#
-  bin_width <- min(sample_total_values_x[-1] - sample_total_values_x[-length(sample_total_values_x)])#
-  xlim <- c(min(sample_total_values_x) - bin_width, max(sample_total_values_x) + bin_width)#
-  ylim <- c(0, max(sample_total_frequency_x) + 1)#
-  breaks <- seq(min(sample_total_values_x) - bin_width / 2, max(sample_total_values_x) + bin_width / 2, by = bin_width)#
-  xlabel <- round(seq(min(sample_total_values_x), max(sample_total_values_x), by = bin_width), 2)#
-  xzlabel <- round((xlabel - population_mean) / population_sd, 2)#
-  ylabel <- seq(0, max(sample_total_frequency_x), by = 1)#
-  ydensitylabel <- format(ylabel / length(sample_total), digits = 2)#
-#
-  ##### 2. Do the plotting #######
-  par(mar = c(5, 4, 4, 5) + 0.1)#
-  hist(sample_total, ylim = ylim, xlim = xlim, breaks = breaks, #
-    col = fill, border = border, main = "", xlab = xlab, ylab = ylab,#
-    yaxs = "i", xaxs = "i", xaxt = "n", yaxt = "n", ...)#
-  if (!is.null(sample2)) {#
-  hist(x = sample1, breaks = breaks, col = "#f8cea2", border = "#b78135", add = TRUE)  	#
-  }#
-  mtext(expression(italic("X")), side = 1, line = 0, adj = 0.99)#
-  axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0)#
-  axis(1, at = xlabel, labels = xlabel, lwd = 0, lwd.ticks = 1, padj = -0.5)#
-  axis(2, at = ylim, labels = c("",""), lwd.ticks = 0)#
-  axis(2, at = ylabel, labels = ylabel, lwd = 0, lwd.ticks = 1, las = 1)#
-#
-  ##### 3. Add more axes #######
-  if (AVD){#
-    axis(4, at = ylim, labels = c("",""), lwd.ticks = 0)#
-    axis(4, at = ylabel, labels = ydensitylabel, lwd = 0, lwd.ticks = 1, las = 1)#
-    mtext("Density", side = 4, line = 4, padj = - 1)#
-  }#
-#
-  if (AHZ) {#
-    axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0, line = 2.5)#
-    axis(1, at = xlabel, labels = xzlabel, lwd = 0, lwd.ticks = 1, line = 2.5, padj = -0.5)#
-    mtext(expression(italic("z")), side = 1, line = 2.5, adj = 0.99)#
-  }#
-#
-  ##### 4. Add more information concerning the sample data #######
-  if (show_sample_grid){#
-    invisible(lapply(1:nrow(sample_total_tidy[["Table"]]), function(i) {#
-    invisible(lapply(1:sample_total_frequency_x[i], function(j){#
-      segments(sample_total_values_x[i]  - bin_width / 2, 1:j, sample_total_values_x[i]  + bin_width / 2, 1:j, col = border)#
-              }))#
-      }))#
-    }#
-#
-  if (show_sample_sigma) {#
-  	segment_y0 <- Table_1[Table_1[, "data"] == round(mean(sample1), 0), "Freq"]#
-  	segments(x0 = mean(sample1), y0 = segment_y0, x1 = mean(sample1), y1 = max(freq) + 2)#
-    arrows(mean(sample1)- sd(sample1), ylim[2]-0.5, mean(sample1) + sd(sample1), ylim[2] - 0.5, code = 3, length = 0.1)#
-    mtext(side = 3, at = mean(sample1), text = bquote(italic(M) == .(round(mean(sample1), 2))))#
-    text(x = mean(sample1) + sd(sample1) / 2, y = ylim[2] - 0.5, label = bquote(s == .(round(sd(sample1), 2))), pos = 3)#
-    text(x = mean(sample1) - sd(sample1) / 2, y = ylim[2] - 0.5, label = bquote(s == .(round(sd(sample1), 2))), pos = 3)#
-  }#
- add_vertical_horizontal_lines <- function(sample, center = mean(sample), values, frequency, length, color, start, end) {#
-     ## vertical line above mu#
-    segments(x0 = center, y0 = length(frequency[frequency == center]), y1 = max(frequency) + 1, col = "gray")#
-    ## vertical lines above each unique observation#
-    segments(x0 = values, y0 = frequency, y1 = seq(max(frequency) + start, max(frequency) + end, length.out = length), col = "gray")#
-    ## horizontal lines connecting the vertical lines and the population mean#
-    segments(x0 = values, y0 = seq(max(frequency) + start, max(frequency) + end, length.out = length), x1 = rep(center, sample_total_unique_length), col = color)#
-    ## #
-    mtext(side = 3, at = mean(sample), text = bquote(italic(M) == .(round(mean(sample), 2))))#
-    mtext(side = 3, at = center, text = bquote(italic(mu[0]) == .(center)), line = 1)#
- }#
- add_lines_together <- function(center1, center2) {#
-  	break_point <- (sample_1_valus_length / sample_total_unique_length) * 0.8#
-    add_vertical_horizontal_lines(sample1, center1, sample_1_values_x, sample_1_values_frequency, sample_1_valus_length, color = "red", 0.1, break_point)#
-    if(!is.null(sample2)) {#
-    add_vertical_horizontal_lines(sample2, center2, sample_2_values_x, sample_2_values_frequency, sample_2_valus_length, color = "blue", break_point, 0.9)    	#
-    }	#
- }#
-  if (show_sample_deviation) {#
-  	if (show_SST) {#
-  	  add_lines_together(population_mean, population_mean)#
-     } else  {#
-   	  add_lines_together(mean(sample1), mean(sample2))    	#
-     } #
-  	}#
-#
-  ##### 5. Add population curve #######
-  if (show_population_curve){#
-    zx <- seq(population_mean - 3 * population_sd, population_mean + 3 * population_sd, len = 100)#
-    zy <- dnorm(zx, mean = population_mean, sd = population_sd) * length(sample1)#
-    lines(zx, zy, col = "#cf232a", lwd = 2)#
-  }#
-}#
-#
-sample1 = c(11, 9, 4, 5, 6, 7, 12, 10)#
-sample2 = c(7, 13, 14, 16, 9, 11, 15, 11)#
-#
-Plot_Sample_FrequencyN(sample1, sample2, show_sample_deviation = T, show_SST = T)
-rm(list = ls())#
-Plot_Sample_FrequencyN <- function(#
-sample1, sample2 = NULL, #
-show_sample_deviation = FALSE,#
-show_sample_grid = TRUE,#
-show_sample_sigma = FALSE,#
-AHZ = FALSE, AVD = TRUE,#
-show_population_curve = FALSE,#
-population_mean = mean(c(sample1, sample2)),#
-population_sd = sd(c(sample1, sample2)),#
-fill = "#a0d5cf", border = "#009f9b", #
-#fill = "#fce6bf", border = "#b78135", #
-xlab = "", ylab = "Frequency",#
-show_SST = TRUE,#
-...#
-){#
-  ##### 1. Calculate the required value #######
-  sample_tidy <- function (sample) {#
-    Mean <- mean(sample)#
-    Table <- as.data.frame(table(sample, dnn = "data"))#
-    names(Table)[names(Table) == "Freq"] <- "Frequency"#
-    Table[, "data"] <- as.numeric(as.character(Table[, "data"]))#
-    Table_Unique <- Table[Table[, "data"] != Mean, ]#
-    res <- list(Table = Table, Table_Unique = Table_Unique, Mean = Mean)#
-    return(res)	#
-  }#
-  sample_1_tidy <- sample_tidy(sample1)#
-  sample_2_tidy <- if (!is.null(sample2)) sample_tidy(sample2) else sample_1_tidy#
-#
-  sample_total <- c(sample1, sample2)#
-  sample_total_tidy <- sample_tidy(sample_total)#
-  sample_total_values_x <- sample_total_tidy[["Table"]][["data"]]#
-  sample_total_values_x <- sort(sample_total_values_x)#
-  sample_total_frequency_x <- sample_total_tidy[["Table"]][["Frequency"]]#
-  sample_total_unique_x <- sample_total_tidy[["Table_Unique"]][["data"]]#
-  sample_total_unique_x <- sort(sample_total_unique_x)#
-  sample_total_unique_frequency <- sample_total_tidy[["Table_Unique"]][["Frequency"]]#
-  sample_total_unique_length <- nrow(sample_total_tidy[["Table_Unique"]])#
-  sample_1_values_x <- sample_total_values_x[sample_total_values_x %in% sample1]#
-  sample_1_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_1_values_x, "Frequency"]#
-  sample_1_valus_length <- length(sample_1_values_x)#
-  sample_2_values_x <- sample_total_values_x[sample_total_values_x %in% sample2]#
-  sample_2_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_2_values_x, "Frequency"]#
-  sample_2_valus_length <- length(sample_2_values_x)#
-  bin_width <- min(sample_total_values_x[-1] - sample_total_values_x[-length(sample_total_values_x)])#
-  xlim <- c(min(sample_total_values_x) - bin_width, max(sample_total_values_x) + bin_width)#
-  ylim <- c(0, max(sample_total_frequency_x) + 1)#
-  breaks <- seq(min(sample_total_values_x) - bin_width / 2, max(sample_total_values_x) + bin_width / 2, by = bin_width)#
-  xlabel <- round(seq(min(sample_total_values_x), max(sample_total_values_x), by = bin_width), 2)#
-  xzlabel <- round((xlabel - population_mean) / population_sd, 2)#
-  ylabel <- seq(0, max(sample_total_frequency_x), by = 1)#
-  ydensitylabel <- format(ylabel / length(sample_total), digits = 2)#
-#
-  ##### 2. Do the plotting #######
-  par(mar = c(5, 4, 4, 5) + 0.1)#
-  hist(sample_total, ylim = ylim, xlim = xlim, breaks = breaks, #
-    col = fill, border = border, main = "", xlab = xlab, ylab = ylab,#
-    yaxs = "i", xaxs = "i", xaxt = "n", yaxt = "n", ...)#
-  if (!is.null(sample2)) {#
-  hist(x = sample1, breaks = breaks, col = "#f8cea2", border = "#b78135", add = TRUE)  	#
-  }#
-  mtext(expression(italic("X")), side = 1, line = 0, adj = 0.99)#
-  axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0)#
-  axis(1, at = xlabel, labels = xlabel, lwd = 0, lwd.ticks = 1, padj = -0.5)#
-  axis(2, at = ylim, labels = c("",""), lwd.ticks = 0)#
-  axis(2, at = ylabel, labels = ylabel, lwd = 0, lwd.ticks = 1, las = 1)#
-#
-  ##### 3. Add more axes #######
-  if (AVD){#
-    axis(4, at = ylim, labels = c("",""), lwd.ticks = 0)#
-    axis(4, at = ylabel, labels = ydensitylabel, lwd = 0, lwd.ticks = 1, las = 1)#
-    mtext("Density", side = 4, line = 4, padj = - 1)#
-  }#
-#
-  if (AHZ) {#
-    axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0, line = 2.5)#
-    axis(1, at = xlabel, labels = xzlabel, lwd = 0, lwd.ticks = 1, line = 2.5, padj = -0.5)#
-    mtext(expression(italic("z")), side = 1, line = 2.5, adj = 0.99)#
-  }#
-#
-  ##### 4. Add more information concerning the sample data #######
-  if (show_sample_grid){#
-    invisible(lapply(1:nrow(sample_total_tidy[["Table"]]), function(i) {#
-    invisible(lapply(1:sample_total_frequency_x[i], function(j){#
-      segments(sample_total_values_x[i]  - bin_width / 2, 1:j, sample_total_values_x[i]  + bin_width / 2, 1:j, col = border)#
-              }))#
-      }))#
-    }#
-#
-  if (show_sample_sigma) {#
-  	segment_y0 <- Table_1[Table_1[, "data"] == round(mean(sample1), 0), "Freq"]#
-  	segments(x0 = mean(sample1), y0 = segment_y0, x1 = mean(sample1), y1 = max(freq) + 2)#
-    arrows(mean(sample1)- sd(sample1), ylim[2]-0.5, mean(sample1) + sd(sample1), ylim[2] - 0.5, code = 3, length = 0.1)#
-    mtext(side = 3, at = mean(sample1), text = bquote(italic(M) == .(round(mean(sample1), 2))))#
-    text(x = mean(sample1) + sd(sample1) / 2, y = ylim[2] - 0.5, label = bquote(s == .(round(sd(sample1), 2))), pos = 3)#
-    text(x = mean(sample1) - sd(sample1) / 2, y = ylim[2] - 0.5, label = bquote(s == .(round(sd(sample1), 2))), pos = 3)#
-  }#
- add_vertical_horizontal_lines <- function(sample, center = mean(sample), values, frequency, length, color, start, end) {#
-     ## vertical line above mu#
-    segments(x0 = center, y0 = length(frequency[frequency == center]), y1 = max(frequency) + 1, col = "gray")#
-    ## vertical lines above each unique observation#
-    segments(x0 = values, y0 = frequency, y1 = seq(max(frequency) + start, max(frequency) + end, length.out = length), col = "gray")#
-    ## horizontal lines connecting the vertical lines and the population mean#
-    segments(x0 = values, y0 = seq(max(frequency) + start, max(frequency) + end, length.out = length), x1 = rep(center, sample_total_unique_length), col = color)#
-    ## #
-    mtext(side = 3, at = mean(sample), text = bquote(italic(M) == .(round(mean(sample), 2))))#
- }#
- add_lines_together <- function(center1, center2) {#
-  	break_point <- (sample_1_valus_length / sample_total_unique_length) * 0.8#
-    add_vertical_horizontal_lines(sample1, center1, sample_1_values_x, sample_1_values_frequency, sample_1_valus_length, color = "red", 0.1, break_point)#
-    if(!is.null(sample2)) {#
-    add_vertical_horizontal_lines(sample2, center2, sample_2_values_x, sample_2_values_frequency, sample_2_valus_length, color = "blue", break_point, 0.9)    	#
-    }	#
- }#
-  if (show_sample_deviation) {#
-  	if (show_SST) {#
-  	  add_lines_together(population_mean, population_mean)#
-     } else  {#
-   	  add_lines_together(mean(sample1), mean(sample2))    	#
-     } #
-  	}#
- mtext(side = 3, at = population_mean, text = bquote(italic(mu[0]) == .(population_mean)), line = 1)#
-  ##### 5. Add population curve #######
-  if (show_population_curve){#
-    zx <- seq(population_mean - 3 * population_sd, population_mean + 3 * population_sd, len = 100)#
-    zy <- dnorm(zx, mean = population_mean, sd = population_sd) * length(sample1)#
-    lines(zx, zy, col = "#cf232a", lwd = 2)#
-  }#
-}#
-#
-sample1 = c(11, 9, 4, 5, 6, 7, 12, 10)#
-sample2 = c(7, 13, 14, 16, 9, 11, 15, 11)#
-#
-Plot_Sample_FrequencyN(sample1, sample2, show_sample_deviation = T, show_SST = F)
-rm(list = ls())#
-Plot_Sample_FrequencyN <- function(#
-sample1, sample2 = NULL, #
-show_sample_deviation = FALSE,#
-show_sample_grid = TRUE,#
-show_sample_sigma = FALSE,#
-AHZ = FALSE, AVD = TRUE,#
-show_population_curve = FALSE,#
-population_mean = mean(c(sample1, sample2)),#
-population_sd = sd(c(sample1, sample2)),#
-fill = "#a0d5cf", border = "#009f9b", #
-#fill = "#fce6bf", border = "#b78135", #
-xlab = "", ylab = "Frequency",#
-show_SST = TRUE,#
-...#
-){#
-  ##### 1. Calculate the required value #######
-  sample_tidy <- function (sample) {#
-    Mean <- mean(sample)#
-    Table <- as.data.frame(table(sample, dnn = "data"))#
-    names(Table)[names(Table) == "Freq"] <- "Frequency"#
-    Table[, "data"] <- as.numeric(as.character(Table[, "data"]))#
-    Table_Unique <- Table[Table[, "data"] != Mean, ]#
-    res <- list(Table = Table, Table_Unique = Table_Unique, Mean = Mean)#
-    return(res)	#
-  }#
-  sample_1_tidy <- sample_tidy(sample1)#
-  sample_2_tidy <- if (!is.null(sample2)) sample_tidy(sample2) else sample_1_tidy#
-#
-  sample_total <- c(sample1, sample2)#
-  sample_total_tidy <- sample_tidy(sample_total)#
-  sample_total_values_x <- sample_total_tidy[["Table"]][["data"]]#
-  sample_total_values_x <- sort(sample_total_values_x)#
-  sample_total_frequency_x <- sample_total_tidy[["Table"]][["Frequency"]]#
-  sample_total_unique_x <- sample_total_tidy[["Table_Unique"]][["data"]]#
-  sample_total_unique_x <- sort(sample_total_unique_x)#
-  sample_total_unique_frequency <- sample_total_tidy[["Table_Unique"]][["Frequency"]]#
-  sample_total_unique_length <- nrow(sample_total_tidy[["Table_Unique"]])#
-  sample_1_values_x <- sample_total_values_x[sample_total_values_x %in% sample1]#
-  sample_1_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_1_values_x, "Frequency"]#
-  sample_1_valus_length <- length(sample_1_values_x)#
-  sample_2_values_x <- sample_total_values_x[sample_total_values_x %in% sample2]#
-  sample_2_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_2_values_x, "Frequency"]#
-  sample_2_valus_length <- length(sample_2_values_x)#
-  bin_width <- min(sample_total_values_x[-1] - sample_total_values_x[-length(sample_total_values_x)])#
-  xlim <- c(min(sample_total_values_x) - bin_width, max(sample_total_values_x) + bin_width)#
-  ylim <- c(0, max(sample_total_frequency_x) + 1)#
-  breaks <- seq(min(sample_total_values_x) - bin_width / 2, max(sample_total_values_x) + bin_width / 2, by = bin_width)#
-  xlabel <- round(seq(min(sample_total_values_x), max(sample_total_values_x), by = bin_width), 2)#
-  xzlabel <- round((xlabel - population_mean) / population_sd, 2)#
-  ylabel <- seq(0, max(sample_total_frequency_x), by = 1)#
-  ydensitylabel <- format(ylabel / length(sample_total), digits = 2)#
-#
-  ##### 2. Do the plotting #######
-  par(mar = c(5, 4, 4, 5) + 0.1)#
-  hist(sample_total, ylim = ylim, xlim = xlim, breaks = breaks, #
-    col = fill, border = border, main = "", xlab = xlab, ylab = ylab,#
-    yaxs = "i", xaxs = "i", xaxt = "n", yaxt = "n", ...)#
-  if (!is.null(sample2)) {#
-  hist(x = sample1, breaks = breaks, col = "#f8cea2", border = "#b78135", add = TRUE)  	#
-  }#
-  mtext(expression(italic("X")), side = 1, line = 0, adj = 0.99)#
-  axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0)#
-  axis(1, at = xlabel, labels = xlabel, lwd = 0, lwd.ticks = 1, padj = -0.5)#
-  axis(2, at = ylim, labels = c("",""), lwd.ticks = 0)#
-  axis(2, at = ylabel, labels = ylabel, lwd = 0, lwd.ticks = 1, las = 1)#
-#
-  ##### 3. Add more axes #######
-  if (AVD){#
-    axis(4, at = ylim, labels = c("",""), lwd.ticks = 0)#
-    axis(4, at = ylabel, labels = ydensitylabel, lwd = 0, lwd.ticks = 1, las = 1)#
-    mtext("Density", side = 4, line = 4, padj = - 1)#
-  }#
-#
-  if (AHZ) {#
-    axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0, line = 2.5)#
-    axis(1, at = xlabel, labels = xzlabel, lwd = 0, lwd.ticks = 1, line = 2.5, padj = -0.5)#
-    mtext(expression(italic("z")), side = 1, line = 2.5, adj = 0.99)#
-  }#
-#
-  ##### 4. Add more information concerning the sample data #######
-  if (show_sample_grid){#
-    invisible(lapply(1:nrow(sample_total_tidy[["Table"]]), function(i) {#
-    invisible(lapply(1:sample_total_frequency_x[i], function(j){#
-      segments(sample_total_values_x[i]  - bin_width / 2, 1:j, sample_total_values_x[i]  + bin_width / 2, 1:j, col = border)#
-              }))#
-      }))#
-    }#
-#
-  if (show_sample_sigma) {#
-  	segment_y0 <- Table_1[Table_1[, "data"] == round(mean(sample1), 0), "Freq"]#
-  	segments(x0 = mean(sample1), y0 = segment_y0, x1 = mean(sample1), y1 = max(freq) + 2)#
-    arrows(mean(sample1)- sd(sample1), ylim[2]-0.5, mean(sample1) + sd(sample1), ylim[2] - 0.5, code = 3, length = 0.1)#
-    mtext(side = 3, at = mean(sample1), text = bquote(italic(M) == .(round(mean(sample1), 2))))#
-    text(x = mean(sample1) + sd(sample1) / 2, y = ylim[2] - 0.5, label = bquote(s == .(round(sd(sample1), 2))), pos = 3)#
-    text(x = mean(sample1) - sd(sample1) / 2, y = ylim[2] - 0.5, label = bquote(s == .(round(sd(sample1), 2))), pos = 3)#
-  }#
- add_vertical_horizontal_lines <- function(sample, center = mean(sample), values, frequency, length, color, start, end) {#
-     ## vertical line above mu#
-    segments(x0 = center, y0 = length(frequency[frequency == center]), y1 = max(frequency) + 1, col = "gray")#
-    ## vertical lines above each unique observation#
-    segments(x0 = values, y0 = frequency, y1 = seq(max(frequency) + start, max(frequency) + end, length.out = length), col = "gray")#
-    ## horizontal lines connecting the vertical lines and the population mean#
-    segments(x0 = values, y0 = seq(max(frequency) + start, max(frequency) + end, length.out = length), x1 = rep(center, sample_total_unique_length), col = color)#
-    ## #
-    mtext(side = 3, at = mean(sample), text = bquote(italic(M) == .(round(mean(sample), 2))))#
- }#
- add_lines_together <- function(center1, center2) {#
-  	break_point <- (sample_1_valus_length / sample_total_unique_length) * 0.8#
-    add_vertical_horizontal_lines(sample1, center1, sample_1_values_x, sample_1_values_frequency, sample_1_valus_length, color = "red", 0.1, break_point)#
-    if(!is.null(sample2)) {#
-    add_vertical_horizontal_lines(sample2, center2, sample_2_values_x, sample_2_values_frequency, sample_2_valus_length, color = "blue", break_point, 0.9)    	#
-    }	#
- }#
-  if (show_sample_deviation) {#
-  	if (show_SST) {#
-  	  add_lines_together(population_mean, population_mean)#
-     } else  {#
-   	  add_lines_together(mean(sample1), mean(sample2))    	#
-     } #
-  	}#
- mtext(side = 3, at = population_mean, text = bquote(italic(mu[0]) == .(population_mean)), line = 1)#
-  ##### 5. Add population curve #######
-  if (show_population_curve){#
-    zx <- seq(population_mean - 3 * population_sd, population_mean + 3 * population_sd, len = 100)#
-    zy <- dnorm(zx, mean = population_mean, sd = population_sd) * length(sample1)#
-    lines(zx, zy, col = "#cf232a", lwd = 2)#
-  }#
-}#
-#
-sample1 = c(11, 9, 4, 5, 6, 7, 12, 10)#
-sample2 = c(7, 13, 14, 16, 9, 11, 15, 11)#
-#
-Plot_Sample_FrequencyN(sample1, sample2, show_sample_deviation = T, show_SST = T)
-rm(list = ls())#
-Plot_Sample_FrequencyN <- function(#
-sample1, sample2 = NULL, #
-show_sample_deviation = FALSE,#
-show_sample_grid = TRUE,#
-show_sample_sigma = FALSE,#
-AHZ = FALSE, AVD = TRUE,#
-show_population_curve = FALSE,#
-population_mean = mean(c(sample1, sample2)),#
-population_sd = sd(c(sample1, sample2)),#
-fill = "#a0d5cf", border = "#009f9b", #
-#fill = "#fce6bf", border = "#b78135", #
-xlab = "", ylab = "Frequency",#
-show_SST = TRUE,#
-...#
-){#
-  ##### 1. Calculate the required value #######
-  sample_tidy <- function (sample) {#
-    Mean <- mean(sample)#
-    Table <- as.data.frame(table(sample, dnn = "data"))#
-    names(Table)[names(Table) == "Freq"] <- "Frequency"#
-    Table[, "data"] <- as.numeric(as.character(Table[, "data"]))#
-    Table_Unique <- Table[Table[, "data"] != Mean, ]#
-    res <- list(Table = Table, Table_Unique = Table_Unique, Mean = Mean)#
-    return(res)	#
-  }#
-  sample_1_tidy <- sample_tidy(sample1)#
-  sample_2_tidy <- if (!is.null(sample2)) sample_tidy(sample2) else sample_1_tidy#
-#
-  sample_total <- c(sample1, sample2)#
-  sample_total_tidy <- sample_tidy(sample_total)#
-  sample_total_values_x <- sample_total_tidy[["Table"]][["data"]]#
-  sample_total_values_x <- sort(sample_total_values_x)#
-  sample_total_frequency_x <- sample_total_tidy[["Table"]][["Frequency"]]#
-  sample_total_unique_x <- sample_total_tidy[["Table_Unique"]][["data"]]#
-  sample_total_unique_x <- sort(sample_total_unique_x)#
-  sample_total_unique_frequency <- sample_total_tidy[["Table_Unique"]][["Frequency"]]#
-  sample_total_unique_length <- nrow(sample_total_tidy[["Table_Unique"]])#
-  sample_1_values_x <- sample_total_values_x[sample_total_values_x %in% sample1]#
-  sample_1_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_1_values_x, "Frequency"]#
-  sample_1_valus_length <- length(sample_1_values_x)#
-  sample_2_values_x <- sample_total_values_x[sample_total_values_x %in% sample2]#
-  sample_2_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_2_values_x, "Frequency"]#
-  sample_2_valus_length <- length(sample_2_values_x)#
-  bin_width <- min(sample_total_values_x[-1] - sample_total_values_x[-length(sample_total_values_x)])#
-  xlim <- c(min(sample_total_values_x) - bin_width, max(sample_total_values_x) + bin_width)#
-  ylim <- c(0, max(sample_total_frequency_x) + 1)#
-  breaks <- seq(min(sample_total_values_x) - bin_width / 2, max(sample_total_values_x) + bin_width / 2, by = bin_width)#
-  xlabel <- round(seq(min(sample_total_values_x), max(sample_total_values_x), by = bin_width), 2)#
-  xzlabel <- round((xlabel - population_mean) / population_sd, 2)#
-  ylabel <- seq(0, max(sample_total_frequency_x), by = 1)#
-  ydensitylabel <- format(ylabel / length(sample_total), digits = 2)#
-#
-  ##### 2. Do the plotting #######
-  par(mar = c(5, 4, 4, 5) + 0.1)#
-  hist(sample_total, ylim = ylim, xlim = xlim, breaks = breaks, #
-    col = fill, border = border, main = "", xlab = xlab, ylab = ylab,#
-    yaxs = "i", xaxs = "i", xaxt = "n", yaxt = "n", ...)#
-  if (!is.null(sample2)) {#
-  hist(x = sample1, breaks = breaks, col = "#f8cea2", border = "#b78135", add = TRUE)  	#
-  }#
-  mtext(expression(italic("X")), side = 1, line = 0, adj = 0.99)#
-  axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0)#
-  axis(1, at = xlabel, labels = xlabel, lwd = 0, lwd.ticks = 1, padj = -0.5)#
-  axis(2, at = ylim, labels = c("",""), lwd.ticks = 0)#
-  axis(2, at = ylabel, labels = ylabel, lwd = 0, lwd.ticks = 1, las = 1)#
-#
-  ##### 3. Add more axes #######
-  if (AVD){#
-    axis(4, at = ylim, labels = c("",""), lwd.ticks = 0)#
-    axis(4, at = ylabel, labels = ydensitylabel, lwd = 0, lwd.ticks = 1, las = 1)#
-    mtext("Density", side = 4, line = 4, padj = - 1)#
-  }#
-#
-  if (AHZ) {#
-    axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0, line = 2.5)#
-    axis(1, at = xlabel, labels = xzlabel, lwd = 0, lwd.ticks = 1, line = 2.5, padj = -0.5)#
-    mtext(expression(italic("z")), side = 1, line = 2.5, adj = 0.99)#
-  }#
-#
-  ##### 4. Add more information concerning the sample data #######
-  if (show_sample_grid){#
-    invisible(lapply(1:nrow(sample_total_tidy[["Table"]]), function(i) {#
-    invisible(lapply(1:sample_total_frequency_x[i], function(j){#
-      segments(sample_total_values_x[i]  - bin_width / 2, 1:j, sample_total_values_x[i]  + bin_width / 2, 1:j, col = border)#
-              }))#
-      }))#
-    }#
-#
-  if (show_sample_sigma) {#
-  	segment_y0 <- Table_1[Table_1[, "data"] == round(mean(sample1), 0), "Freq"]#
-  	segments(x0 = mean(sample1), y0 = segment_y0, x1 = mean(sample1), y1 = max(freq) + 2)#
-    arrows(mean(sample1)- sd(sample1), ylim[2]-0.5, mean(sample1) + sd(sample1), ylim[2] - 0.5, code = 3, length = 0.1)#
-    mtext(side = 3, at = mean(sample1), text = bquote(italic(M) == .(round(mean(sample1), 2))))#
-    text(x = mean(sample1) + sd(sample1) / 2, y = ylim[2] - 0.5, label = bquote(s == .(round(sd(sample1), 2))), pos = 3)#
-    text(x = mean(sample1) - sd(sample1) / 2, y = ylim[2] - 0.5, label = bquote(s == .(round(sd(sample1), 2))), pos = 3)#
-  }#
- add_vertical_horizontal_lines <- function(sample, center = mean(sample), values, frequency, length, color, start, end) {#
-     ## vertical line above mu#
-    segments(x0 = center, y0 = length(frequency[frequency == center]), y1 = max(frequency) + 1, col = "gray")#
-    ## vertical lines above each unique observation#
-    segments(x0 = values, y0 = frequency, y1 = seq(max(frequency) + start, max(frequency) + end, length.out = length), col = "gray")#
-    ## horizontal lines connecting the vertical lines and the population mean#
-    segments(x0 = values, y0 = seq(max(frequency) + start, max(frequency) + end, length.out = length), x1 = rep(center, sample_total_unique_length), col = color)#
-    ## #
-    mtext(side = 3, at = mean(sample), text = bquote(italic(M) == .(round(mean(sample), 2))))#
- }#
- add_lines_together <- function(center1, center2) {#
-  	break_point <- (sample_1_valus_length / sample_total_unique_length) * 0.8#
-    add_vertical_horizontal_lines(sample1, center1, sample_1_values_x, sample_1_values_frequency, sample_1_valus_length, color = "red", 0.1, break_point)#
-    if(!is.null(sample2)) {#
-    add_vertical_horizontal_lines(sample2, center2, sample_2_values_x, sample_2_values_frequency, sample_2_valus_length, color = "blue", break_point, 0.9)    	#
-    }	#
- }#
-  if (show_sample_deviation) {#
-  	if (show_SST) {#
-  	  add_lines_together(population_mean, population_mean)#
-     } else  {#
-   	  add_lines_together(mean(sample1), mean(sample2))    	#
-     } #
-  	}#
- mtext(side = 3, at = population_mean, text = bquote(italic(mu[0]) == .(population_mean)), line = 1)#
-  ##### 5. Add population curve #######
-  if (show_population_curve){#
-    zx <- seq(population_mean - 3 * population_sd, population_mean + 3 * population_sd, len = 100)#
-    zy <- dnorm(zx, mean = population_mean, sd = population_sd) * length(sample1)#
-    lines(zx, zy, col = "#cf232a", lwd = 2)#
-  }#
-}#
-#
-sample1 = c(11, 9, 4, 5, 6, 7, 12, 10)#
-sample2 = c(7, 13, 14, 16, 9, 11, 15, 11)#
-#
-Plot_Sample_FrequencyN(sample1, sample2, show_sample_deviation = T, show_SST = T, population_mean = 9)
-rm(list = ls())#
-Plot_Sample_FrequencyN <- function(#
-sample1, sample2 = NULL, #
-show_sample_deviation = FALSE,#
-show_sample_grid = TRUE,#
-show_sample_sigma = FALSE,#
-AHZ = FALSE, AVD = TRUE,#
-show_population_curve = FALSE,#
-population_mean = mean(c(sample1, sample2)),#
-population_sd = sd(c(sample1, sample2)),#
-fill = "#a0d5cf", border = "#009f9b", #
-#fill = "#fce6bf", border = "#b78135", #
-xlab = "", ylab = "Frequency",#
-show_SST = TRUE,#
-...#
-){#
-  ##### 1. Calculate the required value #######
-  sample_tidy <- function (sample) {#
-    Mean <- mean(sample)#
-    Table <- as.data.frame(table(sample, dnn = "data"))#
-    names(Table)[names(Table) == "Freq"] <- "Frequency"#
-    Table[, "data"] <- as.numeric(as.character(Table[, "data"]))#
-    Table_Unique <- Table[Table[, "data"] != Mean, ]#
-    res <- list(Table = Table, Table_Unique = Table_Unique, Mean = Mean)#
-    return(res)	#
-  }#
-  sample_1_tidy <- sample_tidy(sample1)#
-  sample_2_tidy <- if (!is.null(sample2)) sample_tidy(sample2) else sample_1_tidy#
-#
-  sample_total <- c(sample1, sample2)#
-  sample_total_tidy <- sample_tidy(sample_total)#
-  sample_total_values_x <- sample_total_tidy[["Table"]][["data"]]#
-  sample_total_values_x <- sort(sample_total_values_x)#
-  sample_total_frequency_x <- sample_total_tidy[["Table"]][["Frequency"]]#
-  sample_total_unique_x <- sample_total_tidy[["Table_Unique"]][["data"]]#
-  sample_total_unique_x <- sort(sample_total_unique_x)#
-  sample_total_unique_frequency <- sample_total_tidy[["Table_Unique"]][["Frequency"]]#
-  sample_total_unique_length <- nrow(sample_total_tidy[["Table_Unique"]])#
-  sample_1_values_x <- sample_total_values_x[sample_total_values_x %in% sample1]#
-  sample_1_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_1_values_x, "Frequency"]#
-  sample_1_valus_length <- length(sample_1_values_x)#
-  sample_2_values_x <- sample_total_values_x[sample_total_values_x %in% sample2]#
-  sample_2_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_2_values_x, "Frequency"]#
-  sample_2_valus_length <- length(sample_2_values_x)#
-  bin_width <- min(sample_total_values_x[-1] - sample_total_values_x[-length(sample_total_values_x)])#
-  xlim <- c(min(sample_total_values_x) - bin_width, max(sample_total_values_x) + bin_width)#
-  ylim <- c(0, max(sample_total_frequency_x) + 1)#
-  breaks <- seq(min(sample_total_values_x) - bin_width / 2, max(sample_total_values_x) + bin_width / 2, by = bin_width)#
-  xlabel <- round(seq(min(sample_total_values_x), max(sample_total_values_x), by = bin_width), 2)#
-  xzlabel <- round((xlabel - population_mean) / population_sd, 2)#
-  ylabel <- seq(0, max(sample_total_frequency_x), by = 1)#
-  ydensitylabel <- format(ylabel / length(sample_total), digits = 2)#
-#
-  ##### 2. Do the plotting #######
-  par(mar = c(5, 4, 4, 5) + 0.1)#
-  hist(sample_total, ylim = ylim, xlim = xlim, breaks = breaks, #
-    col = fill, border = border, main = "", xlab = xlab, ylab = ylab,#
-    yaxs = "i", xaxs = "i", xaxt = "n", yaxt = "n", ...)#
-  if (!is.null(sample2)) {#
-  hist(x = sample1, breaks = breaks, col = "#f8cea2", border = "#b78135", add = TRUE)  	#
-  }#
-  mtext(expression(italic("X")), side = 1, line = 0, adj = 0.99)#
-  axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0)#
-  axis(1, at = xlabel, labels = xlabel, lwd = 0, lwd.ticks = 1, padj = -0.5)#
-  axis(2, at = ylim, labels = c("",""), lwd.ticks = 0)#
-  axis(2, at = ylabel, labels = ylabel, lwd = 0, lwd.ticks = 1, las = 1)#
-#
-  ##### 3. Add more axes #######
-  if (AVD){#
-    axis(4, at = ylim, labels = c("",""), lwd.ticks = 0)#
-    axis(4, at = ylabel, labels = ydensitylabel, lwd = 0, lwd.ticks = 1, las = 1)#
-    mtext("Density", side = 4, line = 4, padj = - 1)#
-  }#
-#
-  if (AHZ) {#
-    axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0, line = 2.5)#
-    axis(1, at = xlabel, labels = xzlabel, lwd = 0, lwd.ticks = 1, line = 2.5, padj = -0.5)#
-    mtext(expression(italic("z")), side = 1, line = 2.5, adj = 0.99)#
-  }#
-#
-  ##### 4. Add more information concerning the sample data #######
-  if (show_sample_grid){#
-    invisible(lapply(1:nrow(sample_total_tidy[["Table"]]), function(i) {#
-    invisible(lapply(1:sample_total_frequency_x[i], function(j){#
-      segments(sample_total_values_x[i]  - bin_width / 2, 1:j, sample_total_values_x[i]  + bin_width / 2, 1:j, col = border)#
-              }))#
-      }))#
-    }#
-#
-  if (show_sample_sigma) {#
-  	segment_y0 <- Table_1[Table_1[, "data"] == round(mean(sample1), 0), "Freq"]#
-  	segments(x0 = mean(sample1), y0 = segment_y0, x1 = mean(sample1), y1 = max(freq) + 2)#
-    arrows(mean(sample1)- sd(sample1), ylim[2]-0.5, mean(sample1) + sd(sample1), ylim[2] - 0.5, code = 3, length = 0.1)#
-    mtext(side = 3, at = mean(sample1), text = bquote(italic(M) == .(round(mean(sample1), 2))))#
-    text(x = mean(sample1) + sd(sample1) / 2, y = ylim[2] - 0.5, label = bquote(s == .(round(sd(sample1), 2))), pos = 3)#
-    text(x = mean(sample1) - sd(sample1) / 2, y = ylim[2] - 0.5, label = bquote(s == .(round(sd(sample1), 2))), pos = 3)#
-  }#
- add_vertical_horizontal_lines <- function(sample, center = mean(sample), values, frequency, length, color, start, end) {#
-     ## vertical line above mu#
-    segments(x0 = center, y0 = length(frequency[frequency == center]), y1 = max(frequency) + 1, col = "gray")#
-    ## vertical lines above each unique observation#
-    segments(x0 = values, y0 = frequency, y1 = seq(max(frequency) + start, max(frequency) + end, length.out = length), col = "gray")#
-    ## horizontal lines connecting the vertical lines and the population mean#
-    segments(x0 = values, y0 = seq(max(frequency) + start, max(frequency) + end, length.out = length), x1 = rep(center, sample_total_unique_length), col = color)#
-    ## #
-    mtext(side = 3, at = mean(sample), text = bquote(italic(M) == .(round(mean(sample), 2))))#
- }#
- add_lines_together <- function(center1, center2) {#
-  	break_point <- (sample_1_valus_length / sample_total_unique_length) * 0.8#
-    add_vertical_horizontal_lines(sample1, center1, sample_1_values_x, sample_1_values_frequency, sample_1_valus_length, color = "red", 0.1, break_point)#
-    if(!is.null(sample2)) {#
-    add_vertical_horizontal_lines(sample2, center2, sample_2_values_x, sample_2_values_frequency, sample_2_valus_length, color = "blue", break_point, 0.9)    	#
-    }	#
- }#
-  if (show_sample_deviation) {#
-  	if (show_SST) {#
-  	  add_lines_together(population_mean, population_mean)#
-     } else  {#
-   	  add_lines_together(mean(sample1), mean(sample2))    	#
-     } #
-  	}#
- mtext(side = 3, at = population_mean, text = bquote(italic(mu[0]) == .(population_mean)), line = 1)#
-  ##### 5. Add population curve #######
-  if (show_population_curve){#
-    zx <- seq(population_mean - 3 * population_sd, population_mean + 3 * population_sd, len = 100)#
-    zy <- dnorm(zx, mean = population_mean, sd = population_sd) * length(sample1)#
-    lines(zx, zy, col = "#cf232a", lwd = 2)#
-  }#
-}#
-#
-sample1 = c(11, 9, 4, 5, 6, 7, 12, 10)#
-sample2 = c(7, 13, 14, 16, 9, 11, 15, 11)#
-#
-Plot_Sample_FrequencyN(sample1, sample2, show_sample_deviation = T, show_SST = T, population_mean = 8)
-rm(list = ls())#
-Plot_Sample_FrequencyN <- function(#
-sample1, sample2 = NULL, #
-show_sample_deviation = FALSE,#
-show_sample_grid = TRUE,#
-show_sample_sigma = FALSE,#
-AHZ = FALSE, AVD = TRUE,#
-show_population_curve = FALSE,#
-population_mean = mean(c(sample1, sample2)),#
-population_sd = sd(c(sample1, sample2)),#
-fill = "#a0d5cf", border = "#009f9b", #
-#fill = "#fce6bf", border = "#b78135", #
-xlab = "", ylab = "Frequency",#
-show_SST = TRUE,#
-...#
-){#
-  ##### 1. Calculate the required value #######
-  sample_tidy <- function (sample) {#
-    Mean <- mean(sample)#
-    Table <- as.data.frame(table(sample, dnn = "data"))#
-    names(Table)[names(Table) == "Freq"] <- "Frequency"#
-    Table[, "data"] <- as.numeric(as.character(Table[, "data"]))#
-    Table_Unique <- Table[Table[, "data"] != Mean, ]#
-    res <- list(Table = Table, Table_Unique = Table_Unique, Mean = Mean)#
-    return(res)	#
-  }#
-  sample_1_tidy <- sample_tidy(sample1)#
-  sample_2_tidy <- if (!is.null(sample2)) sample_tidy(sample2) else sample_1_tidy#
-#
-  sample_total <- c(sample1, sample2)#
-  sample_total_tidy <- sample_tidy(sample_total)#
-  sample_total_values_x <- sample_total_tidy[["Table"]][["data"]]#
-  sample_total_values_x <- sort(sample_total_values_x)#
-  sample_total_frequency_x <- sample_total_tidy[["Table"]][["Frequency"]]#
-  sample_total_unique_x <- sample_total_tidy[["Table_Unique"]][["data"]]#
-  sample_total_unique_x <- sort(sample_total_unique_x)#
-  sample_total_unique_frequency <- sample_total_tidy[["Table_Unique"]][["Frequency"]]#
-  sample_total_unique_length <- nrow(sample_total_tidy[["Table_Unique"]])#
-  sample_1_values_x <- sample_total_values_x[sample_total_values_x %in% sample1]#
-  sample_1_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_1_values_x, "Frequency"]#
-  sample_1_valus_length <- length(sample_1_values_x)#
-  sample_2_values_x <- sample_total_values_x[sample_total_values_x %in% sample2]#
-  sample_2_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_2_values_x, "Frequency"]#
-  sample_2_valus_length <- length(sample_2_values_x)#
-  bin_width <- min(sample_total_values_x[-1] - sample_total_values_x[-length(sample_total_values_x)])#
-  xlim <- c(min(sample_total_values_x) - bin_width, max(sample_total_values_x) + bin_width)#
-  ylim <- c(0, max(sample_total_frequency_x) + 1)#
-  breaks <- seq(min(sample_total_values_x) - bin_width / 2, max(sample_total_values_x) + bin_width / 2, by = bin_width)#
-  xlabel <- round(seq(min(sample_total_values_x), max(sample_total_values_x), by = bin_width), 2)#
-  xzlabel <- round((xlabel - population_mean) / population_sd, 2)#
-  ylabel <- seq(0, max(sample_total_frequency_x), by = 1)#
-  ydensitylabel <- format(ylabel / length(sample_total), digits = 2)#
-#
-  ##### 2. Do the plotting #######
-  par(mar = c(5, 4, 4, 5) + 0.1)#
-  hist(sample_total, ylim = ylim, xlim = xlim, breaks = breaks, #
-    col = fill, border = border, main = "", xlab = xlab, ylab = ylab,#
-    yaxs = "i", xaxs = "i", xaxt = "n", yaxt = "n", ...)#
-  if (!is.null(sample2)) {#
-  hist(x = sample1, breaks = breaks, col = "#f8cea2", border = "#b78135", add = TRUE)  	#
-  }#
-  mtext(expression(italic("X")), side = 1, line = 0, adj = 0.99)#
-  axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0)#
-  axis(1, at = xlabel, labels = xlabel, lwd = 0, lwd.ticks = 1, padj = -0.5)#
-  axis(2, at = ylim, labels = c("",""), lwd.ticks = 0)#
-  axis(2, at = ylabel, labels = ylabel, lwd = 0, lwd.ticks = 1, las = 1)#
-#
-  ##### 3. Add more axes #######
-  if (AVD){#
-    axis(4, at = ylim, labels = c("",""), lwd.ticks = 0)#
-    axis(4, at = ylabel, labels = ydensitylabel, lwd = 0, lwd.ticks = 1, las = 1)#
-    mtext("Density", side = 4, line = 4, padj = - 1)#
-  }#
-#
-  if (AHZ) {#
-    axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0, line = 2.5)#
-    axis(1, at = xlabel, labels = xzlabel, lwd = 0, lwd.ticks = 1, line = 2.5, padj = -0.5)#
-    mtext(expression(italic("z")), side = 1, line = 2.5, adj = 0.99)#
-  }#
-#
-  ##### 4. Add more information concerning the sample data #######
-  if (show_sample_grid){#
-    invisible(lapply(1:nrow(sample_total_tidy[["Table"]]), function(i) {#
-    invisible(lapply(1:sample_total_frequency_x[i], function(j){#
-      segments(sample_total_values_x[i]  - bin_width / 2, 1:j, sample_total_values_x[i]  + bin_width / 2, 1:j, col = border)#
-              }))#
-      }))#
-    }#
-#
-  if (show_sample_sigma) {#
-  	segment_y0 <- Table_1[Table_1[, "data"] == round(mean(sample1), 0), "Freq"]#
-  	segments(x0 = mean(sample1), y0 = segment_y0, x1 = mean(sample1), y1 = max(freq) + 2)#
-    arrows(mean(sample1)- sd(sample1), ylim[2]-0.5, mean(sample1) + sd(sample1), ylim[2] - 0.5, code = 3, length = 0.1)#
-    mtext(side = 3, at = mean(sample1), text = bquote(italic(M) == .(round(mean(sample1), 2))))#
-    text(x = mean(sample1) + sd(sample1) / 2, y = ylim[2] - 0.5, label = bquote(s == .(round(sd(sample1), 2))), pos = 3)#
-    text(x = mean(sample1) - sd(sample1) / 2, y = ylim[2] - 0.5, label = bquote(s == .(round(sd(sample1), 2))), pos = 3)#
-  }#
- add_vertical_horizontal_lines <- function(sample, center = mean(sample), values, frequency, length, color, start, end) {#
-     ## vertical line above mu#
-    segments(x0 = center, y0 = length(frequency[frequency == center]), y1 = max(frequency) + 1, col = "gray")#
-    ## vertical lines above each unique observation#
-    segments(x0 = values, y0 = frequency, y1 = seq(max(frequency) + start, max(frequency) + end, length.out = length), col = "gray")#
-    ## horizontal lines connecting the vertical lines and the population mean#
-    segments(x0 = values, y0 = seq(max(frequency) + start, max(frequency) + end, length.out = length), x1 = rep(center, sample_total_unique_length), col = color)#
-    ## #
-    mtext(side = 3, at = mean(sample), text = bquote(italic(M) == .(round(mean(sample), 2))))#
- }#
- add_lines_together <- function(center1, center2) {#
-  	break_point <- (sample_1_valus_length / sample_total_unique_length) * 0.8#
-    add_vertical_horizontal_lines(sample1, center1, sample_1_values_x, sample_1_values_frequency, sample_1_valus_length, color = "red", 0.1, break_point)#
-    if(!is.null(sample2)) {#
-    add_vertical_horizontal_lines(sample2, center2, sample_2_values_x, sample_2_values_frequency, sample_2_valus_length, color = "blue", break_point, 0.9)    	#
-    }	#
- }#
-  if (show_sample_deviation) {#
-  	if (show_SST) {#
-  	  add_lines_together(population_mean, population_mean)#
-     } else  {#
-   	  add_lines_together(mean(sample1), mean(sample2))    	#
-     } #
-  	}#
- mtext(side = 3, at = population_mean, text = bquote(italic(mu[0]) == .(population_mean)), line = 1)#
-  ##### 5. Add population curve #######
-  if (show_population_curve){#
-    zx <- seq(population_mean - 3 * population_sd, population_mean + 3 * population_sd, len = 100)#
-    zy <- dnorm(zx, mean = population_mean, sd = population_sd) * length(sample1)#
-    lines(zx, zy, col = "#cf232a", lwd = 2)#
-  }#
-}#
-#
-sample1 = c(11, 9, 4, 5, 6, 7, 12, 10)#
-sample2 = c(7, 13, 14, 16, 9, 11, 15, 11)#
-#
-Plot_Sample_FrequencyN(sample1, show_sample_deviation = T, show_SST = T, population_mean = 8)
-rm(list = ls())#
-Plot_Sample_FrequencyN <- function(#
-sample1, sample2 = NULL, #
-show_sample_deviation = FALSE,#
-show_sample_grid = TRUE,#
-show_sample_sigma = FALSE,#
-AHZ = FALSE, AVD = TRUE,#
-show_population_curve = FALSE,#
-population_mean = mean(c(sample1, sample2)),#
-population_sd = sd(c(sample1, sample2)),#
-fill = "#a0d5cf", border = "#009f9b", #
-#fill = "#fce6bf", border = "#b78135", #
-xlab = "", ylab = "Frequency",#
-show_SST = TRUE,#
-...#
-){#
-  ##### 1. Calculate the required value #######
-  sample_tidy <- function (sample) {#
-    Mean <- mean(sample)#
-    Table <- as.data.frame(table(sample, dnn = "data"))#
-    names(Table)[names(Table) == "Freq"] <- "Frequency"#
-    Table[, "data"] <- as.numeric(as.character(Table[, "data"]))#
-    Table_Unique <- Table[Table[, "data"] != Mean, ]#
-    res <- list(Table = Table, Table_Unique = Table_Unique, Mean = Mean)#
-    return(res)	#
-  }#
-  sample_1_tidy <- sample_tidy(sample1)#
-  sample_2_tidy <- if (!is.null(sample2)) sample_tidy(sample2) else sample_1_tidy#
-#
-  sample_total <- c(sample1, sample2)#
-  sample_total_tidy <- sample_tidy(sample_total)#
-  sample_total_values_x <- sample_total_tidy[["Table"]][["data"]]#
-  sample_total_values_x <- sort(sample_total_values_x)#
-  sample_total_frequency_x <- sample_total_tidy[["Table"]][["Frequency"]]#
-  sample_total_unique_x <- sample_total_tidy[["Table_Unique"]][["data"]]#
-  sample_total_unique_x <- sort(sample_total_unique_x)#
-  sample_total_unique_frequency <- sample_total_tidy[["Table_Unique"]][["Frequency"]]#
-  sample_total_unique_length <- nrow(sample_total_tidy[["Table_Unique"]])#
-  sample_1_values_x <- sample_total_values_x[sample_total_values_x %in% sample1]#
-  sample_1_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_1_values_x, "Frequency"]#
-  sample_1_valus_length <- length(sample_1_values_x)#
-  sample_2_values_x <- sample_total_values_x[sample_total_values_x %in% sample2]#
-  sample_2_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_2_values_x, "Frequency"]#
-  sample_2_valus_length <- length(sample_2_values_x)#
-  bin_width <- min(sample_total_values_x[-1] - sample_total_values_x[-length(sample_total_values_x)])#
-  xlim <- c(min(sample_total_values_x) - bin_width, max(sample_total_values_x) + bin_width)#
-  ylim <- c(0, max(sample_total_frequency_x) + 1)#
-  breaks <- seq(min(sample_total_values_x) - bin_width / 2, max(sample_total_values_x) + bin_width / 2, by = bin_width)#
-  xlabel <- round(seq(min(sample_total_values_x), max(sample_total_values_x), by = bin_width), 2)#
-  xzlabel <- round((xlabel - population_mean) / population_sd, 2)#
-  ylabel <- seq(0, max(sample_total_frequency_x), by = 1)#
-  ydensitylabel <- format(ylabel / length(sample_total), digits = 2)#
-#
-  ##### 2. Do the plotting #######
-  par(mar = c(5, 4, 4, 5) + 0.1)#
-  hist(sample_total, ylim = ylim, xlim = xlim, breaks = breaks, #
-    col = fill, border = border, main = "", xlab = xlab, ylab = ylab,#
-    yaxs = "i", xaxs = "i", xaxt = "n", yaxt = "n", ...)#
-  if (!is.null(sample2)) {#
-  hist(x = sample1, breaks = breaks, col = "#f8cea2", border = "#b78135", add = TRUE)  	#
-  }#
-  mtext(expression(italic("X")), side = 1, line = 0, adj = 0.99)#
-  axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0)#
-  axis(1, at = xlabel, labels = xlabel, lwd = 0, lwd.ticks = 1, padj = -0.5)#
-  axis(2, at = ylim, labels = c("",""), lwd.ticks = 0)#
-  axis(2, at = ylabel, labels = ylabel, lwd = 0, lwd.ticks = 1, las = 1)#
-#
-  ##### 3. Add more axes #######
-  if (AVD){#
-    axis(4, at = ylim, labels = c("",""), lwd.ticks = 0)#
-    axis(4, at = ylabel, labels = ydensitylabel, lwd = 0, lwd.ticks = 1, las = 1)#
-    mtext("Density", side = 4, line = 4, padj = - 1)#
-  }#
-#
-  if (AHZ) {#
-    axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0, line = 2.5)#
-    axis(1, at = xlabel, labels = xzlabel, lwd = 0, lwd.ticks = 1, line = 2.5, padj = -0.5)#
-    mtext(expression(italic("z")), side = 1, line = 2.5, adj = 0.99)#
-  }#
-#
-  ##### 4. Add more information concerning the sample data #######
-  if (show_sample_grid){#
-    invisible(lapply(1:nrow(sample_total_tidy[["Table"]]), function(i) {#
-    invisible(lapply(1:sample_total_frequency_x[i], function(j){#
-      segments(sample_total_values_x[i]  - bin_width / 2, 1:j, sample_total_values_x[i]  + bin_width / 2, 1:j, col = border)#
-              }))#
-      }))#
-    }#
-#
-  if (show_sample_sigma) {#
-  	segment_y0 <- Table_1[Table_1[, "data"] == round(mean(sample1), 0), "Freq"]#
-  	segments(x0 = mean(sample1), y0 = segment_y0, x1 = mean(sample1), y1 = max(freq) + 2)#
-    arrows(mean(sample1)- sd(sample1), ylim[2]-0.5, mean(sample1) + sd(sample1), ylim[2] - 0.5, code = 3, length = 0.1)#
-    mtext(side = 3, at = mean(sample1), text = bquote(italic(M) == .(round(mean(sample1), 2))))#
-    text(x = mean(sample1) + sd(sample1) / 2, y = ylim[2] - 0.5, label = bquote(s == .(round(sd(sample1), 2))), pos = 3)#
-    text(x = mean(sample1) - sd(sample1) / 2, y = ylim[2] - 0.5, label = bquote(s == .(round(sd(sample1), 2))), pos = 3)#
-  }#
- add_vertical_horizontal_lines <- function(sample, center = mean(sample), values, frequency, length, color, start, end) {#
-     ## vertical line above mu#
-    segments(x0 = center, y0 = length(frequency[frequency == center]), y1 = max(frequency) + 1, col = "gray")#
-    ## vertical lines above each unique observation#
-    segments(x0 = values, y0 = frequency, y1 = seq(max(frequency) + start, max(frequency) + end, length.out = length), col = "gray")#
-    ## horizontal lines connecting the vertical lines and the population mean#
-    segments(x0 = values, y0 = seq(max(frequency) + start, max(frequency) + end, length.out = length), x1 = rep(center, sample_total_unique_length), col = color)#
-    ## #
-    mtext(side = 3, at = mean(sample), text = bquote(italic(M) == .(round(mean(sample), 2))))#
- }#
- add_lines_together <- function(center1, center2) {#
-  	break_point <- (sample_1_valus_length / sample_total_unique_length) * 0.8#
-    add_vertical_horizontal_lines(sample1, center1, sample_1_values_x, sample_1_values_frequency, sample_1_valus_length, color = "red", 0.1, break_point)#
-    if(!is.null(sample2)) {#
-    add_vertical_horizontal_lines(sample2, center2, sample_2_values_x, sample_2_values_frequency, sample_2_valus_length, color = "blue", break_point, 0.9)    	#
-    }	#
- }#
-  if (show_sample_deviation) {#
-  	if (show_SST) {#
-  	  add_lines_together(population_mean, population_mean)#
-     } else  {#
-   	  add_lines_together(mean(sample1), mean(sample2))    	#
-     } #
-  	}#
- mtext(side = 3, at = population_mean, text = bquote(italic(mu[0]) == .(population_mean)), line = 1)#
-  ##### 5. Add population curve #######
-  if (show_population_curve){#
-    zx <- seq(population_mean - 3 * population_sd, population_mean + 3 * population_sd, len = 100)#
-    zy <- dnorm(zx, mean = population_mean, sd = population_sd) * length(sample1)#
-    lines(zx, zy, col = "#cf232a", lwd = 2)#
-  }#
-}#
-#
-sample1 = c(11, 9, 4, 5, 6, 7, 12, 10)#
-sample2 = c(7, 13, 14, 16, 9, 11, 15, 11)#
-#
-Plot_Sample_FrequencyN(sample1, show_sample_deviation = T, show_SST = T, population_mean = 9)
-rm(list = ls())#
-Plot_Sample_FrequencyN <- function(#
-sample1, sample2 = NULL, #
-show_sample_deviation = FALSE,#
-show_sample_grid = TRUE,#
-show_sample_sigma = FALSE,#
-AHZ = FALSE, AVD = TRUE,#
-show_population_curve = FALSE,#
-population_mean = mean(c(sample1, sample2)),#
-population_sd = sd(c(sample1, sample2)),#
-fill = "#f8cea2", border = "#b78135"#
-#fill = "#fce6bf", border = "#b78135", #
-xlab = "", ylab = "Frequency",#
-show_SST = TRUE,#
-...#
-){#
-  ##### 1. Calculate the required value #######
-  sample_tidy <- function (sample) {#
-    Mean <- mean(sample)#
-    Table <- as.data.frame(table(sample, dnn = "data"))#
-    names(Table)[names(Table) == "Freq"] <- "Frequency"#
-    Table[, "data"] <- as.numeric(as.character(Table[, "data"]))#
-    Table_Unique <- Table[Table[, "data"] != Mean, ]#
-    res <- list(Table = Table, Table_Unique = Table_Unique, Mean = Mean)#
-    return(res)	#
-  }#
-  sample_1_tidy <- sample_tidy(sample1)#
-  sample_2_tidy <- if (!is.null(sample2)) sample_tidy(sample2) else sample_1_tidy#
-#
-  sample_total <- c(sample1, sample2)#
-  sample_total_tidy <- sample_tidy(sample_total)#
-  sample_total_values_x <- sample_total_tidy[["Table"]][["data"]]#
-  sample_total_values_x <- sort(sample_total_values_x)#
-  sample_total_frequency_x <- sample_total_tidy[["Table"]][["Frequency"]]#
-  sample_total_unique_x <- sample_total_tidy[["Table_Unique"]][["data"]]#
-  sample_total_unique_x <- sort(sample_total_unique_x)#
-  sample_total_unique_frequency <- sample_total_tidy[["Table_Unique"]][["Frequency"]]#
-  sample_total_unique_length <- nrow(sample_total_tidy[["Table_Unique"]])#
-  sample_1_values_x <- sample_total_values_x[sample_total_values_x %in% sample1]#
-  sample_1_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_1_values_x, "Frequency"]#
-  sample_1_valus_length <- length(sample_1_values_x)#
-  sample_2_values_x <- sample_total_values_x[sample_total_values_x %in% sample2]#
-  sample_2_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_2_values_x, "Frequency"]#
-  sample_2_valus_length <- length(sample_2_values_x)#
-  bin_width <- min(sample_total_values_x[-1] - sample_total_values_x[-length(sample_total_values_x)])#
-  xlim <- c(min(sample_total_values_x) - bin_width, max(sample_total_values_x) + bin_width)#
-  ylim <- c(0, max(sample_total_frequency_x) + 1)#
-  breaks <- seq(min(sample_total_values_x) - bin_width / 2, max(sample_total_values_x) + bin_width / 2, by = bin_width)#
-  xlabel <- round(seq(min(sample_total_values_x), max(sample_total_values_x), by = bin_width), 2)#
-  xzlabel <- round((xlabel - population_mean) / population_sd, 2)#
-  ylabel <- seq(0, max(sample_total_frequency_x), by = 1)#
-  ydensitylabel <- format(ylabel / length(sample_total), digits = 2)#
-#
-  ##### 2. Do the plotting #######
-  par(mar = c(5, 4, 4, 5) + 0.1)#
-  hist(sample_total, ylim = ylim, xlim = xlim, breaks = breaks, #
-    col = fill, border = border, main = "", xlab = xlab, ylab = ylab,#
-    yaxs = "i", xaxs = "i", xaxt = "n", yaxt = "n", ...)#
-  if (!is.null(sample2)) {#
-  hist(x = sample1, breaks = breaks, col = "#a0d5cf", border = "#009f9b", add = TRUE)  	#
-  }#
-  mtext(expression(italic("X")), side = 1, line = 0, adj = 0.99)#
-  axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0)#
-  axis(1, at = xlabel, labels = xlabel, lwd = 0, lwd.ticks = 1, padj = -0.5)#
-  axis(2, at = ylim, labels = c("",""), lwd.ticks = 0)#
-  axis(2, at = ylabel, labels = ylabel, lwd = 0, lwd.ticks = 1, las = 1)#
-#
-  ##### 3. Add more axes #######
-  if (AVD){#
-    axis(4, at = ylim, labels = c("",""), lwd.ticks = 0)#
-    axis(4, at = ylabel, labels = ydensitylabel, lwd = 0, lwd.ticks = 1, las = 1)#
-    mtext("Density", side = 4, line = 4, padj = - 1)#
-  }#
-#
-  if (AHZ) {#
-    axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0, line = 2.5)#
-    axis(1, at = xlabel, labels = xzlabel, lwd = 0, lwd.ticks = 1, line = 2.5, padj = -0.5)#
-    mtext(expression(italic("z")), side = 1, line = 2.5, adj = 0.99)#
-  }#
-#
-  ##### 4. Add more information concerning the sample data #######
-  if (show_sample_grid){#
-    invisible(lapply(1:nrow(sample_total_tidy[["Table"]]), function(i) {#
-    invisible(lapply(1:sample_total_frequency_x[i], function(j){#
-      segments(sample_total_values_x[i]  - bin_width / 2, 1:j, sample_total_values_x[i]  + bin_width / 2, 1:j, col = border)#
-              }))#
-      }))#
-    }#
-#
-  if (show_sample_sigma) {#
-  	segment_y0 <- Table_1[Table_1[, "data"] == round(mean(sample1), 0), "Freq"]#
-  	segments(x0 = mean(sample1), y0 = segment_y0, x1 = mean(sample1), y1 = max(freq) + 2)#
-    arrows(mean(sample1)- sd(sample1), ylim[2]-0.5, mean(sample1) + sd(sample1), ylim[2] - 0.5, code = 3, length = 0.1)#
-    mtext(side = 3, at = mean(sample1), text = bquote(italic(M) == .(round(mean(sample1), 2))))#
-    text(x = mean(sample1) + sd(sample1) / 2, y = ylim[2] - 0.5, label = bquote(s == .(round(sd(sample1), 2))), pos = 3)#
-    text(x = mean(sample1) - sd(sample1) / 2, y = ylim[2] - 0.5, label = bquote(s == .(round(sd(sample1), 2))), pos = 3)#
-  }#
- add_vertical_horizontal_lines <- function(sample, center = mean(sample), values, frequency, length, color, start, end) {#
-     ## vertical line above mu#
-    segments(x0 = center, y0 = length(frequency[frequency == center]), y1 = max(frequency) + 1, col = "gray")#
-    ## vertical lines above each unique observation#
-    segments(x0 = values, y0 = frequency, y1 = seq(max(frequency) + start, max(frequency) + end, length.out = length), col = "gray")#
-    ## horizontal lines connecting the vertical lines and the population mean#
-    segments(x0 = values, y0 = seq(max(frequency) + start, max(frequency) + end, length.out = length), x1 = rep(center, sample_total_unique_length), col = color)#
-    ## #
-    mtext(side = 3, at = mean(sample), text = bquote(italic(M) == .(round(mean(sample), 2))))#
- }#
- add_lines_together <- function(center1, center2) {#
-  	break_point <- (sample_1_valus_length / sample_total_unique_length) * 0.8#
-    add_vertical_horizontal_lines(sample1, center1, sample_1_values_x, sample_1_values_frequency, sample_1_valus_length, color = "red", 0.1, break_point)#
-    if(!is.null(sample2)) {#
-    add_vertical_horizontal_lines(sample2, center2, sample_2_values_x, sample_2_values_frequency, sample_2_valus_length, color = "blue", break_point, 0.9)    	#
-    }	#
- }#
-  if (show_sample_deviation) {#
-  	if (show_SST) {#
-  	  add_lines_together(population_mean, population_mean)#
-     } else  {#
-   	  add_lines_together(mean(sample1), mean(sample2))    	#
-     } #
-  	}#
- mtext(side = 3, at = population_mean, text = bquote(italic(mu[0]) == .(population_mean)), line = 1)#
-  ##### 5. Add population curve #######
-  if (show_population_curve){#
-    zx <- seq(population_mean - 3 * population_sd, population_mean + 3 * population_sd, len = 100)#
-    zy <- dnorm(zx, mean = population_mean, sd = population_sd) * length(sample1)#
-    lines(zx, zy, col = "#cf232a", lwd = 2)#
-  }#
-}#
-#
-sample1 = c(11, 9, 4, 5, 6, 7, 12, 10)#
-sample2 = c(7, 13, 14, 16, 9, 11, 15, 11)#
-#
-Plot_Sample_FrequencyN(sample1, sample2, show_sample_deviation = T, show_SST = F)
-rm(list = ls())#
-Plot_Sample_FrequencyN <- function(#
-sample1, sample2 = NULL, #
-show_sample_deviation = FALSE,#
-show_sample_grid = TRUE,#
-show_sample_sigma = FALSE,#
-AHZ = FALSE, AVD = TRUE,#
-show_population_curve = FALSE,#
-population_mean = mean(c(sample1, sample2)),#
-population_sd = sd(c(sample1, sample2)),#
-fill = "#f8cea2", border = "#b78135",#
-#fill = "#fce6bf", border = "#b78135", #
-xlab = "", ylab = "Frequency",#
-show_SST = TRUE,#
-...#
-){#
-  ##### 1. Calculate the required value #######
-  sample_tidy <- function (sample) {#
-    Mean <- mean(sample)#
-    Table <- as.data.frame(table(sample, dnn = "data"))#
-    names(Table)[names(Table) == "Freq"] <- "Frequency"#
-    Table[, "data"] <- as.numeric(as.character(Table[, "data"]))#
-    Table_Unique <- Table[Table[, "data"] != Mean, ]#
-    res <- list(Table = Table, Table_Unique = Table_Unique, Mean = Mean)#
-    return(res)	#
-  }#
-  sample_1_tidy <- sample_tidy(sample1)#
-  sample_2_tidy <- if (!is.null(sample2)) sample_tidy(sample2) else sample_1_tidy#
-#
-  sample_total <- c(sample1, sample2)#
-  sample_total_tidy <- sample_tidy(sample_total)#
-  sample_total_values_x <- sample_total_tidy[["Table"]][["data"]]#
-  sample_total_values_x <- sort(sample_total_values_x)#
-  sample_total_frequency_x <- sample_total_tidy[["Table"]][["Frequency"]]#
-  sample_total_unique_x <- sample_total_tidy[["Table_Unique"]][["data"]]#
-  sample_total_unique_x <- sort(sample_total_unique_x)#
-  sample_total_unique_frequency <- sample_total_tidy[["Table_Unique"]][["Frequency"]]#
-  sample_total_unique_length <- nrow(sample_total_tidy[["Table_Unique"]])#
-  sample_1_values_x <- sample_total_values_x[sample_total_values_x %in% sample1]#
-  sample_1_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_1_values_x, "Frequency"]#
-  sample_1_valus_length <- length(sample_1_values_x)#
-  sample_2_values_x <- sample_total_values_x[sample_total_values_x %in% sample2]#
-  sample_2_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_2_values_x, "Frequency"]#
-  sample_2_valus_length <- length(sample_2_values_x)#
-  bin_width <- min(sample_total_values_x[-1] - sample_total_values_x[-length(sample_total_values_x)])#
-  xlim <- c(min(sample_total_values_x) - bin_width, max(sample_total_values_x) + bin_width)#
-  ylim <- c(0, max(sample_total_frequency_x) + 1)#
-  breaks <- seq(min(sample_total_values_x) - bin_width / 2, max(sample_total_values_x) + bin_width / 2, by = bin_width)#
-  xlabel <- round(seq(min(sample_total_values_x), max(sample_total_values_x), by = bin_width), 2)#
-  xzlabel <- round((xlabel - population_mean) / population_sd, 2)#
-  ylabel <- seq(0, max(sample_total_frequency_x), by = 1)#
-  ydensitylabel <- format(ylabel / length(sample_total), digits = 2)#
-#
-  ##### 2. Do the plotting #######
-  par(mar = c(5, 4, 4, 5) + 0.1)#
-  hist(sample_total, ylim = ylim, xlim = xlim, breaks = breaks, #
-    col = fill, border = border, main = "", xlab = xlab, ylab = ylab,#
-    yaxs = "i", xaxs = "i", xaxt = "n", yaxt = "n", ...)#
-  if (!is.null(sample2)) {#
-  hist(x = sample1, breaks = breaks, col = "#a0d5cf", border = "#009f9b", add = TRUE)  	#
-  }#
-  mtext(expression(italic("X")), side = 1, line = 0, adj = 0.99)#
-  axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0)#
-  axis(1, at = xlabel, labels = xlabel, lwd = 0, lwd.ticks = 1, padj = -0.5)#
-  axis(2, at = ylim, labels = c("",""), lwd.ticks = 0)#
-  axis(2, at = ylabel, labels = ylabel, lwd = 0, lwd.ticks = 1, las = 1)#
-#
-  ##### 3. Add more axes #######
-  if (AVD){#
-    axis(4, at = ylim, labels = c("",""), lwd.ticks = 0)#
-    axis(4, at = ylabel, labels = ydensitylabel, lwd = 0, lwd.ticks = 1, las = 1)#
-    mtext("Density", side = 4, line = 4, padj = - 1)#
-  }#
-#
-  if (AHZ) {#
-    axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0, line = 2.5)#
-    axis(1, at = xlabel, labels = xzlabel, lwd = 0, lwd.ticks = 1, line = 2.5, padj = -0.5)#
-    mtext(expression(italic("z")), side = 1, line = 2.5, adj = 0.99)#
-  }#
-#
-  ##### 4. Add more information concerning the sample data #######
-  if (show_sample_grid){#
-    invisible(lapply(1:nrow(sample_total_tidy[["Table"]]), function(i) {#
-    invisible(lapply(1:sample_total_frequency_x[i], function(j){#
-      segments(sample_total_values_x[i]  - bin_width / 2, 1:j, sample_total_values_x[i]  + bin_width / 2, 1:j, col = border)#
-              }))#
-      }))#
-    }#
-#
-  if (show_sample_sigma) {#
-  	segment_y0 <- Table_1[Table_1[, "data"] == round(mean(sample1), 0), "Freq"]#
-  	segments(x0 = mean(sample1), y0 = segment_y0, x1 = mean(sample1), y1 = max(freq) + 2)#
-    arrows(mean(sample1)- sd(sample1), ylim[2]-0.5, mean(sample1) + sd(sample1), ylim[2] - 0.5, code = 3, length = 0.1)#
-    mtext(side = 3, at = mean(sample1), text = bquote(italic(M) == .(round(mean(sample1), 2))))#
-    text(x = mean(sample1) + sd(sample1) / 2, y = ylim[2] - 0.5, label = bquote(s == .(round(sd(sample1), 2))), pos = 3)#
-    text(x = mean(sample1) - sd(sample1) / 2, y = ylim[2] - 0.5, label = bquote(s == .(round(sd(sample1), 2))), pos = 3)#
-  }#
- add_vertical_horizontal_lines <- function(sample, center = mean(sample), values, frequency, length, color, start, end) {#
-     ## vertical line above mu#
-    segments(x0 = center, y0 = length(frequency[frequency == center]), y1 = max(frequency) + 1, col = "gray")#
-    ## vertical lines above each unique observation#
-    segments(x0 = values, y0 = frequency, y1 = seq(max(frequency) + start, max(frequency) + end, length.out = length), col = "gray")#
-    ## horizontal lines connecting the vertical lines and the population mean#
-    segments(x0 = values, y0 = seq(max(frequency) + start, max(frequency) + end, length.out = length), x1 = rep(center, sample_total_unique_length), col = color)#
-    ## #
-    mtext(side = 3, at = mean(sample), text = bquote(italic(M) == .(round(mean(sample), 2))))#
- }#
- add_lines_together <- function(center1, center2) {#
-  	break_point <- (sample_1_valus_length / sample_total_unique_length) * 0.8#
-    add_vertical_horizontal_lines(sample1, center1, sample_1_values_x, sample_1_values_frequency, sample_1_valus_length, color = "red", 0.1, break_point)#
-    if(!is.null(sample2)) {#
-    add_vertical_horizontal_lines(sample2, center2, sample_2_values_x, sample_2_values_frequency, sample_2_valus_length, color = "blue", break_point, 0.9)    	#
-    }	#
- }#
-  if (show_sample_deviation) {#
-  	if (show_SST) {#
-  	  add_lines_together(population_mean, population_mean)#
-     } else  {#
-   	  add_lines_together(mean(sample1), mean(sample2))    	#
-     } #
-  	}#
- mtext(side = 3, at = population_mean, text = bquote(italic(mu[0]) == .(population_mean)), line = 1)#
-  ##### 5. Add population curve #######
-  if (show_population_curve){#
-    zx <- seq(population_mean - 3 * population_sd, population_mean + 3 * population_sd, len = 100)#
-    zy <- dnorm(zx, mean = population_mean, sd = population_sd) * length(sample1)#
-    lines(zx, zy, col = "#cf232a", lwd = 2)#
-  }#
-}#
-#
-sample1 = c(11, 9, 4, 5, 6, 7, 12, 10)#
-sample2 = c(7, 13, 14, 16, 9, 11, 15, 11)#
-#
-Plot_Sample_FrequencyN(sample1, sample2, show_sample_deviation = T, show_SST = F)
-rm(list = ls())#
-Plot_Sample_FrequencyN <- function(#
-sample1, sample2 = NULL, #
-show_sample_deviation = FALSE,#
-show_sample_grid = TRUE,#
-show_sample_sigma = FALSE,#
-AHZ = FALSE, AVD = TRUE,#
-show_population_curve = FALSE,#
-population_mean = mean(c(sample1, sample2)),#
-population_sd = sd(c(sample1, sample2)),#
 fill = "#f8cea2", border = "#b78135",#
 #fill = "#fce6bf", border = "#b78135", #
 xlab = "", ylab = "Frequency",#
@@ -5912,67 +4435,6 @@ if (show_t_curve) {#
 }#
 #
 Plot_F_Distribution(df1=1, df2=20, x_range = c(0, 7), show_t_curve = T, y_range=0.5)
-Plot_F_Distribution <- function(#
-df1 = 1, df2 = 14, alpha_level = 0.05,#
-x_range = c(0, 7), y_range = NULL, #
-fill_critical_region = TRUE, show_t_curve = FALSE#
-){#
- #### 1. Define colors to do the drawing#
- fcolor <- "#d62d20" #ggsci::pal_aaas("default")(10)[3]#
- ffill <- "#F6D5D2" # "#e9c4b2"#
- tcolor <- "#008744" #ggsci::pal_aaas("default")(10)[2]#
- tfill <- "#E5F3EC"#
- #### 2. Calculate the relevant values#
- x_t <- seq(min(x_range), max(x_range), by = 0.0001)#
- y_t <- dt(x_t, df2)#
- critical_region_t <- qt(alpha_level / 2, df2, lower.tail = FALSE)#
- critical_region_t_x <- c(critical_region_t, x_t[x_t >= critical_region_t], max(x_t))#
- critical_region_t_y <- c(0, dt(x_t[x_t >= critical_region_t], df2), 0)#
-#
- x_F <- x_t[x_t >= 0]#
- y_F <- df(x_F, df1, df2)#
- critical_region_F <- qf(alpha_level, df1, df2, lower.tail = FALSE)#
- critical_region_F_x <- c(critical_region_F, x_F[x_F >= critical_region_F], max(x_F))#
- critical_region_F_y <- c(0, df(x_F[x_F >= critical_region_F], df1, df2), 0)#
-#
- y_total <- c(y_t, y_F)#
- y_total <- y_total[is.finite(y_total)]#
- y_max <- ifelse(is.null(y_range), max(y_total), y_range)#
- xlim <- c(min(x_range), max(x_range) + 0.5)#
- ylim <- c(0, y_max * 1.1)#
-#
- ### 3. Do the plotting#
- plot(NULL, NULL, xlim = xlim, ylim = ylim,#
-  type = "l", bty = "l", yaxs = "i", xaxs = "i", axes = FALSE,#
-  ylab = "Density", xlab = "t / F values", font.lab = 2#
-  )#
-  mtext(expression(italic("t")), side = 1, line = 0, adj = 0.99)#
-  axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0)#
-  axis(1, at = seq(min(x_range), max(x_range)), lwd = 0, lwd.ticks = 1, padj = -0.5)#
-#
- if (fill_critical_region) {#
- polygon(x = critical_region_F_x,  y = critical_region_F_y, col = ffill, border = NULL) 	#
- }#
- lines(x_F, y_F, col = fcolor, lwd = 2)#
- abline(v = critical_region_F, col = fcolor, lty = 2)#
- text(x = 1, y = y_max + 0.02, pos = 4, offset = -2, col = fcolor,#
-   labels = bquote(df[1] == .(df1) ~ "," ~ df[2] ==.(df2)) )#
- text(x = critical_region_F, y = y_max / 10, col = fcolor, pos = 4, offset = 0.2,#
-   labels = bquote(italic(F == .(round(critical_region_F, 2))) ~ "," ~ italic(alpha) == .(alpha_level) ))#
-#
-if (show_t_curve) {#
-	if (fill_critical_region) {#
- polygon(x =   critical_region_t_x, y = critical_region_t_y, col = tfill, border = NULL)#
- polygon(x = - critical_region_t_x, y = critical_region_t_y, col = tfill, border = NULL)	#
-	}#
- lines(x_t, y_t, col = tcolor, lwd = 2)#
- abline(v = critical_region_t, lty = 2, col = tcolor)#
- text(x = critical_region_t, y = y_max / 3.5, pos = 4, col = tcolor, offset = 0.2,#
-      labels = bquote(italic(t == .(round(critical_region_t, 2))) ~ "," ~ italic(alpha / 2) == .(alpha_level / 2) ))  #
-  }#
-}#
-#
-Plot_F_Distribution(df1=1, df2=20, x_range = c(0, 7), show_t_curve = T, y_range=0.5)
 ?qf
 ?df()
 qf(0.5, 1, 10)
@@ -5982,12 +4444,9 @@ dt(0.5, 10)
 qt(dt(1, 10), 10, lower.tail=)
 qt(dt(1, 10), 10, lower.tail=F)
 qf(df(1, 1, 10), 1, 10, lower.tail=F)
-qf(df(1, 1, 10), 1, 10, lower.tail=F)
 qf(pf(1, 1, 10), 1, 10, lower.tail=F)
 qt(pt(1, 10), 10, lower.tail=F)
 qt(, 10, lower.tail=F)
-pt(1, 10)
-pt(1, 10)
 pt(1, 10)
 dt(0.82, 10)
 qt(0.025, 20)
@@ -6002,7 +4461,6 @@ qt(dt(2.09, 20), 20, lower.tail=F)
 qt(dt(2.09, 20), 20, lower.tail=F)^2
 ft(df(2.09,1, 20), 1,20, lower.tail=F)
 qf(df(2.09,1, 20), 1,20, lower.tail=F)
-qt(dt(2.09, 20), 20, lower.tail=F)^2
 qt(dt(2.09, 20), 20, lower.tail=F)^2
 score <- c(2, 3,  8,  6,  5,  6,#
            5, 9, 10, 13,  8,  9,#
@@ -6170,20 +4628,6 @@ T <- apply(data, 2, ff)#
 dd <- rbind(data, T)#
 row.names(dd) <- c(rep(NULL, 6), "T", "n", "Mean", "SS")#
 )
-data <- matrix(data = score, #
-       nrow = 6, #
-       dimnames = list(Number = paste("S", 1:6, sep = ""), #
-                       Treatment = c("RRR", "RPQ", "RCQ")                       #
-                       )#
-   )#
-ff <- function(x) rbind(#
-  T = sum(x), #
-  n = length(x), #
-  mean = mean(x),#
-  SS = sum((x - mean(x)) ^ 2))#
-T <- apply(data, 2, ff)#
-dd <- rbind(data, T)#
-row.names(dd) <- c(rep(NULL, 6), "T", "n", "Mean", "SS")
 data <- matrix(data = score, #
        nrow = 6, #
        dimnames = list(Number = paste("S", 1:6, sep = ""), #
@@ -6476,7 +4920,6 @@ Exp2
 library(acqr)
 Plot_Sample_Frequency(Exp2$Score_A)
 Plot_Sample_Frequency(Exp2$Score_B)
-Plot_Sample_Frequency(Exp2$Score_B)
 Plot_Sample_Frequency(Exp2$score_B)
 Exp2$score_B
 A1 <- Exp2[Exp2[, "Condition"] == "Treatment_1", "Score_A"]#
@@ -6514,3 +4957,795 @@ Plot_F_Distribution(show_t_curve=T, x_range = c(0, 10), y_range = 0.5)
 Plot_F_Distribution(show_t_curve=T, x_range = c(0, 10), y_range = 0.7)
 Plot_F_Distribution(show_t_curve=T, x_range = c(0, 10), y_range = 0.4)
 2.14^2
+Plot_Sample_Frequency <- function(#
+sample1, sample2 = NULL, #
+x_range = NULL,#
+show_sample_deviation = FALSE,#
+show_sample_grid = TRUE,#
+show_sample_sigma = FALSE,#
+AHZ = FALSE, AVD = TRUE,#
+show_population_curve = FALSE,#
+population_mean = mean(c(sample1, sample2)),#
+population_sd = sd(c(sample1, sample2)),#
+show_SST = TRUE,#
+xlab = "", ylab = "Frequency",#
+...#
+){#
+  ##### 0. Define colors #######
+  sample1_col <- c("#f8cea2", "#b78135")#
+  sample2_col <- c("#a0d5cf", "#009f9b") #
+  ##### 1. Calculate the required value #######
+  sample_tidy <- function (sample) {#
+    Mean <- mean(sample)#
+    Table <- as.data.frame(table(sample, dnn = "data"))#
+    names(Table)[names(Table) == "Freq"] <- "Frequency"#
+    Table[, "data"] <- as.numeric(as.character(Table[, "data"]))#
+    Table_Unique <- Table[Table[, "data"] != Mean, ]#
+    res <- list(Table = Table, Table_Unique = Table_Unique, Mean = Mean)#
+    return(res)	#
+  }#
+  sample_total <- c(sample1, sample2)#
+  sample_total_tidy <- sample_tidy(sample_total)#
+  sample_total_values_x <- sample_total_tidy[["Table"]][["data"]]#
+  sample_total_values_x <- sort(sample_total_values_x)#
+  sample_total_frequency_x <- sample_total_tidy[["Table"]][["Frequency"]]#
+  sample_total_unique_x <- sample_total_tidy[["Table_Unique"]][["data"]]#
+  sample_total_unique_x <- sort(sample_total_unique_x)#
+  sample_total_unique_frequency <- sample_total_tidy[["Table_Unique"]][["Frequency"]]#
+  sample_total_unique_length <- nrow(sample_total_tidy[["Table_Unique"]])#
+  sample_1_tidy <- sample_tidy(sample1)#
+  sample_1_values_x <- sample_total_values_x[sample_total_values_x %in% sample1]#
+  sample_1_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_1_values_x, "Frequency"]#
+  sample_1_valus_length <- length(sample_1_values_x)#
+  sample_2_tidy <- if (!is.null(sample2)) sample_tidy(sample2) else sample_1_tidy#
+  sample_2_values_x <- sample_total_values_x[sample_total_values_x %in% sample2]#
+  sample_2_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_2_values_x, "Frequency"]#
+  sample_2_valus_length <- length(sample_2_values_x)#
+  bin_width <- min(sample_total_values_x[-1] - sample_total_values_x[-length(sample_total_values_x)])#
+  if (is.null(x_range)) {#
+  xlim <- c(min(sample_total_values_x) - bin_width, max(sample_total_values_x) + bin_width) 	  	#
+  } else {#
+  xlim <- c(min(x_range) - bin_width, max(x_range) + bin_width)	#
+  }#
+  ylim <- c(0, max(sample_total_frequency_x) + 1)#
+  breaks <- seq(min(xlim) + bin_width / 2, max(xlim) + bin_width / 2, by = bin_width)#
+  xlabel <- round(seq(min(xlim) + bin_width, max(xlim) - bin_width, by = bin_width), 2)#
+  xzlabel <- round((xlabel - population_mean) / population_sd, 2)#
+  ylabel <- seq(0, max(sample_total_frequency_x), by = 1)#
+  ydensitylabel <- format(ylabel / length(sample_total), digits = 2)#
+#
+  ##### 2. Do the plotting #######
+  par(mar = c(5, 4, 4, 5) + 0.1)#
+  hist(sample_total, ylim = ylim, xlim = xlim, breaks = breaks, font.lab = 2,#
+    col = sample1_col[1], border = sample1_col[2], main = "", xlab = xlab, ylab = ylab,#
+    yaxs = "i", xaxs = "i", xaxt = "n", yaxt = "n", ...)#
+  mtext(expression(italic("X")), side = 1, line = 0, adj = 0.99)#
+  axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0)#
+  axis(1, at = xlabel, labels = xlabel, lwd = 0, lwd.ticks = 1, padj = -0.5)#
+  axis(2, at = ylim, labels = c("",""), lwd.ticks = 0)#
+  axis(2, at = ylabel, labels = ylabel, lwd = 0, lwd.ticks = 1, las = 1)#
+  ##### 3. Add more axes #######
+  if (AVD){#
+    axis(4, at = ylim, labels = c("",""), lwd.ticks = 0)#
+    axis(4, at = ylabel, labels = ydensitylabel, lwd = 0, lwd.ticks = 1, las = 1)#
+    mtext("Density", side = 4, line = 4, padj = - 1)#
+  }#
+#
+  if (AHZ) {#
+    axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0, line = 2.5)#
+    axis(1, at = xlabel, labels = xzlabel, lwd = 0, lwd.ticks = 1, line = 2.5, padj = -0.5)#
+    mtext(expression(italic("z")), side = 1, line = 2.5, adj = 0.99)#
+  }#
+#
+  ##### 4. Add more information concerning the sample data #######
+  plot_grids <- function(tidy, frequency, values, color) {#
+    invisible(lapply(1:nrow(tidy[["Table"]]), function(i) {#
+    invisible(lapply(1:frequency[i], function(j){#
+      segments(values[i]  - bin_width / 2, 1:j, values[i]  + bin_width / 2, 1:j, col = color)#
+              }))#
+      }))  	#
+  }#
+#
+  if (!is.null(sample2)) {#
+  hist(x = sample1, breaks = breaks, col = sample2_col[1], border = sample2_col[2], add = TRUE) #
+  legend( "topleft", lwd = 10, col = c(sample1_col[1], sample2_col[1]), bty = "n", legend = c("Condition A",  "Condition B"))  	#
+  } #
+    if (show_sample_grid) {#
+  if (is.null(sample2)) {#
+  plot_grids(sample_total_tidy, sample_total_frequency_x, sample_total_values_x, sample1_col[2])  	#
+  } else{#
+  plot_grids(sample_total_tidy, sample_total_frequency_x, sample_total_values_x, sample2_col[2])#
+  plot_grids(sample_2_tidy, sample_2_values_frequency, sample_2_values_x, sample1_col[2])  #
+  }   	#
+  }#
+   ##### Add legends if two sampels are included#
+  sample_sigma <- function(sample_total) {#
+    segments(x0 = mean(sample_total), y0 = ylim[2] - 1, x1 = mean(sample_total), y1 = max(sample_total_frequency_x) + 1)#
+    arrows(mean(sample_total)- sd(sample_total), ylim[2] - 0.5, mean(sample_total) + sd(sample_total), ylim[2] - 0.5, code = 3, length = 0.1)#
+    mtext(side = 3, at = mean(sample_total), text = bquote(italic(M) == .(round(mean(sample_total), 2))))#
+    text(x = mean(sample_total) + sd(sample_total) / 2, y = ylim[2] - 0.6, label = bquote(s == .(round(sd(sample_total), 2))), pos = 3)#
+    text(x = mean(sample_total) - sd(sample_total) / 2, y = ylim[2] - 0.6, label = bquote(s == .(round(sd(sample_total), 2))), pos = 3)  	#
+  }#
+  if (show_sample_sigma) {#
+  	sample_sigma(sample1)#
+  	if (!is.null(sample2)) sample_sigma(sample2)#
+  }#
+ add_vertical_horizontal_lines <- function(sample, center = mean(sample), values, frequency, length, color, start, end) {#
+     ## vertical line above mu#
+    segments(x0 = center, y0 = length(frequency[frequency == center]), y1 = max(frequency) + 1, col = "gray")#
+    ## vertical lines above each unique observation#
+    segments(x0 = values, y0 = frequency, y1 = seq(max(frequency) + start, max(frequency) + end, length.out = length), col = "gray")#
+    ## horizontal lines connecting the vertical lines and the population mean#
+    segments(x0 = values, y0 = seq(max(frequency) + start, max(frequency) + end, length.out = length), x1 = rep(center, sample_total_unique_length), col = color)#
+    ## #
+    mtext(side = 3, at = mean(sample), text = bquote(italic(M) == .(round(mean(sample), 2))))#
+ }#
+ add_lines_together <- function(center1, center2) {#
+  	break_point <- (sample_1_valus_length / sample_total_unique_length) * 0.8#
+    if(is.null(sample2)) {#
+    add_vertical_horizontal_lines(sample = sample1, center = center1, values = sample_1_values_x, frequency = sample_1_values_frequency, length = sample_1_valus_length, color = "red", start = 0.1, end = break_point)#
+    } else {#
+    add_vertical_horizontal_lines(sample1, center1, sample_1_values_x, sample_1_values_frequency, sample_1_valus_length, color = "blue", 0.1, break_point)#
+    add_vertical_horizontal_lines(sample2, center2, sample_2_values_x, sample_2_values_frequency, sample_2_valus_length, color = "red", break_point, 0.9)#
+    }#
+ }#
+  if (show_sample_deviation) {#
+  	if (show_SST) {#
+  	  add_lines_together(population_mean, population_mean)#
+  	  mtext(side = 3, at = population_mean, text = bquote(italic(mu[0]) == .(population_mean)), line = 1)#
+     } else  {#
+   	  add_lines_together(mean(sample1), mean(sample2))    #
+  	  mtext(side = 3, at = population_mean, text = bquote(italic(mu[0]) == .(population_mean)), line = 1)	#
+     } #
+  	}#
+#
+  ##### 5. Add population curve #######
+  if (show_population_curve){#
+    zx <- seq(population_mean - 3 * population_sd, population_mean + 3 * population_sd, len = 100)#
+    zy <- dnorm(zx, mean = population_mean, sd = population_sd) * length(sample1)#
+    lines(zx, zy, col = "#cf232a", lwd = 2)#
+  }#
+}#
+#
+sample1 <- c(11, 9, 4, 5, 6, 7, 12, 10)#
+sample2 <- c(7, 13, 14, 16, 9, 11, 15, 11)#
+# Plot_Sample_Frequency(sample1, sample2, show_sample_deviation = F, show_SST = F)
+Plot_Sample_Frequency <- function(#
+sample1, sample2 = NULL, #
+x_range = NULL,#
+show_sample_deviation = FALSE,#
+show_sample_grid = TRUE,#
+show_sample_sigma = FALSE,#
+AHZ = FALSE, AVD = TRUE,#
+show_population_curve = FALSE,#
+population_mean = mean(c(sample1, sample2)),#
+population_sd = sd(c(sample1, sample2)),#
+show_SST = TRUE,#
+xlab = "", ylab = "Frequency",#
+...#
+){#
+  ##### 0. Define colors #######
+  sample1_col <- c("#f8cea2", "#b78135")#
+  sample2_col <- c("#a0d5cf", "#009f9b") #
+  ##### 1. Calculate the required value #######
+  sample_tidy <- function (sample) {#
+    Mean <- mean(sample)#
+    Table <- as.data.frame(table(sample, dnn = "data"))#
+    names(Table)[names(Table) == "Freq"] <- "Frequency"#
+    Table[, "data"] <- as.numeric(as.character(Table[, "data"]))#
+    Table_Unique <- Table[Table[, "data"] != Mean, ]#
+    res <- list(Table = Table, Table_Unique = Table_Unique, Mean = Mean)#
+    return(res)	#
+  }#
+  sample_total <- c(sample1, sample2)#
+  sample_total_tidy <- sample_tidy(sample_total)#
+  sample_total_values_x <- sample_total_tidy[["Table"]][["data"]]#
+  sample_total_values_x <- sort(sample_total_values_x)#
+  sample_total_frequency_x <- sample_total_tidy[["Table"]][["Frequency"]]#
+  sample_total_unique_x <- sample_total_tidy[["Table_Unique"]][["data"]]#
+  sample_total_unique_x <- sort(sample_total_unique_x)#
+  sample_total_unique_frequency <- sample_total_tidy[["Table_Unique"]][["Frequency"]]#
+  sample_total_unique_length <- nrow(sample_total_tidy[["Table_Unique"]])#
+  sample_1_tidy <- sample_tidy(sample1)#
+  sample_1_values_x <- sample_total_values_x[sample_total_values_x %in% sample1]#
+  sample_1_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_1_values_x, "Frequency"]#
+  sample_1_valus_length <- length(sample_1_values_x)#
+  sample_2_tidy <- if (!is.null(sample2)) sample_tidy(sample2) else sample_1_tidy#
+  sample_2_values_x <- sample_total_values_x[sample_total_values_x %in% sample2]#
+  sample_2_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_2_values_x, "Frequency"]#
+  sample_2_valus_length <- length(sample_2_values_x)#
+  bin_width <- min(sample_total_values_x[-1] - sample_total_values_x[-length(sample_total_values_x)])#
+  if (is.null(x_range)) {#
+  xlim <- c(min(sample_total_values_x) - bin_width, max(sample_total_values_x) + bin_width) 	  	#
+  } else {#
+  xlim <- c(min(x_range) - bin_width, max(x_range) + bin_width)	#
+  }#
+  ylim <- c(0, max(sample_total_frequency_x) + 1)#
+  breaks <- seq(min(xlim) + bin_width / 2, max(xlim) + bin_width / 2, by = bin_width)#
+  xlabel <- round(seq(min(xlim) + bin_width, max(xlim) - bin_width, by = bin_width), 2)#
+  xzlabel <- round((xlabel - population_mean) / population_sd, 2)#
+  ylabel <- seq(0, max(sample_total_frequency_x), by = 1)#
+  ydensitylabel <- format(ylabel / length(sample_total), digits = 2)#
+#
+  ##### 2. Do the plotting #######
+  par(mar = c(5, 4, 4, 5) + 0.1)#
+  hist(sample_total, ylim = ylim, xlim = xlim, breaks = breaks, font.lab = 2,#
+    col = sample1_col[1], border = sample1_col[2], main = "", xlab = xlab, ylab = ylab,#
+    yaxs = "i", xaxs = "i", xaxt = "n", yaxt = "n", ...)#
+  mtext(expression(italic("X")), side = 1, line = 0, adj = 0.99)#
+  axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0)#
+  axis(1, at = xlabel, labels = xlabel, lwd = 0, lwd.ticks = 1, padj = -0.5)#
+  axis(2, at = ylim, labels = c("",""), lwd.ticks = 0)#
+  axis(2, at = ylabel, labels = ylabel, lwd = 0, lwd.ticks = 1, las = 1)#
+  ##### 3. Add more axes #######
+  if (AVD){#
+    axis(4, at = ylim, labels = c("",""), lwd.ticks = 0)#
+    axis(4, at = ylabel, labels = ydensitylabel, lwd = 0, lwd.ticks = 1, las = 1)#
+    mtext("Density", side = 4, line = 4, padj = - 1)#
+  }#
+#
+  if (AHZ) {#
+    axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0, line = 2.5)#
+    axis(1, at = xlabel, labels = xzlabel, lwd = 0, lwd.ticks = 1, line = 2.5, padj = -0.5)#
+    mtext(expression(italic("z")), side = 1, line = 2.5, adj = 0.99)#
+  }#
+#
+  ##### 4. Add more information concerning the sample data #######
+  plot_grids <- function(tidy, frequency, values, color) {#
+    invisible(lapply(1:nrow(tidy[["Table"]]), function(i) {#
+    invisible(lapply(1:frequency[i], function(j){#
+      segments(values[i]  - bin_width / 2, 1:j, values[i]  + bin_width / 2, 1:j, col = color)#
+              }))#
+      }))  	#
+  }#
+#
+  if (!is.null(sample2)) {#
+  hist(x = sample1, breaks = breaks, col = sample2_col[1], border = sample2_col[2], add = TRUE) #
+  legend( "topleft", lwd = 10, col = c(sample1_col[1], sample2_col[1]), bty = "n", legend = c("Condition A",  "Condition B"))  	#
+  } #
+    if (show_sample_grid) {#
+  if (is.null(sample2)) {#
+  plot_grids(sample_total_tidy, sample_total_frequency_x, sample_total_values_x, sample1_col[2])  	#
+  } else{#
+  plot_grids(sample_total_tidy, sample_total_frequency_x, sample_total_values_x, sample2_col[2])#
+  plot_grids(sample_2_tidy, sample_2_values_frequency, sample_2_values_x, sample1_col[2])  #
+  }   	#
+  }#
+   ##### Add legends if two sampels are included#
+  sample_sigma <- function(sample_total) {#
+    segments(x0 = mean(sample_total), y0 = ylim[2] - 1, x1 = mean(sample_total), y1 = max(sample_total_frequency_x) + 1)#
+    arrows(mean(sample_total)- sd(sample_total), ylim[2] - 0.5, mean(sample_total) + sd(sample_total), ylim[2] - 0.5, code = 3, length = 0.1)#
+    mtext(side = 3, at = mean(sample_total), text = bquote(italic(M) == .(round(mean(sample_total), 2))))#
+    text(x = mean(sample_total) + sd(sample_total) / 2, y = ylim[2] - 0.6, label = bquote(s == .(round(sd(sample_total), 2))), pos = 3)#
+    text(x = mean(sample_total) - sd(sample_total) / 2, y = ylim[2] - 0.6, label = bquote(s == .(round(sd(sample_total), 2))), pos = 3)  	#
+  }#
+  if (show_sample_sigma) {#
+  	sample_sigma(sample1)#
+  	if (!is.null(sample2)) sample_sigma(sample2)#
+  }#
+ add_vertical_horizontal_lines <- function(sample, center = mean(sample), values, frequency, length, color, start, end) {#
+     ## vertical line above mu#
+    segments(x0 = center, y0 = length(frequency[frequency == center]), y1 = max(frequency) + 1, col = "gray")#
+    ## vertical lines above each unique observation#
+    segments(x0 = values, y0 = frequency, y1 = seq(max(frequency) + start, max(frequency) + end, length.out = length), col = "gray")#
+    ## horizontal lines connecting the vertical lines and the population mean#
+    segments(x0 = values, y0 = seq(max(frequency) + start, max(frequency) + end, length.out = length), x1 = rep(center, sample_total_unique_length), col = color)#
+    ## #
+    mtext(side = 3, at = mean(sample), text = bquote(italic(M) == .(round(mean(sample), 2))))#
+ }#
+ add_lines_together <- function(center1, center2) {#
+  	break_point <- (sample_1_valus_length / sample_total_unique_length) * 0.8#
+    if(is.null(sample2)) {#
+    add_vertical_horizontal_lines(sample = sample1, center = center1, values = sample_1_values_x, frequency = sample_1_values_frequency, length = sample_1_valus_length, color = "red", start = 0.1, end = break_point)#
+    } else {#
+    add_vertical_horizontal_lines(sample1, center1, sample_1_values_x, sample_1_values_frequency, sample_1_valus_length, color = "blue", 0.1, break_point)#
+    add_vertical_horizontal_lines(sample2, center2, sample_2_values_x, sample_2_values_frequency, sample_2_valus_length, color = "red", break_point, 0.9)#
+    }#
+ }#
+  if (show_sample_deviation) {#
+  	if (show_SST) {#
+  	  add_lines_together(population_mean, population_mean)#
+  	  mtext(side = 3, at = population_mean, text = bquote(italic(mu[0]) == .(population_mean)), line = 1)#
+     } else  {#
+   	  add_lines_together(mean(sample1), mean(sample2))    #
+  	  mtext(side = 3, at = population_mean, text = bquote(italic(mu[0]) == .(population_mean)), line = 1)	#
+     } #
+  	}#
+#
+  ##### 5. Add population curve #######
+  if (show_population_curve){#
+    zx <- seq(population_mean - 3 * population_sd, population_mean + 3 * population_sd, len = 100)#
+    zy <- dnorm(zx, mean = population_mean, sd = population_sd) * length(sample1)#
+    lines(zx, zy, col = "#cf232a", lwd = 2)#
+  }#
+}#
+#
+sample1 <- c(11, 9, 4, 5, 6, 7, 12, 10)#
+sample2 <- c(7, 13, 14, 16, 9, 11, 15, 11)#
+Plot_Sample_Frequency(sample1, sample2, show_sample_deviation = F, show_SST = F)
+Plot_Sample_Frequency(sample1, sample2, show_sample_sigma = T)
+Plot_Sample_Frequency(sample1, show_sample_sigma = T)
+Plot_Sample_Frequency <- function(#
+sample1, sample2 = NULL, #
+x_range = NULL,#
+show_sample_deviation = FALSE,#
+show_sample_grid = TRUE,#
+show_sample_sigma = FALSE,#
+AHZ = FALSE, AVD = TRUE,#
+show_population_curve = FALSE,#
+population_mean = mean(c(sample1, sample2)),#
+population_sd = sd(c(sample1, sample2)),#
+show_SST = TRUE,#
+xlab = "", ylab = "Frequency",#
+...#
+){#
+  ##### 0. Define colors #######
+  sample1_col <- c("#f8cea2", "#b78135")#
+  sample2_col <- c("#a0d5cf", "#009f9b") #
+  ##### 1. Calculate the required value #######
+  sample_tidy <- function (sample) {#
+    Mean <- mean(sample)#
+    Table <- as.data.frame(table(sample, dnn = "data"))#
+    names(Table)[names(Table) == "Freq"] <- "Frequency"#
+    Table[, "data"] <- as.numeric(as.character(Table[, "data"]))#
+    Table_Unique <- Table[Table[, "data"] != Mean, ]#
+    res <- list(Table = Table, Table_Unique = Table_Unique, Mean = Mean)#
+    return(res)	#
+  }#
+  sample_total <- c(sample1, sample2)#
+  sample_total_tidy <- sample_tidy(sample_total)#
+  sample_total_values_x <- sample_total_tidy[["Table"]][["data"]]#
+  sample_total_values_x <- sort(sample_total_values_x)#
+  sample_total_frequency_x <- sample_total_tidy[["Table"]][["Frequency"]]#
+  sample_total_unique_x <- sample_total_tidy[["Table_Unique"]][["data"]]#
+  sample_total_unique_x <- sort(sample_total_unique_x)#
+  sample_total_unique_frequency <- sample_total_tidy[["Table_Unique"]][["Frequency"]]#
+  sample_total_unique_length <- nrow(sample_total_tidy[["Table_Unique"]])#
+  sample_1_tidy <- sample_tidy(sample1)#
+  sample_1_values_x <- sample_total_values_x[sample_total_values_x %in% sample1]#
+  sample_1_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_1_values_x, "Frequency"]#
+  sample_1_valus_length <- length(sample_1_values_x)#
+  sample_2_tidy <- if (!is.null(sample2)) sample_tidy(sample2) else sample_1_tidy#
+  sample_2_values_x <- sample_total_values_x[sample_total_values_x %in% sample2]#
+  sample_2_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_2_values_x, "Frequency"]#
+  sample_2_valus_length <- length(sample_2_values_x)#
+  bin_width <- min(sample_total_values_x[-1] - sample_total_values_x[-length(sample_total_values_x)])#
+  if (is.null(x_range)) {#
+  xlim <- c(min(sample_total_values_x) - bin_width, max(sample_total_values_x) + bin_width) 	  	#
+  } else {#
+  xlim <- c(min(x_range) - bin_width, max(x_range) + bin_width)	#
+  }#
+  ylim <- c(0, max(sample_total_frequency_x) + 1)#
+  breaks <- seq(min(xlim) + bin_width / 2, max(xlim) + bin_width / 2, by = bin_width)#
+  xlabel <- round(seq(min(xlim) + bin_width, max(xlim) - bin_width, by = bin_width), 2)#
+  xzlabel <- round((xlabel - population_mean) / population_sd, 2)#
+  ylabel <- seq(0, max(sample_total_frequency_x), by = 1)#
+  ydensitylabel <- format(ylabel / length(sample_total), digits = 2)#
+#
+  ##### 2. Do the plotting #######
+  par(mar = c(5, 4, 4, 5) + 0.1)#
+  hist(sample_total, ylim = ylim, xlim = xlim, breaks = breaks, font.lab = 2,#
+    col = sample1_col[1], border = sample1_col[2], main = "", xlab = xlab, ylab = ylab,#
+    yaxs = "i", xaxs = "i", xaxt = "n", yaxt = "n", ...)#
+  mtext(expression(italic("X")), side = 1, line = 0, adj = 0.99)#
+  axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0)#
+  axis(1, at = xlabel, labels = xlabel, lwd = 0, lwd.ticks = 1, padj = -0.5)#
+  axis(2, at = ylim, labels = c("",""), lwd.ticks = 0)#
+  axis(2, at = ylabel, labels = ylabel, lwd = 0, lwd.ticks = 1, las = 1)#
+  ##### 3. Add more axes #######
+  if (AVD){#
+    axis(4, at = ylim, labels = c("",""), lwd.ticks = 0)#
+    axis(4, at = ylabel, labels = ydensitylabel, lwd = 0, lwd.ticks = 1, las = 1)#
+    mtext("Density", side = 4, line = 4, padj = - 1)#
+  }#
+#
+  if (AHZ) {#
+    axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0, line = 2.5)#
+    axis(1, at = xlabel, labels = xzlabel, lwd = 0, lwd.ticks = 1, line = 2.5, padj = -0.5)#
+    mtext(expression(italic("z")), side = 1, line = 2.5, adj = 0.99)#
+  }#
+#
+  ##### 4. Add more information concerning the sample data #######
+  plot_grids <- function(tidy, frequency, values, color) {#
+    invisible(lapply(1:nrow(tidy[["Table"]]), function(i) {#
+    invisible(lapply(1:frequency[i], function(j){#
+      segments(values[i]  - bin_width / 2, 1:j, values[i]  + bin_width / 2, 1:j, col = color)#
+              }))#
+      }))  	#
+  }#
+#
+  if (!is.null(sample2)) {#
+  hist(x = sample1, breaks = breaks, col = sample2_col[1], border = sample2_col[2], add = TRUE) #
+  legend( "topleft", lwd = 10, col = c(sample1_col[1], sample2_col[1]), bty = "n", legend = c("Condition A",  "Condition B"))  	#
+  } #
+    if (show_sample_grid) {#
+  if (is.null(sample2)) {#
+  plot_grids(sample_total_tidy, sample_total_frequency_x, sample_total_values_x, sample1_col[2])  	#
+  } else{#
+  plot_grids(sample_total_tidy, sample_total_frequency_x, sample_total_values_x, sample2_col[2])#
+  plot_grids(sample_2_tidy, sample_2_values_frequency, sample_2_values_x, sample1_col[2])  #
+  }   	#
+  }#
+   ##### Add legends if two sampels are included#
+  sample_sigma <- function(sample_total, y_adj = 0.5) {#
+    segments(x0 = mean(sample_total), y0 = ylim[2] - 1, x1 = mean(sample_total), y1 = max(sample_total_frequency_x) + 1)#
+    arrows(mean(sample_total)- sd(sample_total), ylim[2] - y_adj, mean(sample_total) + sd(sample_total), ylim[2] - y_adj, code = 3, length = 0.1)#
+    mtext(side = 3, at = mean(sample_total), text = bquote(italic(M) == .(round(mean(sample_total), 2))))#
+    text(x = mean(sample_total) + sd(sample_total) / 2, y = ylim[2] - 0.6, label = bquote(s == .(round(sd(sample_total), 2))), pos = 3)#
+    text(x = mean(sample_total) - sd(sample_total) / 2, y = ylim[2] - 0.6, label = bquote(s == .(round(sd(sample_total), 2))), pos = 3)  	#
+  }#
+  if (show_sample_sigma) {#
+  	sample_sigma(sample1)#
+  	if (!is.null(sample2)) sample_sigma(sample2, y_adj = 0.25)#
+  }#
+ add_vertical_horizontal_lines <- function(sample, center = mean(sample), values, frequency, length, color, start, end) {#
+     ## vertical line above mu#
+    segments(x0 = center, y0 = length(frequency[frequency == center]), y1 = max(frequency) + 1, col = "gray")#
+    ## vertical lines above each unique observation#
+    segments(x0 = values, y0 = frequency, y1 = seq(max(frequency) + start, max(frequency) + end, length.out = length), col = "gray")#
+    ## horizontal lines connecting the vertical lines and the population mean#
+    segments(x0 = values, y0 = seq(max(frequency) + start, max(frequency) + end, length.out = length), x1 = rep(center, sample_total_unique_length), col = color)#
+    ## #
+    mtext(side = 3, at = mean(sample), text = bquote(italic(M) == .(round(mean(sample), 2))))#
+ }#
+ add_lines_together <- function(center1, center2) {#
+  	break_point <- (sample_1_valus_length / sample_total_unique_length) * 0.8#
+    if(is.null(sample2)) {#
+    add_vertical_horizontal_lines(sample = sample1, center = center1, values = sample_1_values_x, frequency = sample_1_values_frequency, length = sample_1_valus_length, color = "red", start = 0.1, end = break_point)#
+    } else {#
+    add_vertical_horizontal_lines(sample1, center1, sample_1_values_x, sample_1_values_frequency, sample_1_valus_length, color = "blue", 0.1, break_point)#
+    add_vertical_horizontal_lines(sample2, center2, sample_2_values_x, sample_2_values_frequency, sample_2_valus_length, color = "red", break_point, 0.9)#
+    }#
+ }#
+  if (show_sample_deviation) {#
+  	if (show_SST) {#
+  	  add_lines_together(population_mean, population_mean)#
+  	  mtext(side = 3, at = population_mean, text = bquote(italic(mu[0]) == .(population_mean)), line = 1)#
+     } else  {#
+   	  add_lines_together(mean(sample1), mean(sample2))    #
+  	  mtext(side = 3, at = population_mean, text = bquote(italic(mu[0]) == .(population_mean)), line = 1)	#
+     } #
+  	}#
+#
+  ##### 5. Add population curve #######
+  if (show_population_curve){#
+    zx <- seq(population_mean - 3 * population_sd, population_mean + 3 * population_sd, len = 100)#
+    zy <- dnorm(zx, mean = population_mean, sd = population_sd) * length(sample1)#
+    lines(zx, zy, col = "#cf232a", lwd = 2)#
+  }#
+}#
+#
+sample1 <- c(11, 9, 4, 5, 6, 7, 12, 10)#
+sample2 <- c(7, 13, 14, 16, 9, 11, 15, 11)#
+# Plot_Sample_Frequency(sample1, sample2, show_sample_deviation = F, show_SST = F)
+Plot_Sample_Frequency(sample1, show_sample_sigma = T)
+Plot_Sample_Frequency(sample1, sample2, show_sample_sigma = T)
+Plot_Sample_Frequency <- function(#
+sample1, sample2 = NULL, #
+x_range = NULL,#
+show_sample_deviation = FALSE,#
+show_sample_grid = TRUE,#
+show_sample_sigma = FALSE,#
+AHZ = FALSE, AVD = TRUE,#
+show_population_curve = FALSE,#
+population_mean = mean(c(sample1, sample2)),#
+population_sd = sd(c(sample1, sample2)),#
+show_SST = TRUE,#
+xlab = "", ylab = "Frequency",#
+...#
+){#
+  ##### 0. Define colors #######
+  sample1_col <- c("#f8cea2", "#b78135")#
+  sample2_col <- c("#a0d5cf", "#009f9b") #
+  ##### 1. Calculate the required value #######
+  sample_tidy <- function (sample) {#
+    Mean <- mean(sample)#
+    Table <- as.data.frame(table(sample, dnn = "data"))#
+    names(Table)[names(Table) == "Freq"] <- "Frequency"#
+    Table[, "data"] <- as.numeric(as.character(Table[, "data"]))#
+    Table_Unique <- Table[Table[, "data"] != Mean, ]#
+    res <- list(Table = Table, Table_Unique = Table_Unique, Mean = Mean)#
+    return(res)	#
+  }#
+  sample_total <- c(sample1, sample2)#
+  sample_total_tidy <- sample_tidy(sample_total)#
+  sample_total_values_x <- sample_total_tidy[["Table"]][["data"]]#
+  sample_total_values_x <- sort(sample_total_values_x)#
+  sample_total_frequency_x <- sample_total_tidy[["Table"]][["Frequency"]]#
+  sample_total_unique_x <- sample_total_tidy[["Table_Unique"]][["data"]]#
+  sample_total_unique_x <- sort(sample_total_unique_x)#
+  sample_total_unique_frequency <- sample_total_tidy[["Table_Unique"]][["Frequency"]]#
+  sample_total_unique_length <- nrow(sample_total_tidy[["Table_Unique"]])#
+  sample_1_tidy <- sample_tidy(sample1)#
+  sample_1_values_x <- sample_total_values_x[sample_total_values_x %in% sample1]#
+  sample_1_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_1_values_x, "Frequency"]#
+  sample_1_valus_length <- length(sample_1_values_x)#
+  sample_2_tidy <- if (!is.null(sample2)) sample_tidy(sample2) else sample_1_tidy#
+  sample_2_values_x <- sample_total_values_x[sample_total_values_x %in% sample2]#
+  sample_2_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_2_values_x, "Frequency"]#
+  sample_2_valus_length <- length(sample_2_values_x)#
+  bin_width <- min(sample_total_values_x[-1] - sample_total_values_x[-length(sample_total_values_x)])#
+  if (is.null(x_range)) {#
+  xlim <- c(min(sample_total_values_x) - bin_width, max(sample_total_values_x) + bin_width) 	  	#
+  } else {#
+  xlim <- c(min(x_range) - bin_width, max(x_range) + bin_width)	#
+  }#
+  ylim <- c(0, max(sample_total_frequency_x) + 1)#
+  breaks <- seq(min(xlim) + bin_width / 2, max(xlim) + bin_width / 2, by = bin_width)#
+  xlabel <- round(seq(min(xlim) + bin_width, max(xlim) - bin_width, by = bin_width), 2)#
+  xzlabel <- round((xlabel - population_mean) / population_sd, 2)#
+  ylabel <- seq(0, max(sample_total_frequency_x), by = 1)#
+  ydensitylabel <- format(ylabel / length(sample_total), digits = 2)#
+#
+  ##### 2. Do the plotting #######
+  par(mar = c(5, 4, 4, 5) + 0.1)#
+  hist(sample_total, ylim = ylim, xlim = xlim, breaks = breaks, font.lab = 2,#
+    col = sample1_col[1], border = sample1_col[2], main = "", xlab = xlab, ylab = ylab,#
+    yaxs = "i", xaxs = "i", xaxt = "n", yaxt = "n", ...)#
+  mtext(expression(italic("X")), side = 1, line = 0, adj = 0.99)#
+  axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0)#
+  axis(1, at = xlabel, labels = xlabel, lwd = 0, lwd.ticks = 1, padj = -0.5)#
+  axis(2, at = ylim, labels = c("",""), lwd.ticks = 0)#
+  axis(2, at = ylabel, labels = ylabel, lwd = 0, lwd.ticks = 1, las = 1)#
+  ##### 3. Add more axes #######
+  if (AVD){#
+    axis(4, at = ylim, labels = c("",""), lwd.ticks = 0)#
+    axis(4, at = ylabel, labels = ydensitylabel, lwd = 0, lwd.ticks = 1, las = 1)#
+    mtext("Density", side = 4, line = 4, padj = - 1)#
+  }#
+#
+  if (AHZ) {#
+    axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0, line = 2.5)#
+    axis(1, at = xlabel, labels = xzlabel, lwd = 0, lwd.ticks = 1, line = 2.5, padj = -0.5)#
+    mtext(expression(italic("z")), side = 1, line = 2.5, adj = 0.99)#
+  }#
+#
+  ##### 4. Add more information concerning the sample data #######
+  plot_grids <- function(tidy, frequency, values, color) {#
+    invisible(lapply(1:nrow(tidy[["Table"]]), function(i) {#
+    invisible(lapply(1:frequency[i], function(j){#
+      segments(values[i]  - bin_width / 2, 1:j, values[i]  + bin_width / 2, 1:j, col = color)#
+              }))#
+      }))  	#
+  }#
+#
+  if (!is.null(sample2)) {#
+  hist(x = sample1, breaks = breaks, col = sample2_col[1], border = sample2_col[2], add = TRUE) #
+  legend( "topleft", lwd = 10, col = c(sample1_col[1], sample2_col[1]), bty = "n", legend = c("Condition A",  "Condition B"))  	#
+  } #
+    if (show_sample_grid) {#
+  if (is.null(sample2)) {#
+  plot_grids(sample_total_tidy, sample_total_frequency_x, sample_total_values_x, sample1_col[2])  	#
+  } else{#
+  plot_grids(sample_total_tidy, sample_total_frequency_x, sample_total_values_x, sample2_col[2])#
+  plot_grids(sample_2_tidy, sample_2_values_frequency, sample_2_values_x, sample1_col[2])  #
+  }   	#
+  }#
+   ##### Add legends if two sampels are included#
+  sample_sigma <- function(sample_total, y_adj = 0.5) {#
+    segments(x0 = mean(sample_total), y0 = ylim[2] - 1, x1 = mean(sample_total), y1 = max(sample_total_frequency_x) + 1)#
+    arrows(mean(sample_total)- sd(sample_total), ylim[2] - y_adj, mean(sample_total) + sd(sample_total), ylim[2] - y_adj, code = 3, length = 0.1)#
+    mtext(side = 3, at = mean(sample_total), text = bquote(italic(M) == .(round(mean(sample_total), 2))))#
+    text(x = mean(sample_total) + sd(sample_total) / 2, y = ylim[2] - y_adj - 0.1, label = bquote(s == .(round(sd(sample_total), 2))), pos = 3)#
+    text(x = mean(sample_total) - sd(sample_total) / 2, y = ylim[2] - y_adj - 0.1, label = bquote(s == .(round(sd(sample_total), 2))), pos = 3)  	#
+  }#
+  if (show_sample_sigma) {#
+  	if (!is.null(sample2)) {#
+  	sample_sigma(sample1, y_adj = 0.6)	#
+  	sample_sigma(sample2, y_adj = 0.3)	#
+  	} else {#
+    sample_sigma(sample1, y_adj = 0.5)#
+  	}#
+  }#
+ add_vertical_horizontal_lines <- function(sample, center = mean(sample), values, frequency, length, color, start, end) {#
+     ## vertical line above mu#
+    segments(x0 = center, y0 = length(frequency[frequency == center]), y1 = max(frequency) + 1, col = "gray")#
+    ## vertical lines above each unique observation#
+    segments(x0 = values, y0 = frequency, y1 = seq(max(frequency) + start, max(frequency) + end, length.out = length), col = "gray")#
+    ## horizontal lines connecting the vertical lines and the population mean#
+    segments(x0 = values, y0 = seq(max(frequency) + start, max(frequency) + end, length.out = length), x1 = rep(center, sample_total_unique_length), col = color)#
+    ## #
+    mtext(side = 3, at = mean(sample), text = bquote(italic(M) == .(round(mean(sample), 2))))#
+ }#
+ add_lines_together <- function(center1, center2) {#
+  	break_point <- (sample_1_valus_length / sample_total_unique_length) * 0.8#
+    if(is.null(sample2)) {#
+    add_vertical_horizontal_lines(sample = sample1, center = center1, values = sample_1_values_x, frequency = sample_1_values_frequency, length = sample_1_valus_length, color = "red", start = 0.1, end = break_point)#
+    } else {#
+    add_vertical_horizontal_lines(sample1, center1, sample_1_values_x, sample_1_values_frequency, sample_1_valus_length, color = "blue", 0.1, break_point)#
+    add_vertical_horizontal_lines(sample2, center2, sample_2_values_x, sample_2_values_frequency, sample_2_valus_length, color = "red", break_point, 0.9)#
+    }#
+ }#
+  if (show_sample_deviation) {#
+  	if (show_SST) {#
+  	  add_lines_together(population_mean, population_mean)#
+  	  mtext(side = 3, at = population_mean, text = bquote(italic(mu[0]) == .(population_mean)), line = 1)#
+     } else  {#
+   	  add_lines_together(mean(sample1), mean(sample2))    #
+  	  mtext(side = 3, at = population_mean, text = bquote(italic(mu[0]) == .(population_mean)), line = 1)	#
+     } #
+  	}#
+#
+  ##### 5. Add population curve #######
+  if (show_population_curve){#
+    zx <- seq(population_mean - 3 * population_sd, population_mean + 3 * population_sd, len = 100)#
+    zy <- dnorm(zx, mean = population_mean, sd = population_sd) * length(sample1)#
+    lines(zx, zy, col = "#cf232a", lwd = 2)#
+  }#
+}#
+#
+sample1 <- c(11, 9, 4, 5, 6, 7, 12, 10)#
+sample2 <- c(7, 13, 14, 16, 9, 11, 15, 11)#
+# Plot_Sample_Frequency(sample1, sample2, show_sample_deviation = F, show_SST = F)
+Plot_Sample_Frequency(sample1, sample2, show_sample_sigma = T)
+Plot_Sample_Frequency <- function(#
+sample1, sample2 = NULL, #
+x_range = NULL,#
+show_sample_deviation = FALSE,#
+show_sample_grid = TRUE,#
+show_sample_sigma = FALSE,#
+AHZ = FALSE, AVD = TRUE,#
+show_population_curve = FALSE,#
+population_mean = mean(c(sample1, sample2)),#
+population_sd = sd(c(sample1, sample2)),#
+show_SST = TRUE,#
+xlab = "", ylab = "Frequency",#
+...#
+){#
+  ##### 0. Define colors #######
+  sample1_col <- c("#f8cea2", "#b78135")#
+  sample2_col <- c("#a0d5cf", "#009f9b") #
+  ##### 1. Calculate the required value #######
+  sample_tidy <- function (sample) {#
+    Mean <- mean(sample)#
+    Table <- as.data.frame(table(sample, dnn = "data"))#
+    names(Table)[names(Table) == "Freq"] <- "Frequency"#
+    Table[, "data"] <- as.numeric(as.character(Table[, "data"]))#
+    Table_Unique <- Table[Table[, "data"] != Mean, ]#
+    res <- list(Table = Table, Table_Unique = Table_Unique, Mean = Mean)#
+    return(res)	#
+  }#
+  sample_total <- c(sample1, sample2)#
+  sample_total_tidy <- sample_tidy(sample_total)#
+  sample_total_values_x <- sample_total_tidy[["Table"]][["data"]]#
+  sample_total_values_x <- sort(sample_total_values_x)#
+  sample_total_frequency_x <- sample_total_tidy[["Table"]][["Frequency"]]#
+  sample_total_unique_x <- sample_total_tidy[["Table_Unique"]][["data"]]#
+  sample_total_unique_x <- sort(sample_total_unique_x)#
+  sample_total_unique_frequency <- sample_total_tidy[["Table_Unique"]][["Frequency"]]#
+  sample_total_unique_length <- nrow(sample_total_tidy[["Table_Unique"]])#
+  sample_1_tidy <- sample_tidy(sample1)#
+  sample_1_values_x <- sample_total_values_x[sample_total_values_x %in% sample1]#
+  sample_1_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_1_values_x, "Frequency"]#
+  sample_1_valus_length <- length(sample_1_values_x)#
+  sample_2_tidy <- if (!is.null(sample2)) sample_tidy(sample2) else sample_1_tidy#
+  sample_2_values_x <- sample_total_values_x[sample_total_values_x %in% sample2]#
+  sample_2_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_2_values_x, "Frequency"]#
+  sample_2_valus_length <- length(sample_2_values_x)#
+  bin_width <- min(sample_total_values_x[-1] - sample_total_values_x[-length(sample_total_values_x)])#
+  if (is.null(x_range)) {#
+  xlim <- c(min(sample_total_values_x) - bin_width, max(sample_total_values_x) + bin_width) 	  	#
+  } else {#
+  xlim <- c(min(x_range) - bin_width, max(x_range) + bin_width)	#
+  }#
+  ylim <- c(0, max(sample_total_frequency_x) + 1)#
+  breaks <- seq(min(xlim) + bin_width / 2, max(xlim) + bin_width / 2, by = bin_width)#
+  xlabel <- round(seq(min(xlim) + bin_width, max(xlim) - bin_width, by = bin_width), 2)#
+  xzlabel <- round((xlabel - population_mean) / population_sd, 2)#
+  ylabel <- seq(0, max(sample_total_frequency_x), by = 1)#
+  ydensitylabel <- format(ylabel / length(sample_total), digits = 2)#
+#
+  ##### 2. Do the plotting #######
+  par(mar = c(5, 4, 4, 5) + 0.1)#
+  hist(sample_total, ylim = ylim, xlim = xlim, breaks = breaks, font.lab = 2,#
+    col = sample1_col[1], border = sample1_col[2], main = "", xlab = xlab, ylab = ylab,#
+    yaxs = "i", xaxs = "i", xaxt = "n", yaxt = "n", ...)#
+  mtext(expression(italic("X")), side = 1, line = 0, adj = 0.99)#
+  axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0)#
+  axis(1, at = xlabel, labels = xlabel, lwd = 0, lwd.ticks = 1, padj = -0.5)#
+  axis(2, at = ylim, labels = c("",""), lwd.ticks = 0)#
+  axis(2, at = ylabel, labels = ylabel, lwd = 0, lwd.ticks = 1, las = 1)#
+  ##### 3. Add more axes #######
+  if (AVD){#
+    axis(4, at = ylim, labels = c("",""), lwd.ticks = 0)#
+    axis(4, at = ylabel, labels = ydensitylabel, lwd = 0, lwd.ticks = 1, las = 1)#
+    mtext("Density", side = 4, line = 4, padj = - 1)#
+  }#
+#
+  if (AHZ) {#
+    axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0, line = 2.5)#
+    axis(1, at = xlabel, labels = xzlabel, lwd = 0, lwd.ticks = 1, line = 2.5, padj = -0.5)#
+    mtext(expression(italic("z")), side = 1, line = 2.5, adj = 0.99)#
+  }#
+#
+  ##### 4. Add more information concerning the sample data #######
+  plot_grids <- function(tidy, frequency, values, color) {#
+    invisible(lapply(1:nrow(tidy[["Table"]]), function(i) {#
+    invisible(lapply(1:frequency[i], function(j){#
+      segments(values[i]  - bin_width / 2, 1:j, values[i]  + bin_width / 2, 1:j, col = color)#
+              }))#
+      }))  	#
+  }#
+#
+  if (!is.null(sample2)) {#
+  hist(x = sample1, breaks = breaks, col = sample2_col[1], border = sample2_col[2], add = TRUE) #
+  legend( "topleft", lwd = 10, col = c(sample1_col[1], sample2_col[1]), bty = "n", legend = c("Condition A",  "Condition B"))  	#
+  } #
+    if (show_sample_grid) {#
+  if (is.null(sample2)) {#
+  plot_grids(sample_total_tidy, sample_total_frequency_x, sample_total_values_x, sample1_col[2])  	#
+  } else{#
+  plot_grids(sample_total_tidy, sample_total_frequency_x, sample_total_values_x, sample2_col[2])#
+  plot_grids(sample_2_tidy, sample_2_values_frequency, sample_2_values_x, sample1_col[2])  #
+  }   	#
+  }#
+   ##### Add legends if two sampels are included#
+  sample_sigma <- function(sample_total, y_adj = 0.5) {#
+    segments(x0 = mean(sample_total), y0 = ylim[2] - 1, x1 = mean(sample_total), y1 = max(sample_total_frequency_x) + 1)#
+    arrows(mean(sample_total)- sd(sample_total), ylim[2] - y_adj, mean(sample_total) + sd(sample_total), ylim[2] - y_adj, code = 3, length = 0.1)#
+    mtext(side = 3, at = mean(sample_total), text = bquote(italic(M) == .(round(mean(sample_total), 2))))#
+    text(x = mean(sample_total) + sd(sample_total) / 2, y = ylim[2] - y_adj - 0.05, label = bquote(s == .(round(sd(sample_total), 2))), pos = 3)#
+    text(x = mean(sample_total) - sd(sample_total) / 2, y = ylim[2] - y_adj - 0.05, label = bquote(s == .(round(sd(sample_total), 2))), pos = 3)  	#
+  }#
+  if (show_sample_sigma) {#
+  	if (!is.null(sample2)) {#
+  	sample_sigma(sample1, y_adj = 0.6)	#
+  	sample_sigma(sample2, y_adj = 0.3)	#
+  	} else {#
+    sample_sigma(sample1, y_adj = 0.5)#
+  	}#
+  }#
+ add_vertical_horizontal_lines <- function(sample, center = mean(sample), values, frequency, length, color, start, end) {#
+     ## vertical line above mu#
+    segments(x0 = center, y0 = length(frequency[frequency == center]), y1 = max(frequency) + 1, col = "gray")#
+    ## vertical lines above each unique observation#
+    segments(x0 = values, y0 = frequency, y1 = seq(max(frequency) + start, max(frequency) + end, length.out = length), col = "gray")#
+    ## horizontal lines connecting the vertical lines and the population mean#
+    segments(x0 = values, y0 = seq(max(frequency) + start, max(frequency) + end, length.out = length), x1 = rep(center, sample_total_unique_length), col = color)#
+    ## #
+    mtext(side = 3, at = mean(sample), text = bquote(italic(M) == .(round(mean(sample), 2))))#
+ }#
+ add_lines_together <- function(center1, center2) {#
+  	break_point <- (sample_1_valus_length / sample_total_unique_length) * 0.8#
+    if(is.null(sample2)) {#
+    add_vertical_horizontal_lines(sample = sample1, center = center1, values = sample_1_values_x, frequency = sample_1_values_frequency, length = sample_1_valus_length, color = "red", start = 0.1, end = break_point)#
+    } else {#
+    add_vertical_horizontal_lines(sample1, center1, sample_1_values_x, sample_1_values_frequency, sample_1_valus_length, color = "blue", 0.1, break_point)#
+    add_vertical_horizontal_lines(sample2, center2, sample_2_values_x, sample_2_values_frequency, sample_2_valus_length, color = "red", break_point, 0.9)#
+    }#
+ }#
+  if (show_sample_deviation) {#
+  	if (show_SST) {#
+  	  add_lines_together(population_mean, population_mean)#
+  	  mtext(side = 3, at = population_mean, text = bquote(italic(mu[0]) == .(population_mean)), line = 1)#
+     } else  {#
+   	  add_lines_together(mean(sample1), mean(sample2))    #
+  	  mtext(side = 3, at = population_mean, text = bquote(italic(mu[0]) == .(population_mean)), line = 1)	#
+     } #
+  	}#
+#
+  ##### 5. Add population curve #######
+  if (show_population_curve){#
+    zx <- seq(population_mean - 3 * population_sd, population_mean + 3 * population_sd, len = 100)#
+    zy <- dnorm(zx, mean = population_mean, sd = population_sd) * length(sample1)#
+    lines(zx, zy, col = "#cf232a", lwd = 2)#
+  }#
+}#
+#
+sample1 <- c(11, 9, 4, 5, 6, 7, 12, 10)#
+sample2 <- c(7, 13, 14, 16, 9, 11, 15, 11)#
+# Plot_Sample_Frequency(sample1, sample2, show_sample_deviation = F, show_SST = F)
+Plot_Sample_Frequency(sample1, sample2, show_sample_sigma = T)
+Exp2 <- data.frame(#
+Condition = rep(c("Treatment_1", "Treatment_2"), each = 7),#
+Score_A = c(8, 8, 7, 9, 8, 9, 7, 12, 13, 12, 11, 13, 12, 11),#
+Score_B = c(4, 11, 2, 17, 0, 8, 14, 12, 9, 20, 6, 16, 18, 3) )
+A1 <- Exp2[Exp2[, "Condition"] == "Treatment_1", "Score_A"]#
+A2 <- Exp2[Exp2[, "Condition"] == "Treatment_2", "Score_A"]#
+B1 <- Exp2[Exp2[, "Condition"] == "Treatment_1", "Score_B"]#
+B2 <- Exp2[Exp2[, "Condition"] == "Treatment_2", "Score_B"]
+A1
+sd(A1)
+sd(A2)
+sd(B2)
+sd(B1)

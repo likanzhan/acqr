@@ -107,14 +107,21 @@ xlab = "", ylab = "Frequency",
   }
   
    ##### Add legends if two sampels are included
-
- 
+  sample_sigma <- function(sample_total, y_adj = 0.5, color = sample1_col[2]) {
+    segments(x0 = mean(sample_total), y0 = ylim[2] - 1, x1 = mean(sample_total), y1 = max(sample_total_frequency_x) + 1, col = color)
+    arrows(mean(sample_total)- sd(sample_total), ylim[2] - y_adj, mean(sample_total) + sd(sample_total), ylim[2] - y_adj, code = 3, length = 0.1, col = color)
+    mtext(side = 3, at = mean(sample_total), text = bquote(italic(M) == .(round(mean(sample_total), 2))), col = color)
+    text(x = mean(sample_total) + sd(sample_total) / 2, y = ylim[2] - y_adj - 0.05, label = bquote(s == .(round(sd(sample_total), 2))), pos = 3, col = color)
+    text(x = mean(sample_total) - sd(sample_total) / 2, y = ylim[2] - y_adj - 0.05, label = bquote(s == .(round(sd(sample_total), 2))), pos = 3, col = color)  	
+  }
+  
   if (show_sample_sigma) {
-  	segments(x0 = mean(sample_total), y0 = ylim[2] - 1, x1 = mean(sample_total), y1 = max(sample_total_frequency_x) + 1)
-    arrows(mean(sample_total)- sd(sample_total), ylim[2] - 0.5, mean(sample_total) + sd(sample_total), ylim[2] - 0.5, code = 3, length = 0.1)
-    mtext(side = 3, at = mean(sample_total), text = bquote(italic(M) == .(round(mean(sample_total), 2))))
-    text(x = mean(sample_total) + sd(sample_total) / 2, y = ylim[2] - 0.6, label = bquote(s == .(round(sd(sample_total), 2))), pos = 3)
-    text(x = mean(sample_total) - sd(sample_total) / 2, y = ylim[2] - 0.6, label = bquote(s == .(round(sd(sample_total), 2))), pos = 3)
+  	if (is.null(sample2)) {
+    sample_sigma(sample1, y_adj = 0.5, color = sample1_col[2])
+  	} else {
+  	sample_sigma(sample1, y_adj = 0.6, color = sample2_col[2])	
+  	sample_sigma(sample2, y_adj = 0.3, color = sample1_col[2])	
+  	}
   }
     
  add_vertical_horizontal_lines <- function(sample, center = mean(sample), values, frequency, length, color, start, end) {
