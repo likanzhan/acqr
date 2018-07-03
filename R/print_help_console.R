@@ -1,4 +1,4 @@
-help_console <- function(
+print_help_console <- function(
  topic, 
  format=c("text", "html", "latex", "Rd"),
  lines=NULL, 
