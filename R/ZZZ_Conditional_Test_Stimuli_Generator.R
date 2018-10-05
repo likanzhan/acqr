@@ -53,8 +53,11 @@ Conditional_Information_Generator <- function(
         rename(Object_Same_Audio = Component_Audio, Object_Same_Image = Component_Image) %>%
         group_by(Component_Category) %>%
     ## Search_Sample_Seed to find a random seed to make sure that no element is in the same  position
-        mutate(Object_Different_Image = {set.seed(acqr::Search_Sample_Seed(Object_Same_Image)); sample(Object_Same_Image)}) %>% ungroup() %>% 
-        mutate(Object_Different_Audio = pull(.[match(Object_Different_Image, Object_Same_Image), "Object_Same_Audio"])) %>%
+        mutate(Object_Different_Image = {set.seed(acqr::Search_Sample_Seed(Object_Same_Image)); 
+        	                             sample(Object_Same_Image)}) %>% 
+        ungroup() %>% 
+        mutate(Object_Different_Audio = pull(.[match(Object_Different_Image, Object_Same_Image), 
+                                               "Object_Same_Audio"])) %>%
         mutate(Spatial_Order = rep(c("CS_DD_SD_SS", "SD_SS_CS_DD", "DD_CS_SS_SD", "SS_SD_DD_CS"), 84 / 4)) %>%
         mutate(Temporal_Order = rep(c("Different", "Same"), 84 / 2)) %>%
         mutate(Test_Image = paste0(sprintf("%02d", 1:nrow(.)), ".png")) %>%
@@ -78,12 +81,15 @@ Conditional_Information_Generator <- function(
             function(i) paste0(.[i, grepl(paste0(.[i, "Temporal_Order"], "_Audio"), colnames(.))], ".wav")
             )) %>%
         mutate(Familize_2_Object_Image = sapply(1:nrow(.), 
-            function(i) paste0(.[i, grepl(paste0("^(?=Object)(?!.*", .[i, "Temporal_Order"], ")(?=.*Image)"), colnames(.), perl = TRUE)], ".png")
+            function(i) paste0(.[i, grepl(paste0("^(?=Object)(?!.*", .[i, "Temporal_Order"], ")(?=.*Image)"), 
+                                          colnames(.), perl = TRUE)], ".png")
             )) %>%
         mutate(Familize_2_Object_Audio = sapply(1:nrow(.), 
-            function(i) paste0(.[i, grepl(paste0("^(?=Object)(?!.*", .[i, "Temporal_Order"], ")(?=.*Audio)"), colnames(.), perl = TRUE)], ".wav")
+            function(i) paste0(.[i, grepl(paste0("^(?=Object)(?!.*", .[i, "Temporal_Order"], ")(?=.*Audio)"), 
+                                          colnames(.), perl = TRUE)], ".wav")
             )) %>%
-        mutate(Test_Audio = paste0(abbreviate(paste(substr(Test_Image, 1, 2), Sentential_Connective, Mentioned_Object, Agent_Mood), 6), ".wav")) %>%
+        mutate(Test_Audio = paste0(abbreviate(paste(substr(Test_Image, 1, 2), 
+                                   Sentential_Connective, Mentioned_Object, Agent_Mood), 6), ".wav")) %>%
         mutate(Top_Left     = substr(Spatial_Order, 1, 2),
                Top_Right    = substr(Spatial_Order, 4, 5),
                Bottom_Left  = substr(Spatial_Order, 7, 8),
@@ -121,15 +127,21 @@ Conditional_Test_Image_Generator <- function(
 
 ########## 1. Read Objects into R ####################################################################################################
     suppressMessages(library(magick))
-    Object_Same_File <- file.path(Root_Directory, Input_Objects_Folder, paste0(Test_Image_File[Test_Image_Row, "Object_Same_Image"], ".png"))
+    Object_Same_File <- file.path(Root_Directory, Input_Objects_Folder, 
+                                  paste0(Test_Image_File[Test_Image_Row, "Object_Same_Image"], ".png"))
     Object_Same      <- magick::image_read(Object_Same_File)
-    Object_Same      <- magick::image_resize(Object_Same, geometry = geometry_size_percent(width = 200 / 600 * 100))
-    Brand_Same       <- magick::image_resize(Object_Same, geometry = geometry_size_percent(width = 70 / 200 * 100))
+    Object_Same      <- magick::image_resize(Object_Same, 
+                                             geometry = geometry_size_percent(width = 200 / 600 * 100))
+    Brand_Same       <- magick::image_resize(Object_Same, 
+                                             geometry = geometry_size_percent(width = 70 / 200 * 100))
 
-    Object_Different_File <- file.path(Root_Directory, Input_Objects_Folder, paste0(Test_Image_File[Test_Image_Row, "Object_Different_Image"], ".png"))
+    Object_Different_File <- file.path(Root_Directory, Input_Objects_Folder, 
+                                       paste0(Test_Image_File[Test_Image_Row, "Object_Different_Image"], ".png"))
     Object_Different      <- magick::image_read(Object_Different_File)
-    Object_Different      <- magick::image_resize(Object_Different, geometry = geometry_size_percent(width = 200 / 600 * 100))
-    Brand_Different       <- magick::image_resize(Object_Different, geometry = geometry_size_percent(width = 70 / 200 * 100))
+    Object_Different      <- magick::image_resize(Object_Different, 
+                                                  geometry = geometry_size_percent(width = 200 / 600 * 100))
+    Brand_Different       <- magick::image_resize(Object_Different, 
+                                                  geometry = geometry_size_percent(width = 70 / 200 * 100))
 
 ########## 2. Read Boxes into R and Define offsets ####################################################################################################
     Box_Open_File   <- file.path(Root_Directory, Input_Boxes_Folder, "Box_Open.pdf")
@@ -158,47 +170,67 @@ Conditional_Test_Image_Generator <- function(
     Offset_Bottom_Right_Box_Open <- paste0("+", Box_Open_Right_Offset_X, "+", Box_Open_Bottom_Offset_Y)
 
     Height_Difference_Open_Closed <- Box_Open_Height - Box_Closed_Height
-    Offset_Top_Left_Box_Closed     <- paste0("+", Box_Open_Left_Offset_X,  "+", Box_Open_Top_Offset_Y    + Height_Difference_Open_Closed)
-    Offset_Top_Right_Box_Closed    <- paste0("+", Box_Open_Right_Offset_X, "+", Box_Open_Top_Offset_Y    + Height_Difference_Open_Closed)
-    Offset_Bottom_Left_Box_Closed  <- paste0("+", Box_Open_Left_Offset_X,  "+", Box_Open_Bottom_Offset_Y + Height_Difference_Open_Closed)
-    Offset_Bottom_Right_Box_Closed <- paste0("+", Box_Open_Right_Offset_X, "+", Box_Open_Bottom_Offset_Y + Height_Difference_Open_Closed)
+    Offset_Top_Left_Box_Closed     <- paste0("+", Box_Open_Left_Offset_X,  
+                                             "+", Box_Open_Top_Offset_Y    + Height_Difference_Open_Closed)
+    Offset_Top_Right_Box_Closed    <- paste0("+", Box_Open_Right_Offset_X, 
+                                             "+", Box_Open_Top_Offset_Y    + Height_Difference_Open_Closed)
+    Offset_Bottom_Left_Box_Closed  <- paste0("+", Box_Open_Left_Offset_X,  
+                                             "+", Box_Open_Bottom_Offset_Y + Height_Difference_Open_Closed)
+    Offset_Bottom_Right_Box_Closed <- paste0("+", Box_Open_Right_Offset_X, 
+                                             "+", Box_Open_Bottom_Offset_Y + Height_Difference_Open_Closed)
 
 ########## 3. Define objects offsets ####################################################################################################
     Object_x_Adjust <- 60
     Object_y_Adjust <- 5
-    Offset_Object_Top_Left     <- paste0("+",  Box_Open_Left_Offset_X  + Object_x_Adjust, "+", Box_Open_Top_Offset_Y    + Object_y_Adjust)
-    Offset_Object_Top_Right    <- paste0("+",  Box_Open_Right_Offset_X + Object_x_Adjust, "+", Box_Open_Top_Offset_Y    + Object_y_Adjust)
-    Offset_Object_Bottom_Left  <- paste0("+",  Box_Open_Left_Offset_X  + Object_x_Adjust, "+", Box_Open_Bottom_Offset_Y + Object_y_Adjust)
-    Offset_Object_Bottom_Right <- paste0("+",  Box_Open_Right_Offset_X + Object_x_Adjust, "+", Box_Open_Bottom_Offset_Y + Object_y_Adjust)
+    Offset_Object_Top_Left     <- paste0("+",  Box_Open_Left_Offset_X   + Object_x_Adjust, 
+                                         "+",  Box_Open_Top_Offset_Y    + Object_y_Adjust)
+    Offset_Object_Top_Right    <- paste0("+",  Box_Open_Right_Offset_X  + Object_x_Adjust, 
+                                         "+",  Box_Open_Top_Offset_Y    + Object_y_Adjust)
+    Offset_Object_Bottom_Left  <- paste0("+",  Box_Open_Left_Offset_X   + Object_x_Adjust, 
+                                         "+",  Box_Open_Bottom_Offset_Y + Object_y_Adjust)
+    Offset_Object_Bottom_Right <- paste0("+",  Box_Open_Right_Offset_X  + Object_x_Adjust, 
+                                         "+",  Box_Open_Bottom_Offset_Y + Object_y_Adjust)
 
     Height_Difference_Open_Cover <- Box_Open_Height - Box_Cover_Height
-    Cover_Offset_Top_Left     <- paste0("+", Box_Open_Left_Offset_X,  "+", Box_Open_Top_Offset_Y    + Height_Difference_Open_Cover)
-    Cover_Offset_Top_Right    <- paste0("+", Box_Open_Right_Offset_X, "+", Box_Open_Top_Offset_Y    + Height_Difference_Open_Cover)
-    Cover_Offset_Bottom_Left  <- paste0("+", Box_Open_Left_Offset_X,  "+", Box_Open_Bottom_Offset_Y + Height_Difference_Open_Cover)
-    Cover_Offset_Bottom_Right <- paste0("+", Box_Open_Right_Offset_X, "+", Box_Open_Bottom_Offset_Y + Height_Difference_Open_Cover)
+    Cover_Offset_Top_Left     <- paste0("+", Box_Open_Left_Offset_X,  
+                                        "+", Box_Open_Top_Offset_Y    + Height_Difference_Open_Cover)
+    Cover_Offset_Top_Right    <- paste0("+", Box_Open_Right_Offset_X, 
+                                        "+", Box_Open_Top_Offset_Y    + Height_Difference_Open_Cover)
+    Cover_Offset_Bottom_Left  <- paste0("+", Box_Open_Left_Offset_X,  
+                                        "+", Box_Open_Bottom_Offset_Y + Height_Difference_Open_Cover)
+    Cover_Offset_Bottom_Right <- paste0("+", Box_Open_Right_Offset_X, 
+                                        "+", Box_Open_Bottom_Offset_Y + Height_Difference_Open_Cover)
 
     Height_Difference_Open_Brand <- Box_Cover_Height - Brand_Same_Height
     Brand_x_Adjust <- 30
     Brand_Offset_Top_Left     <- paste0("+", Box_Open_Left_Offset_X   + Brand_x_Adjust, 
-                                        "+", Box_Open_Top_Offset_Y    + Height_Difference_Open_Cover + Height_Difference_Open_Brand / 2)
+                                        "+", Box_Open_Top_Offset_Y    + Height_Difference_Open_Cover + 
+                                             Height_Difference_Open_Brand / 2)
     Brand_Offset_Top_Right    <- paste0("+", Box_Open_Right_Offset_X  + Brand_x_Adjust, 
-                                        "+", Box_Open_Top_Offset_Y    + Height_Difference_Open_Cover + Height_Difference_Open_Brand / 2)
+                                        "+", Box_Open_Top_Offset_Y    + Height_Difference_Open_Cover + 
+                                             Height_Difference_Open_Brand / 2)
     Brand_Offset_Bottom_Left  <- paste0("+", Box_Open_Left_Offset_X   + Brand_x_Adjust, 
-                                        "+", Box_Open_Bottom_Offset_Y + Height_Difference_Open_Cover + Height_Difference_Open_Brand / 2)
+                                        "+", Box_Open_Bottom_Offset_Y + Height_Difference_Open_Cover + 
+                                             Height_Difference_Open_Brand / 2)
     Brand_Offset_Bottom_Right <- paste0("+", Box_Open_Right_Offset_X  + Brand_x_Adjust, 
-                                        "+", Box_Open_Bottom_Offset_Y + Height_Difference_Open_Cover + Height_Difference_Open_Brand / 2)
+                                        "+", Box_Open_Bottom_Offset_Y + Height_Difference_Open_Cover + 
+                                             Height_Difference_Open_Brand / 2)
 
 ########## 4. Define annotation locations ####################################################################################################
     Annotation_x_Adjust <- 180
     Annotation_y_Adjust <- 15
     Annotation_Offset_Top_Left     <- paste0("+", Box_Open_Left_Offset_X   + Annotation_x_Adjust, 
-                                             "+", Box_Open_Top_Offset_Y    + Height_Difference_Open_Cover + Height_Difference_Open_Brand / 2 + Annotation_y_Adjust)
+                                             "+", Box_Open_Top_Offset_Y    + Height_Difference_Open_Cover + 
+                                                  Height_Difference_Open_Brand / 2 + Annotation_y_Adjust)
     Annotation_Offset_Top_Right    <- paste0("+", Box_Open_Right_Offset_X  + Annotation_x_Adjust, 
-                                             "+", Box_Open_Top_Offset_Y    + Height_Difference_Open_Cover + Height_Difference_Open_Brand / 2 + Annotation_y_Adjust)
+                                             "+", Box_Open_Top_Offset_Y    + Height_Difference_Open_Cover + 
+                                                  Height_Difference_Open_Brand / 2 + Annotation_y_Adjust)
     Annotation_Offset_Bottom_Left  <- paste0("+", Box_Open_Left_Offset_X   + Annotation_x_Adjust, 
-                                             "+", Box_Open_Bottom_Offset_Y + Height_Difference_Open_Cover + Height_Difference_Open_Brand / 2 + Annotation_y_Adjust)
+                                             "+", Box_Open_Bottom_Offset_Y + Height_Difference_Open_Cover + 
+                                                  Height_Difference_Open_Brand / 2 + Annotation_y_Adjust)
     Annotation_Offset_Bottom_Right <- paste0("+", Box_Open_Right_Offset_X  + Annotation_x_Adjust, 
-                                             "+", Box_Open_Bottom_Offset_Y + Height_Difference_Open_Cover + Height_Difference_Open_Brand / 2 + Annotation_y_Adjust)
+                                             "+", Box_Open_Bottom_Offset_Y + Height_Difference_Open_Cover + 
+                                                  Height_Difference_Open_Brand / 2 + Annotation_y_Adjust)
 
 ########## 5. Combine All information into a Data frame ####################################################################################################
     Image_Information <- data.frame(
@@ -207,13 +239,20 @@ Conditional_Test_Image_Generator <- function(
         Box_Top_Right        = c(   "Box_Open",    "Box_Open",  "Box_Closed",    "Box_Open"),
         Box_Bottom_Left      = c(   "Box_Open",  "Box_Closed",    "Box_Open",    "Box_Open"),
         Box_Bottom_Right     = c(   "Box_Open",    "Box_Open",    "Box_Open",  "Box_Closed"),
-        Box_Offset_Top_Left      = c(Offset_Top_Left_Box_Closed, Offset_Top_Left_Box_Open, Offset_Top_Left_Box_Open, Offset_Top_Left_Box_Open),
-        Box_Offset_Top_Right     = c(Offset_Top_Right_Box_Open, Offset_Top_Right_Box_Open, Offset_Top_Right_Box_Closed, Offset_Top_Right_Box_Open),
-        Box_Offset_Bottom_Left   = c(Offset_Bottom_Left_Box_Open, Offset_Bottom_Left_Box_Closed, Offset_Bottom_Left_Box_Open, Offset_Bottom_Left_Box_Open),
-        Box_Offset_Bottom_Right  = c(Offset_Bottom_Right_Box_Open, Offset_Bottom_Right_Box_Open, Offset_Bottom_Right_Box_Open, Offset_Bottom_Right_Box_Closed),
-        Object_Offset_DD = c(Offset_Object_Top_Right, Offset_Object_Bottom_Right, Offset_Object_Top_Left, Offset_Object_Bottom_Left),
-        Object_Offset_SD = c(Offset_Object_Bottom_Left, Offset_Object_Top_Left, Offset_Object_Bottom_Right, Offset_Object_Top_Right),
-        Object_Offset_SS = c(Offset_Object_Bottom_Right, Offset_Object_Top_Right, Offset_Object_Bottom_Left, Offset_Object_Top_Left), 
+        Box_Offset_Top_Left      = c(Offset_Top_Left_Box_Closed, Offset_Top_Left_Box_Open, 
+                                     Offset_Top_Left_Box_Open, Offset_Top_Left_Box_Open),
+        Box_Offset_Top_Right     = c(Offset_Top_Right_Box_Open, Offset_Top_Right_Box_Open, 
+                                     Offset_Top_Right_Box_Closed, Offset_Top_Right_Box_Open),
+        Box_Offset_Bottom_Left   = c(Offset_Bottom_Left_Box_Open, Offset_Bottom_Left_Box_Closed, 
+                                     Offset_Bottom_Left_Box_Open, Offset_Bottom_Left_Box_Open),
+        Box_Offset_Bottom_Right  = c(Offset_Bottom_Right_Box_Open, Offset_Bottom_Right_Box_Open, 
+                                     Offset_Bottom_Right_Box_Open, Offset_Bottom_Right_Box_Closed),
+        Object_Offset_DD = c(Offset_Object_Top_Right, Offset_Object_Bottom_Right, 
+                             Offset_Object_Top_Left, Offset_Object_Bottom_Left),
+        Object_Offset_SD = c(Offset_Object_Bottom_Left, Offset_Object_Top_Left, 
+                             Offset_Object_Bottom_Right, Offset_Object_Top_Right),
+        Object_Offset_SS = c(Offset_Object_Bottom_Right, Offset_Object_Top_Right, 
+                             Offset_Object_Bottom_Left, Offset_Object_Top_Left), 
         Brand_Top_Left     = c("Brand_Same",      "Brand_Different", "Brand_Different", "Brand_Same"),
         Brand_Top_Right    = c("Brand_Different", "Brand_Same",      "Brand_Same",      "Brand_Different"),
         Brand_Bottom_Left  = c("Brand_Different", "Brand_Same",      "Brand_Same",      "Brand_Different"),
@@ -243,10 +282,14 @@ Conditional_Test_Image_Generator <- function(
         magick::image_composite(Box_Cover, offset = Cover_Offset_Bottom_Left) %>%
         magick::image_composite(Box_Cover, offset = Cover_Offset_Bottom_Right)
     Image_Add_Brands <- Image_Add_Covers %>%
-        magick::image_composite(eval(parse(text = Image_Information[Condition, "Brand_Top_Left"])),     offset = Brand_Offset_Top_Left) %>%
-        magick::image_composite(eval(parse(text = Image_Information[Condition, "Brand_Top_Right"])),    offset = Brand_Offset_Top_Right) %>%
-        magick::image_composite(eval(parse(text = Image_Information[Condition, "Brand_Bottom_Left"])),  offset = Brand_Offset_Bottom_Left) %>%
-        magick::image_composite(eval(parse(text = Image_Information[Condition, "Brand_Bottom_Right"])), offset = Brand_Offset_Bottom_Right)
+        magick::image_composite(eval(parse(text = Image_Information[Condition, "Brand_Top_Left"])),     
+                                offset = Brand_Offset_Top_Left) %>%
+        magick::image_composite(eval(parse(text = Image_Information[Condition, "Brand_Top_Right"])),    
+                                offset = Brand_Offset_Top_Right) %>%
+        magick::image_composite(eval(parse(text = Image_Information[Condition, "Brand_Bottom_Left"])),  
+                                offset = Brand_Offset_Bottom_Left) %>%
+        magick::image_composite(eval(parse(text = Image_Information[Condition, "Brand_Bottom_Right"])), 
+                                offset = Brand_Offset_Bottom_Right)
     Image_Add_Numbers <- Image_Add_Brands %>%
         magick::image_annotate("A", font = "Times", location = Annotation_Offset_Top_Left, size = 45) %>%
         magick::image_annotate("B", font = "Times", location = Annotation_Offset_Top_Right, size = 45) %>%
@@ -276,12 +319,15 @@ Conditional_Test_Audio_Generator <- function(
     Test_Stimuli_Row, Root_Directory, Input_Audio_Component_Folder,  Output_Test_Audio_Folder,  
     Sentential_Components_File, Test_Stimuli_File, Mentioned_Object_Expected_Length
 ){
-    Sentential_Components <- read.csv(file.path(Root_Directory, paste0(Sentential_Components_File, ".csv")), header = TRUE, stringsAsFactors = FALSE)
+    Sentential_Components <- read.csv(
+        file.path(Root_Directory, paste0(Sentential_Components_File, ".csv")), header = TRUE, stringsAsFactors = FALSE)
     Audio_Component_Input_Directory <- file.path(Root_Directory, Input_Audio_Component_Folder)
     Sentential_Connectives <- data.frame(Because = c("Because", "Therefore", "Very"), IF = c("IF", "Then", "Will"))
     Sentential_Connective_1 <- Sentential_Connectives[1, Test_Stimuli_File[Test_Stimuli_Row, "Sentential_Connective"]]
-    Sentential_Connective_1_Audio_Name <- Sentential_Components[Sentential_Components$Component_Image == Sentential_Connective_1, "Component_Audio"]
-    Sentential_Connective_1_Audio_File <- tuneR::readWave(file.path(Audio_Component_Input_Directory, paste0(Sentential_Connective_1_Audio_Name, ".wav")))
+    Sentential_Connective_1_Audio_Name <- 
+        Sentential_Components[Sentential_Components$Component_Image == Sentential_Connective_1, "Component_Audio"]
+    Sentential_Connective_1_Audio_File <- tuneR::readWave(
+        file.path(Audio_Component_Input_Directory, paste0(Sentential_Connective_1_Audio_Name, ".wav")))
     Box_In_Audio_Audio_File <- tuneR::readWave(file.path(Audio_Component_Input_Directory, "XiangZiLi.wav"))
     IS_Audio_File <- tuneR::readWave(file.path(Audio_Component_Input_Directory, "Shi.wav"))
     Mentioned_Object <- Test_Stimuli_File[Test_Stimuli_Row, 
@@ -297,15 +343,20 @@ Conditional_Test_Audio_Generator <- function(
           Mentioned_Object_Audio_File <- Mentioned_Object_Audio_File_0
     }
     Sentential_Connective_2 <- Sentential_Connectives[2, Test_Stimuli_File[Test_Stimuli_Row, "Sentential_Connective"]]
-    Sentential_Connective_2_Audio_Name <- Sentential_Components[Sentential_Components$Component_Image == Sentential_Connective_2, "Component_Audio"]
-    Sentential_Connective_2_Audio_File <- tuneR::readWave(file.path(Audio_Component_Input_Directory, paste0(Sentential_Connective_2_Audio_Name, ".wav")))
+    Sentential_Connective_2_Audio_Name <- 
+        Sentential_Components[Sentential_Components$Component_Image == Sentential_Connective_2, "Component_Audio"]
+    Sentential_Connective_2_Audio_File <- tuneR::readWave(
+        file.path(Audio_Component_Input_Directory, paste0(Sentential_Connective_2_Audio_Name, ".wav")))
     Agent_Name_Audio_File <- tuneR::readWave(file.path(Audio_Component_Input_Directory, "XiaoMing.wav"))
     Sentential_Connective_3 <- Sentential_Connectives[3, Test_Stimuli_File[Test_Stimuli_Row, "Sentential_Connective"]]
-    Sentential_Connective_3_Audio_Name <- Sentential_Components[Sentential_Components$Component_Image == Sentential_Connective_3, "Component_Audio"]
-    Sentential_Connective_3_Audio_File <- tuneR::readWave(file.path(Audio_Component_Input_Directory, paste0(Sentential_Connective_3_Audio_Name, ".wav")))
+    Sentential_Connective_3_Audio_Name <- 
+        Sentential_Components[Sentential_Components$Component_Image == Sentential_Connective_3, "Component_Audio"]
+    Sentential_Connective_3_Audio_File <- tuneR::readWave(
+        file.path(Audio_Component_Input_Directory, paste0(Sentential_Connective_3_Audio_Name, ".wav")))
     Agent_Mood <- Test_Stimuli_File[Test_Stimuli_Row, "Agent_Mood"]
     Agent_Mood_Audio_Name <- Sentential_Components[Sentential_Components$Component_Image == Agent_Mood, "Component_Audio"]
-    Agent_Mood_Audio_File <- tuneR::readWave(file.path(Audio_Component_Input_Directory, paste0(Agent_Mood_Audio_Name, ".wav")))
+    Agent_Mood_Audio_File <- tuneR::readWave(
+        file.path(Audio_Component_Input_Directory, paste0(Agent_Mood_Audio_Name, ".wav")))
     Test_Sentence_Audio <- tuneR::bind(
         Sentential_Connective_1_Audio_File, Box_In_Audio_Audio_File, IS_Audio_File,  Mentioned_Object_Audio_File,
         Sentential_Connective_2_Audio_File, Agent_Name_Audio_File, Sentential_Connective_3_Audio_File, Agent_Mood_Audio_File)
@@ -318,7 +369,7 @@ Conditional_Test_Audio_Generator <- function(
 }
 
 ####################################################################################################################################################################
-########  Conditional_Information_Generator
+########  A Wrap-up of the Conditional Test Stimuli Generator
 ###################################################################################################################################################################
 Conditional_Full <- function(
     Root_Directory = "~/Desktop/Conditional_New",
@@ -330,7 +381,8 @@ Conditional_Full <- function(
     Output_Test_Audio_Folder = "Test_Audios",
     Mentioned_Object_Expected_Length = 1400
 ){
-    Conditional_Test_Stimuli_Data <- Conditional_Information_Generator(Root_Directory, Input_Audio_Component_Folder, Sentential_Components_File)
+    Conditional_Test_Stimuli_Data <- Conditional_Information_Generator(
+        Root_Directory, Input_Audio_Component_Folder, Sentential_Components_File)
     Audio_File_Information <- Conditional_Test_Stimuli_Data $Audio_File_Information
     print("========== Audio Info ==========")
     print(Audio_File_Information)
