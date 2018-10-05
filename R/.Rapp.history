@@ -1,2818 +1,3 @@
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0.1, 0.6, 0, 0),#
-  oma = c(3, 0, 4, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-	} else {#
-		plot_pdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0.1, 0.6, 0, 0),#
-  oma = c(3, 0, 4, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-	} else {#
-		plot_pdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-	    mtext(text = bquote(bold(atop("PDF (probability density function)", italic(P(X==x[i])))))#
-		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0.1, 0.6, 0, 0),#
-  oma = c(3, 0, 4, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-	} else {#
-		plot_pdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold(atop("PDF (probability density function)", italic(P(X==x[i]))))),#
-  side = 3, at = 0.25, las = 1, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0.1, 0.6, 0, 0),#
-  oma = c(3, 0, 4, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-	} else {#
-		plot_pdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold(atop("PDF (probability density function)", italic(P(X==x[i]))))),#
-  side = 2, at = 0.25, las = 1, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0.1, 0.6, 0, 0),#
-  oma = c(3, 1, 4, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-	} else {#
-		plot_pdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold(atop("PDF (probability density function)", italic(P(X==x[i]))))),#
-  side = 2, at = 0.25, las = 1, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0.1, 0.6, 0, 0),#
-  oma = c(3, 2, 4, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-	} else {#
-		plot_pdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold(atop("PDF (probability density function)", italic(P(X==x[i]))))),#
-  side = 2, at = 0.25, las = 1, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0.1, 0.6, 0, 0),#
-  oma = c(3, 2, 4, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-	} else {#
-		plot_pdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold(atop("PDF (probability density function)", italic(P(X==x[i]))))),#
-  side = 2, at = 0.25, las = 2, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0.1, 0.6, 0, 0),#
-  oma = c(3, 2, 4, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-	} else {#
-		plot_pdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold(atop("PDF (probability density function)", italic(P(X==x[i]))))),#
-  side = 2, at = 0.25, las = 3, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0.1, 0.6, 0, 0),#
-  oma = c(3, 2, 4, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-	} else {#
-		plot_pdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.25, las = 3, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0.1, 0.6, 0, 0),#
-  oma = c(3, 2, 4, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-	} else {#
-		plot_pdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0.1, 0.6, 0, 0),#
-  oma = c(3, 2, 4, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-	} else {#
-		plot_pdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = 0, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0.1, 0.6, 0, 0),#
-  oma = c(3, 2, 4, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-	} else {#
-		plot_pdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = 1, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0.1, 0.6, 0, 0),#
-  oma = c(3, 2, 4, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-	} else {#
-		plot_pdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = -1, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0.1, 0.6, 0, 0),#
-  oma = c(3, 1, 4, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-	} else {#
-		plot_pdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = -1, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0.1, 0.6, 0, 0),#
-  oma = c(3, 1, 4, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-	} else {#
-		plot_pdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = -2, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0.1, 0.6, 0, 0),#
-  oma = c(3, 1, 4, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-	} else {#
-		plot_pdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = -1.5, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0.1, 0.6, 0, 0),#
-  oma = c(3, 1, 1, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-	} else {#
-		plot_pdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = -1.5, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0.1, 0.6, 0, 0),#
-  oma = c(3, 1, 0.5, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-	} else {#
-		plot_pdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = -1.5, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0.1, 0.6, 0, 0),#
-  oma = c(3, 1, 0.5, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	show_x_panel_lab = (rr == max(r)),show_y_panel_lab = (pipi == max(pi))	#
-	)#
-	} else {#
-		plot_pdf(rr, pipi, show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)))#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = -1.5, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0.1, 0.6, 0, 0),#
-  oma = c(3, 1, 0.5, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi))#
-	)#
-	} else {#
-		plot_pdf(rr, pipi, #
-		show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	    show_x_panel_lab = (rr == max(r)),show_y_panel_lab = (pipi == max(pi))#
-		)#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = -1.5, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0.1, 0.6, 0, 0),#
-  oma = c(3, 1, 0.5, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi))#
-	)#
-	} else {#
-		plot_pdf(rr, pipi, #
-		show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	    show_x_panel_lab = (rr == min(r)),show_y_panel_lab = (pipi == max(pi))#
-		)#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = -1.5, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0.1, 0.6, 0, 0),#
-  oma = c(3, 1, 0.5, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi))#
-	)#
-	} else {#
-		plot_pdf(rr, pipi, #
-		show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	    show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == max(pi))#
-		)#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = -1.5, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0.1, 0.6, 0, 0),#
-  oma = c(3, 1, 0.5, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi))#
-	)#
-	} else {#
-		plot_pdf(rr, pipi, #
-		show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	    show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-		)#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = -1.5, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0.1, 0.1, 0, 0),#
-  oma = c(3, 1, 0.5, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi))#
-	)#
-	} else {#
-		plot_pdf(rr, pipi, #
-		show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	    show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-		)#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = -1.5, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0, 0.1, 0, 0),#
-  oma = c(3, 1, 0.5, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi))#
-	)#
-	} else {#
-		plot_pdf(rr, pipi, #
-		show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	    show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-		)#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = -1.5, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0, 0, 0, 0),#
-  oma = c(3, 1, 0.5, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi))#
-	)#
-	} else {#
-		plot_pdf(rr, pipi, #
-		show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	    show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-		)#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = -1.5, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0, 0, 0, 0),#
-  oma = c(3, 2, 0.5, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi))#
-	)#
-	} else {#
-		plot_pdf(rr, pipi, #
-		show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	    show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-		)#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = -1.5, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0, 0, 0, 0),#
-  oma = c(3, 3, 0.5, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi))#
-	)#
-	} else {#
-		plot_pdf(rr, pipi, #
-		show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	    show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-		)#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = -1.5, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0, 0, 0, 0),#
-  oma = c(3, 4, 0.5, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi))#
-	)#
-	} else {#
-		plot_pdf(rr, pipi, #
-		show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	    show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-		)#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = -1.5, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0, 0, 0, 0),#
-  oma = c(3, 4, 0.5, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi))#
-	)#
-	} else {#
-		plot_pdf(rr, pipi, #
-		show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	    show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-		)#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = 1.5, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0, 0, 0, 0),#
-  oma = c(3, 4, 0.5, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi))#
-	)#
-	} else {#
-		plot_pdf(rr, pipi, #
-		show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	    show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-		)#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = 2, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0, 0, 0, 0),#
-  oma = c(3, 4, 0.5, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi))#
-	)#
-	} else {#
-		plot_pdf(rr, pipi, #
-		show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	    show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-		)#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = 2.5, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0, 0, 0, 0),#
-  oma = c(3, 4.5, 0.5, 0.2),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi))#
-	)#
-	} else {#
-		plot_pdf(rr, pipi, #
-		show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	    show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-		)#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = 2.5, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0, 0, 0, 0),#
-  oma = c(3, 4.5, 0.5, 0.5),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi))#
-	)#
-	} else {#
-		plot_pdf(rr, pipi, #
-		show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	    show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-		)#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = 2.5, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0, 0, 0, 0),#
-  oma = c(4, 4.5, 0.5, 0.5),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi))#
-	)#
-	} else {#
-		plot_pdf(rr, pipi, #
-		show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	    show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-		)#
-mtext(text = bquote(italic("x")), side = 1, line = 1.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = 2.5, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0, 0, 0, 0),#
-  oma = c(4, 4.5, 0.5, 0.5),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi))#
-	)#
-	} else {#
-		plot_pdf(rr, pipi, #
-		show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	    show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-		)#
-mtext(text = bquote(italic("x")), side = 1, line = 2, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = 2.5, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0, 0, 0, 0),#
-  oma = c(4, 4.5, 0.5, 0.5),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi))#
-	)#
-	} else {#
-		plot_pdf(rr, pipi, #
-		show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	    show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-		)#
-mtext(text = bquote(italic("x")), side = 1, line = 2.5, las = 1, outer = TRUE)#
-mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-  side = 2, at = 0.5, las = 3, line = 2.5, outer = TRUE)		}#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  if (show_y_panel_lab) {#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  }#
-    if (show_x_panel_lab){#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0, 0, 0, 0),#
-  oma = c(4, 4.5, 0.5, 0.5),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi),#
-	show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-	)#
-	mtext(text = bquote(italic("x")), side = 1, line = 2.5, las = 1, outer = TRUE)#
-    mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-        side = 2, at = 0.5, las = 3, line = 2.5, outer = TRUE)#
-	} else {#
-		plot_pdf(rr, pipi, #
-		show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	    show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-		)#
-        mtext(text = bquote(italic("x")), side = 1, line = 2.5, las = 1, outer = TRUE)#
-        mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-          side = 2, at = 0.5, las = 3, line = 2.5, outer = TRUE)#
-          }#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  if (show_y_panel_lab) {#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  }#
-    if (show_x_panel_lab){#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0, 0, 0, 0),#
-  oma = c(4, 4.5, 0.5, 0.5),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi),#
-	show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-	)#
-	mtext(text = bquote(italic("x")), side = 1, line = 2.5, las = 1, outer = TRUE)#
-    mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-        side = 2, at = 0.5, las = 3, line = 2.5, outer = TRUE)#
-	} else {#
-		plot_pdf(rr, pipi, #
-		show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	    show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-		)#
-        mtext(text = bquote(italic("x")), side = 1, line = 2.5, las = 1, outer = TRUE)#
-        mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-          side = 2, at = 0.5, las = 3, line = 2.5, outer = TRUE)#
-          }#
-}#
-Plot_Negative_Binomial_Density()Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  if (show_y_panel_lab) {#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  }#
-    if (show_x_panel_lab){#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0, 0, 0, 0),#
-  oma = c(4, 4.5, 0.5, 0.5),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-	)#
-	mtext(text = bquote(italic("x")), side = 1, line = 2.5, las = 1, outer = TRUE)#
-    mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-        side = 2, at = 0.5, las = 3, line = 2.5, outer = TRUE)#
-	} else {#
-		plot_pdf(rr, pipi, #
-		show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	    show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-		)#
-        mtext(text = bquote(italic("x")), side = 1, line = 2.5, las = 1, outer = TRUE)#
-        mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-          side = 2, at = 0.5, las = 3, line = 2.5, outer = TRUE)#
-          }#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  if (show_y_panel_lab) {#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  }#
-    if (show_x_panel_lab){#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0, 0, 0, 0),#
-  oma = c(4, 4.5, 0.5, 0.5),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-	)#
-	mtext(text = bquote(italic("x")), side = 1, line = 2.5, las = 1, outer = TRUE)#
-    mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-        side = 2, at = 0.5, las = 3, line = 2.5, outer = TRUE)#
-	} else {#
-		plot_pdf(rr, pipi, #
-		show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	    show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-		)#
-        mtext(text = bquote(italic("x")), side = 1, line = 2.5, las = 1, outer = TRUE)#
-        mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-          side = 2, at = 0.5, las = 3, line = 2.5, outer = TRUE)#
-          }#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  if (show_y_panel_lab) {#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  }#
-    if (show_x_panel_lab){#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0, 0, 0, 0),#
-  oma = c(4, 4.5, 0.5, 0.5),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-	)#
-	mtext(text = bquote(italic("x")), side = 1, line = 2.5, las = 1, outer = TRUE)#
-    mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X<=x[i])))),#
-        side = 2, at = 0.5, las = 3, line = 2.5, outer = TRUE)#
-	} else {#
-		plot_pdf(rr, pipi, #
-		show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	    show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-		)#
-        mtext(text = bquote(italic("x")), side = 1, line = 2.5, las = 1, outer = TRUE)#
-        mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-          side = 2, at = 0.5, las = 3, line = 2.5, outer = TRUE)#
-          }#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-xx = 0:10,#
-r = c(1, 5, 10),#
-pi = c(0.2, 0.5, 0.8),#
-plot_cumulative_density = FALSE#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  if (show_y_panel_lab) {#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  }#
-    if (show_x_panel_lab){#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0, 0, 0, 0),#
-  oma = c(4, 4.5, 0.5, 0.5),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-	)#
-	mtext(text = bquote(italic("x")), side = 1, line = 2.5, las = 1, outer = TRUE)#
-    mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X<=x[i])))),#
-        side = 2, at = 0.5, las = 3, line = 2.5, outer = TRUE)#
-	} else {#
-		plot_pdf(rr, pipi, #
-		show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	    show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-		)#
-        mtext(text = bquote(italic("x")), side = 1, line = 2.5, las = 1, outer = TRUE)#
-        mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-          side = 2, at = 0.5, las = 3, line = 2.5, outer = TRUE)#
-          }#
-}#
-Plot_Negative_Binomial_Density(,,,T)
-Plot_Negative_Binomial_Density <- function (#
-r = c(1, 3, 5),#
-pi = c(0.4, 0.6),#
-plot_cumulative_density = FALSE,#
-xx = 0:10#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  if (show_y_panel_lab) {#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  }#
-    if (show_x_panel_lab){#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-  }#
-par(#
-  mfcol = c(length(r), length(pi)), #
-  mai = c(0, 0, 0, 0),#
-  oma = c(4, 4.5, 0.5, 0.5),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-	)#
-	mtext(text = bquote(italic("x")), side = 1, line = 2.5, las = 1, outer = TRUE)#
-    mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X<=x[i])))),#
-        side = 2, at = 0.5, las = 3, line = 2.5, outer = TRUE)#
-	} else {#
-		plot_pdf(rr, pipi, #
-		show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	    show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-		)#
-        mtext(text = bquote(italic("x")), side = 1, line = 2.5, las = 1, outer = TRUE)#
-        mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-          side = 2, at = 0.5, las = 3, line = 2.5, outer = TRUE)#
-          }#
-}#
-Plot_Negative_Binomial_Density()
-Plot_Negative_Binomial_Density <- function (#
-r = c(1, 3, 5),#
-pi = c(0.4, 0.6),#
-plot_cumulative_density = FALSE,#
-xx = 0:10#
-){#
-plot_pdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  yy <- dnbinom(xx, rr, pipi)#
-  xmax <- max(xx)#
-  ymax <- max(yy)#
-  plot(xx, yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.1),#
-    type = "h", axes = FALSE,  xlab = "", ylab = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  points(xx, yy, pch = 16, col = "#6EA7CB", cex = 1.5)#
-  if (show_y_panel_lab) {#
-    rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-    text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))	#
-  }#
-  if (show_x_panel_lab){#
-    rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-    text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))	#
-  }#
-  }#
-plot_cdf <- function(rr, pipi, show_x_lab = FALSE,  show_y_lab = FALSE, show_x_panel_lab = FALSE, show_y_panel_lab = FALSE) {#
-  xs <- rep(xx, round(dnbinom(xx, rr, pipi) * 100000, 0))#
-  yy <- ecdf(xs)#
-  xmax <- max(xx)#
-  ymax <- max(yy(xx))#
-  plot(yy, xlim = c(0, xmax + 0.3), ylim = c(0, ymax * 1.05), #
-    xlab = "", ylab = "", axes = FALSE, #
-    col.points = "#6EA7CB", cex.points = 1.5, main = "")#
-  axis(2, lwd = 1, at = c(-0.1, ymax * 1.1), labels = c("", ""), #
-    lwd.ticks = 0, col = "gray")#
-  if (show_y_lab) axis(2, lwd = 0, lwd.ticks = 1, las = 1)#
-  axis(1, lwd = 1, at = c(-1, xmax + 0.3), #
-    labels = c("", ""), lwd.ticks = 0, col = "gray")#
-  if (show_x_lab) axis(1, lwd = 0, lwd.ticks = 1, las = 1)#
-  if (show_y_panel_lab) {#
-  rect(xmax + 0.3, -1, xmax + 0.7, ymax * 1.02, col = "gray", border = "gray")#
-  text(xmax + 0.5, ymax / 2, srt = -90, label = bquote(pi == .(pipi)))#
-  }#
-    if (show_x_panel_lab){#
-  rect(-0.5, ymax * 1.02, xmax + 0.3, ymax * 1.1, col = "gray", border = "gray")#
-  text(xmax / 2, ymax * 1.06, srt = 0, label = bquote(r == .(rr)))#
-  }#
-  }#
-par(#
-  mfcol = c(length(pi), length(r)), #
-  mai = c(0, 0, 0, 0),#
-  oma = c(4, 4.5, 0.5, 0.5),#
-  pty = "m")#
-for (rr in r) for (pipi in pi) if (plot_cumulative_density) {#
-	plot_cdf(rr, pipi, #
-	show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-	)#
-	mtext(text = bquote(italic("x")), side = 1, line = 2.5, las = 1, outer = TRUE)#
-    mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X<=x[i])))),#
-        side = 2, at = 0.5, las = 3, line = 2.5, outer = TRUE)#
-	} else {#
-		plot_pdf(rr, pipi, #
-		show_y_lab = (rr == min(r)), show_x_lab = (pipi == max(pi)),#
-	    show_y_panel_lab = (rr == max(r)),show_x_panel_lab = (pipi == min(pi))#
-		)#
-        mtext(text = bquote(italic("x")), side = 1, line = 2.5, las = 1, outer = TRUE)#
-        mtext(text = bquote(bold("PDF (probability density function)"~italic(P(X==x[i])))),#
-          side = 2, at = 0.5, las = 3, line = 2.5, outer = TRUE)#
-          }#
-}#
-Plot_Negative_Binomial_Density()
-lattice()
-library(lattice)
-xyplot(
-?xyplot
-x <- 0:20
-for (r in c(1, 3, 5)) for (pi in c(0.4, 0.6)) for (x in 0:10) data.frame(x = x, pi = pi, r = r, prob = dnbinom(x, r, pi))
-for (r in c(1, 3, 5)) for (pi in c(0.4, 0.6)) for (x in 0:10) return(data.frame(x = x, pi = pi, r = r, prob = dnbinom(x, r, pi)))
-tt <- for (r in c(1, 3, 5)) for (pi in c(0.4, 0.6)) for (x in 0:10) return(data.frame(x = x, pi = pi, r = r, prob = dnbinom(x, r, pi)))
-str(tt)
-for (r in c(1, 3, 5)) for (pi in c(0.4, 0.6)) for (x in 0:10) return(data.frame(x = x, pi = pi, r = r, prob = dnbinom(x, r, pi)))
-for (r in c(1, 3, 5)) for (pi in c(0.4, 0.6)) for (x in 0:10) dnbinom(x, r, pi)
-for (r in c(1, 3, 5)) {for (pi in c(0.4, 0.6)) {for (x in 0:10) dnbinom(x, r, pi)}}
-for (r in c(1, 3, 5)) {for (pi in c(0.4, 0.6)) {for (x in 0:10) {dnbinom(x, r, pi)}}}
-dnbinom(1, 1, 0.4)
-for (r in c(1, 3, 5)) {for (pi in c(0.4, 0.6)) {for (x in 0:10) {dnbinom(x, r, pi)}}}
-for(x in 0:10) dnbinom(x, 1, 0.6)
-for(x in (0:10)) dnbinom(x, 1, 0.6)
-for(x in c(0:10)) dnbinom(x, 1, 0.6)
-for(x in 10) dnbinom(x, 1, 0.6)
-dmnom(10, 1, 0.6)
-dnbinom(10, 1, 0.6)
-for(x in 10) dnbinom(x, 1, 0.6)
-for(x in 10) {dnbinom(x, 1, 0.6)}
-for(x in 5) {dnbinom(x, 1, 0.6)}
-for(x in c(5)) {dnbinom(x, 1, 0.6)}
-for(x in c(5)) dnbinom(x, 1, 0.6)
-dnbinom(1)
-for (r in c(1, 3, 5)) for (pi in c(0.4, 0.6)) dnbinom(0:10, r, pi)
-dnbinom(0:10, r, pi)
-dnbinom(0:10, 2, pi)
-dnbinom(0:10, 2, 0.4)
 for (pi in c(0.4, 0.6)) dnbinom(0:10, 2, 0.4)
 for (pi in c(0.4, 0.6)) {dnbinom(0:10, 2, 0.4)}
 for (pi in c(0.4, 0.6)) dnbinom(0:10, 2, c(0.4, 0.6))
@@ -5103,3 +2288,348 @@ index_html <- function(#
   cat(document, file = paste(path, "/index.html", sep = ""))	#
 }
 index_html()
+index_html <- function(#
+  path = "~/Dropbox/Apps/updog/appendix"#
+){#
+  files <- list.files(path, full.names = TRUE)#
+  files <- files[basename(files) != "index.html"]#
+  pre_list <- paste(#
+    "<!DOCTYPE html>", "\n", #
+    "<html>", "\n",#
+    "<head>", "\n",#
+    "<title> ", basename(path), " </title>", "\n",#
+    "<meta charset=", "\"", "utf-8", "\"", ">", "\n",#
+    "</head>", "\n", #
+    "<body>", "\n",#
+    "<ul>", "\n", sep = "")#
+  post_list <- paste(#
+    "</ul>", "\n", #
+    "</body>", "\n", #
+    "</html>", sep = "")#
+  item <- function(i) {#
+  	  i_dir <- ifelse(file_test("-d", i), paste(basename(i), "/index.html", sep = ""), i)#
+      paste("<li> ", "<a href=", "\"", i_dir, "\"", "> ", basename(i), " </li>", "\n", sep = "")#
+  }#
+  file_list <- sapply(files, item, USE.NAMES = FALSE)#
+  document <- c(pre_list, file_list, post_list)#
+  cat(document, file = paste(path, "/index.html", sep = ""))	#
+}
+index_html("~/Downloads")
+path = "~/Dropbox/Apps/updog/appendix"
+files <- list.files(path, full.names = TRUE)#
+  files <- files[basename(files) != "index.html"]#
+  folder_list <- files[file_test("-d", files)]
+folder_list
+files <- list.files(path, full.names = TRUE)#
+  files <- files[basename(files) != "index.html"]#
+  folder_list <- files[file_test("-d", files)]
+files
+file_list <- files[file_test("-f", files)]
+file_list
+files <- list.files(path, full.names = TRUE)#
+  files <- files[basename(files) != "index.html"]#
+  folder_list <- files[file_test("-d", files)]
+file_list <- files[file_test("-f", files)]
+file_list
+?list.files
+create_index_html <- function(#
+  path = "~/Dropbox/Apps/updog/appendix"#
+){#
+  files_all <- list.files(path, full.names = TRUE)#
+  files_all <- files[basename(files) != "index.html"]#
+  folder_list <- files_all[file_test("-d", files_all)] # directory#
+  file_list   <- files_all[file_test("-f", files_all)] # files #
+  folder_item <- function(i) paste("<li> ", "<a href=", "\"", basename(i), "/index.html", "\"", "> ", basename(i), " </li>", "\n", sep = "")#
+  file_item   <- function(i) paste("<li> ", "<a href=", "\"", basename(i),                "\"", "> ", basename(i), " </li>", "\n", sep = "")#
+  folder_list <- sapply(folder_list, folder_item, USE.NAMES = FALSE)  #
+  file_list   <- sapply(file_list, file_item, USE.NAMES = FALSE)#
+  folder_section <- c("<li> Folders </li>", "<ul>", "\n", folder_list, "</ul>", "\n")#
+  file_section   <- c("<li> Files </li>",   "<ul>", "\n", file_list,   "</ul>", "\n")#
+  document_pre <- paste(#
+    "<!DOCTYPE html>", "\n", #
+    "<html>", "\n",#
+    "<head>", "\n",#
+    "<title> ", basename(path), " </title>", "\n",#
+    "<meta charset=", "\"", "utf-8", "\"", ">", "\n",#
+    "</head>", "\n", #
+    "<body>", "\n", #
+    "<ol>", sep = "")#
+  document_post <- paste("</ol>", "</body>", "\n", "</html>", sep = "")#
+  document_full <- c(document_pre, folder_section, file_section, document_post)#
+  cat(document_full, file = paste(path, "/index.html", sep = ""))	#
+}
+create_index_html()
+path = "~/Dropbox/Apps/updog/appendix"
+files_all <- list.files(path, full.names = TRUE)#
+  files_all <- files[basename(files) != "index.html"]#
+  folder_list <- files_all[file_test("-d", files_all)] # directory#
+  file_list   <- files_all[file_test("-f", files_all)] # files #
+  folder_item <- function(i) paste("<li> ", "<a href=", "\"", basename(i), "/index.html", "\"", "> ", basename(i), " </li>", "\n", sep = "")#
+  file_item   <- function(i) paste("<li> ", "<a href=", "\"", basename(i),                "\"", "> ", basename(i), " </li>", "\n", sep = "")#
+  folder_list <- sapply(folder_list, folder_item, USE.NAMES = FALSE)  #
+  file_list   <- sapply(file_list, file_item, USE.NAMES = FALSE)#
+  folder_section <- c("<li> Folders </li>", "<ul>", "\n", folder_list, "</ul>", "\n")#
+  file_section   <- c("<li> Files </li>",   "<ul>", "\n", file_list,   "</ul>", "\n")
+file_section
+file_list
+folder_list
+create_index_html()
+files_all <- list.files(path, full.names = TRUE)#
+  files_all <- files[basename(files) != "index.html"]#
+  folder_list <- files_all[file_test("-d", files_all)] # directory#
+  file_list   <- files_all[file_test("-f", files_all)] # files #
+  folder_item <- function(i) paste("<li> ", "<a href=", "\"", basename(i), "/index.html", "\"", "> ", basename(i), " </li>", "\n", sep = "")#
+  file_item   <- function(i) paste("<li> ", "<a href=", "\"", basename(i),                "\"", "> ", basename(i), " </li>", "\n", sep = "")#
+  folder_list <- sapply(folder_list, folder_item, USE.NAMES = FALSE)  #
+  file_list   <- sapply(file_list, file_item, USE.NAMES = FALSE)#
+  folder_section <- c("<li> Folders </li>", "<ul>", "\n", folder_list, "</ul>", "\n")#
+  file_section   <- c("<li> Files </li>",   "<ul>", "\n", file_list,   "</ul>", "\n")
+file_section
+folder_list
+str(folder_list)
+folder_section <- c("<li> Folders </li>", "\n", "<ul>", "\n", folder_list, "</ul>", "\n")
+folder_section
+file_section
+str(folder_section)
+file_list
+file_section
+files_all <- list.files(path, full.names = TRUE)
+files_all
+file_list   <- files_all[file_test("-f", files_all)] # files
+files_list
+file_list
+file_item   <- function(i) paste("<li> ", "<a href=", "\"", basename(i),                "\"", "> ", basename(i), " </li>", "\n", sep = "")
+file_item
+file_list   <- sapply(file_list, file_item, USE.NAMES = FALSE)
+file_list
+file_section   <- c("<li> Files </li>",   "<ul>", "\n", file_list,   "</ul>", "\n")
+file_section
+folder_section <- c("<li> Folders </li>", "\n", "<ul>", "\n", folder_list, "</ul>", "\n")
+folder_section
+document_pre <- paste(#
+    "<!DOCTYPE html>", "\n", #
+    "<html>", "\n",#
+    "<head>", "\n",#
+    "<title> ", basename(path), " </title>", "\n",#
+    "<meta charset=", "\"", "utf-8", "\"", ">", "\n",#
+    "</head>", "\n", #
+    "<body>", "\n", #
+    "<ol>", sep = "")#
+  document_post <- paste("</ol>", "</body>", "\n", "</html>", sep = "")
+document_full <- c(document_pre, folder_section, file_section, document_post)
+document_full
+cat(document_full, file = paste(path, "/index.html", sep = ""))
+create_index_html <- function(#
+  path = "~/Dropbox/Apps/updog/appendix"#
+){#
+  files_all <- list.files(path, full.names = TRUE)#
+  files_all <- files[basename(files) != "index.html"]#
+  folder_list <- files_all[file_test("-d", files_all)] # directory#
+  file_list   <- files_all[file_test("-f", files_all)] # files #
+  folder_item <- function(i) paste("<li> ", "<a href=", "\"", basename(i), "/index.html", "\"", "> ", basename(i), " </li>", "\n", sep = "")#
+  file_item   <- function(i) paste("<li> ", "<a href=", "\"", basename(i),                "\"", "> ", basename(i), " </li>", "\n", sep = "")#
+  folder_list <- sapply(folder_list, folder_item, USE.NAMES = FALSE)  #
+  file_list   <- sapply(file_list, file_item, USE.NAMES = FALSE)#
+  folder_section <- c("<li> Folders </li>", "\n", "<ul>", "\n", folder_list, "</ul>", "\n")#
+  file_section   <- c("<li> Files </li>",   "<ul>", "\n", file_list,   "</ul>", "\n")#
+  document_pre <- paste(#
+    "<!DOCTYPE html>", "\n", #
+    "<html>", "\n",#
+    "<head>", "\n",#
+    "<title> ", basename(path), " </title>", "\n",#
+    "<meta charset=", "\"", "utf-8", "\"", ">", "\n",#
+    "</head>", "\n", #
+    "<body>", "\n", #
+    "<ol>", sep = "")#
+  document_post <- paste("</ol>", "</body>", "\n", "</html>", sep = "")#
+  document_full <- c(document_pre, folder_section, file_section, document_post)#
+  cat(document_full, file = paste(path, "/index.html", sep = ""))	#
+}
+create_index_html
+create_index_html()
+files_all <- list.files(path, full.names = TRUE)#
+  files_all <- files[basename(files) != "index.html"]#
+  folder_list <- files_all[file_test("-d", files_all)] # directory#
+  file_list   <- files_all[file_test("-f", files_all)] # files #
+  folder_item <- function(i) paste("<li> ", "<a href=", "\"", basename(i), "/index.html", "\"", "> ", basename(i), " </li>", "\n", sep = "")#
+  file_item   <- function(i) paste("<li> ", "<a href=", "\"", basename(i),                "\"", "> ", basename(i), " </li>", "\n", sep = "")#
+  folder_list <- sapply(folder_list, folder_item, USE.NAMES = FALSE)  #
+  file_list   <- sapply(file_list, file_item, USE.NAMES = FALSE)#
+  folder_section <- c("<li> Folders </li>", "\n", "<ul>", "\n", folder_list, "</ul>", "\n")#
+  file_section   <- c("<li> Files </li>",   "<ul>", "\n", file_list,   "</ul>", "\n")
+file_list
+is.na(file_list)
+length(file_list)
+c(NULL)
+create_index_html <- function(#
+  path = "~/Dropbox/Apps/updog/appendix"#
+){#
+  files_all <- list.files(path, full.names = TRUE)#
+  files_all <- files[basename(files) != "index.html"]#
+  folder_list <- files_all[file_test("-d", files_all)] # directory#
+  file_list   <- files_all[file_test("-f", files_all)] # files #
+  folder_item <- function(i) paste("<li> ", "<a href=", "\"", basename(i), "/index.html", "\"", "> ", basename(i), " </li>", "\n", sep = "")#
+  file_item   <- function(i) paste("<li> ", "<a href=", "\"", basename(i),                "\"", "> ", basename(i), " </li>", "\n", sep = "")#
+  folder_list <- sapply(folder_list, folder_item, USE.NAMES = FALSE)  #
+  file_list   <- sapply(file_list, file_item, USE.NAMES = FALSE)#
+  folder_section <- c("<li> Folders </li>", "\n", "<ul>", "\n", folder_list, "</ul>", "\n")#
+  folder_section <- ifelse(length(folder_list) == 0, NULL, folder_section)#
+  file_section   <- c("<li> Files </li>",   "<ul>", "\n", file_list,   "</ul>", "\n")#
+  file_section <- ifelse(length(file_list) == 0, NULL, file_section)#
+  document_pre <- paste(#
+    "<!DOCTYPE html>", "\n", #
+    "<html>", "\n",#
+    "<head>", "\n",#
+    "<title> ", basename(path), " </title>", "\n",#
+    "<meta charset=", "\"", "utf-8", "\"", ">", "\n",#
+    "</head>", "\n", #
+    "<body>", "\n", #
+    "<ol>", sep = "")#
+  document_post <- paste("</ol>", "</body>", "\n", "</html>", sep = "")#
+  document_full <- c(document_pre, length(file_list)folder_section, file_section, document_post)#
+  cat(document_full, file = paste(path, "/index.html", sep = ""))	#
+}
+create_index_html <- function(#
+  path = "~/Dropbox/Apps/updog/appendix"#
+){#
+  files_all <- list.files(path, full.names = TRUE)#
+  files_all <- files[basename(files) != "index.html"]#
+  folder_list <- files_all[file_test("-d", files_all)] # directory#
+  file_list   <- files_all[file_test("-f", files_all)] # files #
+  folder_item <- function(i) paste("<li> ", "<a href=", "\"", basename(i), "/index.html", "\"", "> ", basename(i), " </li>", "\n", sep = "")#
+  file_item   <- function(i) paste("<li> ", "<a href=", "\"", basename(i),                "\"", "> ", basename(i), " </li>", "\n", sep = "")#
+  folder_list <- sapply(folder_list, folder_item, USE.NAMES = FALSE)  #
+  file_list   <- sapply(file_list, file_item, USE.NAMES = FALSE)#
+  folder_section <- c("<li> Folders </li>", "\n", "<ul>", "\n", folder_list, "</ul>", "\n")#
+  folder_section <- ifelse(length(folder_list) == 0, NULL, folder_section)#
+  file_section   <- c("<li> Files </li>",   "<ul>", "\n", file_list,   "</ul>", "\n")#
+  file_section <- ifelse(length(file_list) == 0, NULL, file_section)#
+  document_pre <- paste(#
+    "<!DOCTYPE html>", "\n", #
+    "<html>", "\n",#
+    "<head>", "\n",#
+    "<title> ", basename(path), " </title>", "\n",#
+    "<meta charset=", "\"", "utf-8", "\"", ">", "\n",#
+    "</head>", "\n", #
+    "<body>", "\n", #
+    "<ol>", sep = "")#
+  document_post <- paste("</ol>", "</body>", "\n", "</html>", sep = "")#
+  document_full <- c(document_pre, folder_section, file_section, document_post)#
+  cat(document_full, file = paste(path, "/index.html", sep = ""))	#
+}
+create_index_html()
+create_index_html <- function(#
+  path = "~/Dropbox/Apps/updog/appendix"#
+){#
+  files_all <- list.files(path, full.names = TRUE)#
+  files_all <- files[basename(files) != "index.html"]#
+  folder_list <- files_all[file_test("-d", files_all)] # directory#
+  file_list   <- files_all[file_test("-f", files_all)] # files #
+  folder_item <- function(i) paste("<li> ", "<a href=", "\"", basename(i), "/index.html", "\"", "> ", basename(i), " </li>", "\n", sep = "")#
+  file_item   <- function(i) paste("<li> ", "<a href=", "\"", basename(i),                "\"", "> ", basename(i), " </li>", "\n", sep = "")#
+  folder_list <- sapply(folder_list, folder_item, USE.NAMES = FALSE)  #
+  file_list   <- sapply(file_list, file_item, USE.NAMES = FALSE)#
+  folder_section <- c("<li> Folders </li>", "\n", "<ul>", "\n", folder_list, "</ul>", "\n")#
+  folder_section <- ifelse(length(folder_list) == 0, "", folder_section)#
+  file_section   <- c("<li> Files </li>",   "<ul>", "\n", file_list,   "</ul>", "\n")#
+  file_section <- ifelse(length(file_list) == 0, "", file_section)#
+  document_pre <- paste(#
+    "<!DOCTYPE html>", "\n", #
+    "<html>", "\n",#
+    "<head>", "\n",#
+    "<title> ", basename(path), " </title>", "\n",#
+    "<meta charset=", "\"", "utf-8", "\"", ">", "\n",#
+    "</head>", "\n", #
+    "<body>", "\n", #
+    "<ol>", sep = "")#
+  document_post <- paste("</ol>", "</body>", "\n", "</html>", sep = "")#
+  document_full <- c(document_pre, folder_section, file_section, document_post)#
+  cat(document_full, file = paste(path, "/index.html", sep = ""))	#
+}
+create_index_html()
+acqr::create_index_html
+acqr::create_index_html()
+path = "~/Dropbox/Apps/updog/appendix"
+files_all <- list.files(path, full.names = TRUE)#
+  files_all <- files_all[basename(files_all) != "index.html"]#
+  folder_list <- files_all[file_test("-d", files_all)] # directory#
+  file_list   <- files_all[file_test("-f", files_all)] # files #
+  folder_item <- function(i) paste("<li> ", "<a href=", "\"", basename(i), "/index.html", "\"", "> ", basename(i), " </li>", "\n", sep = "")#
+  file_item   <- function(i) paste("<li> ", "<a href=", "\"", basename(i),                "\"", "> ", basename(i), " </li>", "\n", sep = "")#
+  folder_list <- sapply(folder_list, folder_item, USE.NAMES = FALSE)  #
+  file_list   <- sapply(file_list, file_item, USE.NAMES = FALSE)#
+  folder_section <- c("<li> Folders </li>", "\n", "<ul>", "\n", folder_list, "</ul>", "\n")
+folder_section
+ifelse(length(folder_list) == 0, "", folder_section)
+file_list
+create_index_html <- function(#
+  path = "~/Dropbox/Apps/updog/appendix"#
+){#
+  files_all <- list.files(path, full.names = TRUE)#
+  files_all <- files_all[basename(files_all) != "index.html"]#
+  folder_list <- files_all[file_test("-d", files_all)] # directory#
+  file_list   <- files_all[file_test("-f", files_all)] # files #
+  folder_item <- function(i) paste("<li> ", "<a href=", "\"", basename(i), "/index.html", "\"", "> ", basename(i), " </li>", "\n", sep = "")#
+  file_item   <- function(i) paste("<li> ", "<a href=", "\"", basename(i),                "\"", "> ", basename(i), " </li>", "\n", sep = "")#
+  folder_list <- sapply(folder_list, folder_item, USE.NAMES = FALSE)  #
+  file_list   <- sapply(file_list, file_item, USE.NAMES = FALSE)#
+  if (length(folder_list) == 0) {#
+  	folder_section <- ""#
+  } else {#
+    folder_section <- c("<li> Folders </li>", "\n", "<ul>", "\n", folder_list, "</ul>", "\n")#
+  }#
+  if (length(file_list) == 0) {#
+  	file_section <- ""#
+  } else {#
+    file_section <- c("<li> Folders </li>", "\n", "<ul>", "\n", file_list, "</ul>", "\n")#
+  }#
+  document_pre <- paste(#
+    "<!DOCTYPE html>", "\n", #
+    "<html>", "\n",#
+    "<head>", "\n",#
+    "<title> ", basename(path), " </title>", "\n",#
+    "<meta charset=", "\"", "utf-8", "\"", ">", "\n",#
+    "</head>", "\n", #
+    "<body>", "\n", #
+    "<ol>", sep = "")#
+  document_post <- paste("</ol>", "</body>", "\n", "</html>", sep = "")#
+  document_full <- c(document_pre, folder_section, file_section, document_post)#
+  cat(document_full, file = paste(path, "/index.html", sep = ""))	#
+}
+create_index_html()
+create_index_html("~/Downloads")
+create_index_html <- function(#
+  path = "~/Dropbox/Apps/updog/appendix"#
+){#
+  files_all <- list.files(path, full.names = TRUE)#
+  files_all <- files_all[basename(files_all) != "index.html"]#
+  folder_list <- files_all[file_test("-d", files_all)] # directory#
+  file_list   <- files_all[file_test("-f", files_all)] # files #
+  folder_item <- function(i) paste("<li> ", "<a href=", "\"", basename(i), "/index.html", "\"", "> ", basename(i), " </li>", "\n", sep = "")#
+  file_item   <- function(i) paste("<li> ", "<a href=", "\"", basename(i),                "\"", "> ", basename(i), " </li>", "\n", sep = "")#
+  folder_list <- sapply(folder_list, folder_item, USE.NAMES = FALSE)  #
+  file_list   <- sapply(file_list, file_item, USE.NAMES = FALSE)#
+  if (length(folder_list) == 0) {#
+  	folder_section <- ""#
+  } else {#
+    folder_section <- c("<li> Folders </li>", "\n", "<ul>", "\n", folder_list, "</ul>", "\n")#
+  }#
+  if (length(file_list) == 0) {#
+  	file_section <- ""#
+  } else {#
+    file_section <- c("<li> Folders </li>", "\n", "<ul>", "\n", file_list, "</ul>", "\n")#
+  }#
+  document_pre <- paste(#
+    "<!DOCTYPE html>", "\n", #
+    "<html>", "\n",#
+    "<head>", "\n",#
+    "<title> ", basename(path), " </title>", "\n",#
+    "<meta charset=", "\"", "utf-8", "\"", ">", "\n",#
+    "</head>", "\n", #
+    "<body>", "\n", #
+    "<ol>", sep = "")#
+  document_post <- paste("</ol>", "</body>", "\n", "</html>", sep = "")#
+  document_full <- c(document_pre, folder_section, file_section, document_post)#
+  cat(document_full, file = paste(path, "/index.html", sep = ""))	#
+}
+create_index_html("~/Downloads")
