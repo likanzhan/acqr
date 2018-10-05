@@ -8,7 +8,7 @@ Extract_Sound_Fragment <- function(
   Start_Offset <- Start_Offset / 1000
   Stop_Offset <- Stop_Offset / 1000
   Original_Sound_Name <- file.path(Sound_File_Path, paste0(Original_File, ".wav"))
-  New_Sound_Name      <- file.path(Sound_File_Path, paste0(Original_File, "_NEW", ".wav")
+  New_Sound_Name      <- file.path(Sound_File_Path, paste0(Original_File, "_NEW", ".wav"))
   Original_Sound_File <- tuneR::readWave(Original_Sound_Name)
   Original_Sound_Length <- ((length(Original_Sound_File @ left) / Original_Sound_File @ samp.rate))
   Stop_Position  <- Original_Sound_Length - Start_Offset - Stop_Offset
