@@ -1,3 +1,111 @@
+####################################################################################################################################################################
+########  Conditional_Information_Generator
+####################################################################################################################################################################
+Conditional_Information_Generator <- function(
+Root_Directory = "~/Desktop/Conditional_New",
+Objects_Audios_Folder = "Important_Originals/Objects_Audios",
+Sentential_Components_File = "Important_Originals/Sentential_Components"
+){
+#################################### 1. Explore the length of the Audio Files ###########################
+### a. Read the Audio Files ###########################
+library(tuneR)
+Audio_File_Directory <- file.path(Root_Directory, Objects_Audios_Folder)
+Audio_File_Info <- acqr::List_Audio_Files(Audio_File_Directory)
+
+### b. Retract the length of Objects ###########################
+Object_Audio_File <- Audio_File_Info[grepl("^[[:digit:]]", Audio_File_Info$File_Name), ]
+Object_Audio_File <- Object_Audio_File[order(Object_Audio_File$File_Length), ]
+Object_Audio_File $ File_Length <- round(Object_Audio_File$File_Length * 1000)
+Object_Audio_File_Max_Length <- ceiling(max(Object_Audio_File[, "File_Length"]) / 100) * 100
+
+### c. Retract the length of Other Elements ###########################
+Other_Elements_Audio <- Audio_File_Info[grepl("^[[:alpha:]]", Audio_File_Info$File_Name), ]
+Other_Elements_Audio $ File_Name <- gsub("\\.wav$", "", Other_Elements_Audio[, "File_Name"])
+Other_Elements_Name <- expand.grid(
+    Condition = c("Because", "IF"), Position  = paste0("P", c(1:3, 5:8)),
+    stringsAsFactors = FALSE)
+Other_Elements_Name $ File_Name <- c(
+    "YinWei", "RuGuo", 
+    "XiangZiLi", "XiangZiLi", 
+    "Shi", "Shi", 
+    "SuoYi", "NaMe", 
+    "XiaoMing", "XiaoMing",
+    "Hen", "Jiu", 
+    "GaoXing", "ShangXin")
+Other_Elements_Information <- merge(Other_Elements_Audio, Other_Elements_Name, by = "File_Name", all.y = TRUE)
+Other_Elements_Information <- Other_Elements_Information[
+    order(Other_Elements_Information$Position, Other_Elements_Information$Condition, decreasing = c(FALSE, TRUE)), ]
+Other_Elements_Information$File_Length <- round(Other_Elements_Information$File_Length * 1000)
+
+### d. Combine the Information Together ###########################
+Audio_File_Information <- list(
+    Object_Audio_File = Object_Audio_File,
+    Object_Audio_File_Max_Length = Object_Audio_File_Max_Length,
+    Other_Elements_Information = Other_Elements_Information)
+
+#################################### 2. Generate the Test Images Information ############################
+`%>%` <- magrittr::`%>%`
+suppressMessages(library(dplyr))
+Sentential_Components_File_Directory <- file.path(Root_Directory, paste0(Sentential_Components_File, ".csv"))
+Sentential_Components <- read.csv(Sentential_Components_File_Directory, header = TRUE, stringsAsFactors = FALSE)
+Test_Images_Information <- Sentential_Components %>% 
+    filter(Component_Category != "Z_Shared") %>%
+    filter(!Component_Image %in% c("FengChe", "XiaoDao", "JianDao", "ZhiLou")) %>%
+    rename(Object_Same_Audio = Component_Audio, Object_Same_Image = Component_Image) %>%
+    group_by(Component_Category) %>%
+    ## Search_Sample_Seed to find a random seed to make sure that no element is in the same  position
+    mutate(Object_Different_Image = {set.seed(acqr::Search_Sample_Seed(Object_Same_Image)); sample(Object_Same_Image)}) %>% ungroup() %>% 
+    mutate(Object_Different_Audio = pull(.[match(Object_Different_Image, Object_Same_Image), "Object_Same_Audio"])) %>%
+    mutate(Spatial_Order = rep(c("CS_DD_SD_SS", "SD_SS_CS_DD", "DD_CS_SS_SD", "SS_SD_DD_CS"), 84 / 4)) %>%
+    mutate(Temporal_Order = rep(c("Different", "Same"), 84 / 2)) %>%
+    mutate(Test_Image = paste0(sprintf("%02d", 1:nrow(.)), ".png")) %>%
+    arrange(Component_Category)
+Test_Images_Information <- as.data.frame(Test_Images_Information)   
+    
+#################################### 3. Generate the Test Audios Information  ############################
+Experimental_Manipulation <- expand.grid(
+    Sentential_Connective = c("Because", "IF"), 
+    Mentioned_Object      = c("Different", "Same"),
+    Agent_Mood            = c("Happy", "Sad"),
+    stringsAsFactors = FALSE)      
+Experimental_Manipulation <- Experimental_Manipulation[-5, ] # Remove the illicite Condition, i.e., Because-Different-Sad
+Test_Stimuli_Full <- Experimental_Manipulation %>%
+    merge(Test_Images_Information) %>%
+    mutate(Split = rep(as.vector(t(acqr::Create_Latin_Square_Matrix(7))), 6)) %>%
+    mutate(Familize_1_Object_Image = sapply(1:nrow(.), 
+        function(i) paste0(.[i, grepl(paste0(.[i, "Temporal_Order"], "_Image"), colnames(.))], ".png")
+        )) %>%
+    mutate(Familize_1_Object_Audio = sapply(1:nrow(.), 
+        function(i) paste0(.[i, grepl(paste0(.[i, "Temporal_Order"], "_Audio"), colnames(.))], ".wav")
+        )) %>%
+    mutate(Familize_2_Object_Image = sapply(1:nrow(.), 
+        function(i) paste0(.[i, grepl(paste0("^(?=Object)(?!.*", .[i, "Temporal_Order"], ")(?=.*Image)"), colnames(.), perl = TRUE)], ".png")
+        )) %>%
+    mutate(Familize_2_Object_Audio = sapply(1:nrow(.), 
+        function(i) paste0(.[i, grepl(paste0("^(?=Object)(?!.*", .[i, "Temporal_Order"], ")(?=.*Audio)"), colnames(.), perl = TRUE)], ".wav")
+        )) %>%
+    mutate(Test_Audio = paste0(abbreviate(paste(substr(Test_Image, 1, 2), Sentential_Connective, Mentioned_Object, Agent_Mood), 6), ".wav")) %>%
+    mutate(Top_Left     = substr(Spatial_Order, 1, 2),
+           Top_Right    = substr(Spatial_Order, 4, 5),
+           Bottom_Left  = substr(Spatial_Order, 7, 8),
+           Bottom_Right = substr(Spatial_Order, 10, 11))
+Test_Stimuli <- Test_Stimuli_Full %>%
+    select(Split, Sentential_Connective, Mentioned_Object, Agent_Mood,
+           Spatial_Order, Temporal_Order, 
+           Top_Left, Top_Right, Bottom_Left, Bottom_Right,
+           Familize_1_Object_Image, Familize_1_Object_Audio, Familize_2_Object_Image, Familize_2_Object_Audio,
+           Test_Image, Test_Audio)
+#################################### 3. Generate the Test Audios and Test_Stimuli File  ############################
+Full_Information <- list(Audio_File_Information = Audio_File_Information, 
+           Test_Images_Information = Test_Images_Information, 
+           Test_Stimuli_Full = Test_Stimuli_Full, 
+           Test_Stimuli = Test_Stimuli)
+return(Full_Information)              
+}
+
+####################################################################################################################################################################
+########  Conditional_Test_Image_Generator
+####################################################################################################################################################################
 ## Notes: 
 ## This function requires 
 ## 1. A Root_Directory,
@@ -149,5 +257,71 @@ dir.create(File_Path, showWarnings = FALSE)
 print(Test_Images[row, "Test_Image"])
 magick::image_write(Image_Add_Numbers, file.path(File_Path, Test_Images[row, "Test_Image"]))		
 }
-########## 7. Run the function to draw the image ####################################################################################################
-#Conditional_Test_Image_Generator()
+
+####################################################################################################################################################################
+########  Conditional_Test_Audio_Generator
+####################################################################################################################################################################
+
+#### Notes: 
+## 1. The root directory: Root_Directory
+## 3. Two Files Stored in the Root Directory and their Required Columns:
+##    a. Sentential_Compoents: Component_Image, Component_Audio
+##    b. Test_Stimuli: Sentential_Connective, Mentioned_Object, Agent_Mood, Object_Same_Image, Object_Different_Image, Test_Audio, Test_Image
+## 2. Two folders in the root directory: 
+##    a. Input_Audio_Component_Folder: The Folder storing the audio elements that are going to be concatenated to form the test audios. 
+##       The names of the components should be the same as the column of "Component_Audio" in the "Sentential_Components" file.
+##    b. Output_Test_Audio_Folder (Created one if it does not exist): 
+
+Conditional_Test_Audio_Generator <- function(
+  row = 1,
+  Root_Directory = "~/Desktop/Conditional_New",
+  Input_Audio_Component_Folder = "Important_Originals/Objects_Audios",
+  Output_Test_Audio_Folder = "Test_Audios",
+  Sentential_Components = "Important_Originals/Sentential_Components", 
+  Test_Stimuli_Information = NULL,
+  Mentioned_Object_Expected_Length = 1400
+  ){
+Sentential_Components <- read.csv(file.path(Root_Directory, paste0(Sentential_Components, ".csv")), header = TRUE, stringsAsFactors = FALSE)
+if (is.null(Test_Stimuli_Information)) {
+    Test_Stimuli <- as.data.frame(get("Test_Stimuli_Full", envir = parent.env(environment()))) # .GlobalEnv
+  } else {
+    Test_Stimuli <- read.csv(file.path(Root_Directory, paste0(Test_Stimuli_Information, ".csv")), header = TRUE, stringsAsFactors = FALSE)
+  }
+Audio_Component_Input_Directory <- file.path(Root_Directory, Input_Audio_Component_Folder)
+Sentential_Connectives <- data.frame(Because = c("Because", "Therefore", "Very"), IF = c("IF", "Then", "Will"))
+Sentential_Connective_1 <- Sentential_Connectives[1, Test_Stimuli[row, "Sentential_Connective"]]
+Sentential_Connective_1_Audio_Name <- Sentential_Components[Sentential_Components$Component_Image == Sentential_Connective_1, "Component_Audio"]
+Sentential_Connective_1_Audio_File <- tuneR::readWave(file.path(Audio_Component_Input_Directory, paste0(Sentential_Connective_1_Audio_Name, ".wav")))
+Box_In_Audio_Audio_File <- tuneR::readWave(file.path(Audio_Component_Input_Directory, "XiangZiLi.wav"))
+IS_Audio_File <- tuneR::readWave(file.path(Audio_Component_Input_Directory, "Shi.wav"))
+Mentioned_Object <- Test_Stimuli[row, grepl(paste0(Test_Stimuli[row, "Mentioned_Object"], "_Image"), colnames(Test_Stimuli))]
+Mentioned_Object_Audio_Name <- Sentential_Components[Sentential_Components$Component_Image == Mentioned_Object, "Component_Audio"]
+Mentioned_Object_Audio_File_0 <- tuneR::readWave(file.path(Audio_Component_Input_Directory, paste0(Mentioned_Object_Audio_Name, ".wav")))
+Mentioned_Object_Audio_File_0_Length <- ((length(Mentioned_Object_Audio_File_0 @ left) / Mentioned_Object_Audio_File_0 @ samp.rate))
+Mentioned_Object_Audio_Silence_Length <- Mentioned_Object_Expected_Length / 1000 - Mentioned_Object_Audio_File_0_Length
+if (Mentioned_Object_Audio_Silence_Length > 0) {
+      Mentioned_Object_Audio_Silence <- tuneR::silence(Mentioned_Object_Audio_Silence_Length, xunit = "time", pcm = TRUE, bit = 16)
+      Mentioned_Object_Audio_File <- tuneR::bind(Mentioned_Object_Audio_File_0, Mentioned_Object_Audio_Silence)	
+  } else {
+      Mentioned_Object_Audio_File <- Mentioned_Object_Audio_File_0
+  }
+Sentential_Connective_2 <- Sentential_Connectives[2, Test_Stimuli[row, "Sentential_Connective"]]
+Sentential_Connective_2_Audio_Name <- Sentential_Components[Sentential_Components$Component_Image == Sentential_Connective_2, "Component_Audio"]
+Sentential_Connective_2_Audio_File <- tuneR::readWave(file.path(Audio_Component_Input_Directory, paste0(Sentential_Connective_2_Audio_Name, ".wav")))
+Agent_Name_Audio_File <- tuneR::readWave(file.path(Audio_Component_Input_Directory, "XiaoMing.wav"))
+Sentential_Connective_3 <- Sentential_Connectives[3, Test_Stimuli[row, "Sentential_Connective"]]
+Sentential_Connective_3_Audio_Name <- Sentential_Components[Sentential_Components$Component_Image == Sentential_Connective_3, "Component_Audio"]
+Sentential_Connective_3_Audio_File <- tuneR::readWave(file.path(Audio_Component_Input_Directory, paste0(Sentential_Connective_3_Audio_Name, ".wav")))
+Agent_Mood <- Test_Stimuli[row, "Agent_Mood"]
+Agent_Mood_Audio_Name <- Sentential_Components[Sentential_Components$Component_Image == Agent_Mood, "Component_Audio"]
+Agent_Mood_Audio_File <- tuneR::readWave(file.path(Audio_Component_Input_Directory, paste0(Agent_Mood_Audio_Name, ".wav")))
+Test_Sentence_Audio <- tuneR::bind(
+    Sentential_Connective_1_Audio_File, Box_In_Audio_Audio_File, IS_Audio_File,  Mentioned_Object_Audio_File,
+    Sentential_Connective_2_Audio_File, Agent_Name_Audio_File, Sentential_Connective_3_Audio_File, Agent_Mood_Audio_File)
+Test_Audios_Output_Directory <- file.path(Root_Directory, Output_Test_Audio_Folder)
+dir.create(Test_Audios_Output_Directory, showWarnings = FALSE)
+Test_Audios_Output_Name <- file.path(Test_Audios_Output_Directory, Test_Stimuli[row, "Test_Audio"])
+print(Test_Stimuli[row, "Test_Audio"])
+tuneR::writeWave(Test_Sentence_Audio, Test_Audios_Output_Name)
+#tuneR::play(Test_Sentence_Audio, player = '/usr/bin/afplay')
+}
