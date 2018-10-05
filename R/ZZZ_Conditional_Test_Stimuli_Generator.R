@@ -1,15 +1,12 @@
 ####################################################################################################################################################################
 ########  Conditional_Information_Generator
 ####################################################################################################################################################################
-Conditional_Information_Generator <- function(
-Root_Directory = "~/Desktop/Conditional_New",
-Objects_Audios_Folder = "Important_Originals/Objects_Audios",
-Sentential_Components_File = "Important_Originals/Sentential_Components"
-){
+Conditional_Information_Generator <- function(Root_Directory, Input_Audio_Component_Folder, Sentential_Components_File){
+#Conditional_Information_Generator <- function(){
 #################################### 1. Explore the length of the Audio Files ###########################
 ### a. Read the Audio Files ###########################
 library(tuneR)
-Audio_File_Directory <- file.path(Root_Directory, Objects_Audios_Folder)
+Audio_File_Directory <- file.path(Root_Directory, Input_Audio_Component_Folder)
 Audio_File_Info <- acqr::List_Audio_Files(Audio_File_Directory)
 
 ### b. Retract the length of Objects ###########################
@@ -116,27 +113,15 @@ return(Full_Information)
 ##    c. Output_Test_Image_Folder: The folder used to store the created test images.
 
 ############ 0. Define the Function ################################################################################################
-Conditional_Test_Image_Generator <- function(
-    row = 1,
-    Root_Directory = "~/Desktop/Conditional_New",
-    Input_Objects_Folder = "Important_Originals/Objects_Images",
-    Input_Boxes_Folder = "Important_Originals/Boxes",
-    Output_Test_Image_Folder = "Test_Images",
-    Test_Images_Information = NULL
-){
+Conditional_Test_Image_Generator <- function(Test_Image_Row, Root_Directory, Input_Objects_Folder, Input_Boxes_Folder, Output_Test_Image_Folder, Test_Image_File){
 suppressMessages(library(magick))
-if (is.null(Test_Images_Information)) {
-	Test_Images <- as.data.frame(get("Test_Images_Information", envir = parent.env(environment()))) # .GlobalEnv
-} else {
-    Test_Images <- read.csv(file.path(Root_Directory, paste0(Test_Images_Information, ".csv")), header = TRUE, stringsAsFactors = FALSE)	
-}
 ########## 1. Read Objects into R ####################################################################################################
-Object_Same_File <- file.path(Root_Directory, Input_Objects_Folder, paste0(Test_Images[row, "Object_Same_Image"], ".png"))
+Object_Same_File <- file.path(Root_Directory, Input_Objects_Folder, paste0(Test_Image_File[Test_Image_Row, "Object_Same_Image"], ".png"))
 Object_Same <- magick::image_read(Object_Same_File)
 Object_Same <- magick::image_resize(Object_Same, geometry = geometry_size_percent(width = 200/600 * 100))
 Brand_Same  <- magick::image_resize(Object_Same, geometry = geometry_size_percent(width = 70/200 * 100))
 
-Object_Different_File <- file.path(Root_Directory, Input_Objects_Folder, paste0(Test_Images[row, "Object_Different_Image"], ".png"))
+Object_Different_File <- file.path(Root_Directory, Input_Objects_Folder, paste0(Test_Image_File[Test_Image_Row, "Object_Different_Image"], ".png"))
 Object_Different <- magick::image_read(Object_Different_File)
 Object_Different <- magick::image_resize(Object_Different, geometry = geometry_size_percent(width = 200/600 * 100))
 Brand_Different  <- magick::image_resize(Object_Different, geometry = geometry_size_percent(width = 70/200 * 100))
@@ -225,7 +210,7 @@ stringsAsFactors = FALSE
 rownames(Image_Information) <- Image_Information$Spatial_Order
 
 ########## 6. Combine different elements together ####################################################################################################
-Condition <- Test_Images[row, "Spatial_Order"]
+Condition <- Test_Image_File[Test_Image_Row, "Spatial_Order"]
 `%>%` <- magrittr::`%>%`
 Image_Add_Boxes <- magick::image_blank(width = 1024, height = 768, color = "lightgray") %>%
     magick::image_composite(eval(parse(text = Image_Information[Condition, "Box_Top_Left"])),     offset = Image_Information[Condition, "Box_Offset_Top_Left"]) %>%
@@ -254,14 +239,13 @@ Image_Add_Numbers <- Image_Add_Brands %>%
 # magick::image_browse(Image_Add_Numbers)
 File_Path <- file.path(Root_Directory, Output_Test_Image_Folder)
 dir.create(File_Path, showWarnings = FALSE)
-print(Test_Images[row, "Test_Image"])
-magick::image_write(Image_Add_Numbers, file.path(File_Path, Test_Images[row, "Test_Image"]))		
+print(Test_Image_File[Test_Image_Row, "Test_Image"])
+magick::image_write(Image_Add_Numbers, file.path(File_Path, Test_Image_File[Test_Image_Row, "Test_Image"]))		
 }
 
 ####################################################################################################################################################################
 ########  Conditional_Test_Audio_Generator
 ####################################################################################################################################################################
-
 #### Notes: 
 ## 1. The root directory: Root_Directory
 ## 3. Two Files Stored in the Root Directory and their Required Columns:
@@ -272,29 +256,17 @@ magick::image_write(Image_Add_Numbers, file.path(File_Path, Test_Images[row, "Te
 ##       The names of the components should be the same as the column of "Component_Audio" in the "Sentential_Components" file.
 ##    b. Output_Test_Audio_Folder (Created one if it does not exist): 
 
-Conditional_Test_Audio_Generator <- function(
-  row = 1,
-  Root_Directory = "~/Desktop/Conditional_New",
-  Input_Audio_Component_Folder = "Important_Originals/Objects_Audios",
-  Output_Test_Audio_Folder = "Test_Audios",
-  Sentential_Components = "Important_Originals/Sentential_Components", 
-  Test_Stimuli_Information = NULL,
-  Mentioned_Object_Expected_Length = 1400
-  ){
-Sentential_Components <- read.csv(file.path(Root_Directory, paste0(Sentential_Components, ".csv")), header = TRUE, stringsAsFactors = FALSE)
-if (is.null(Test_Stimuli_Information)) {
-    Test_Stimuli <- as.data.frame(get("Test_Stimuli_Full", envir = parent.env(environment()))) # .GlobalEnv
-  } else {
-    Test_Stimuli <- read.csv(file.path(Root_Directory, paste0(Test_Stimuli_Information, ".csv")), header = TRUE, stringsAsFactors = FALSE)
-  }
+Conditional_Test_Audio_Generator <- function(Test_Stimuli_Row, Root_Directory, Input_Audio_Component_Folder,  Output_Test_Audio_Folder,  Sentential_Components_File, Test_Stimuli_File, Mentioned_Object_Expected_Length){
+#Conditional_Test_Audio_Generator <- function(){
+Sentential_Components <- read.csv(file.path(Root_Directory, paste0(Sentential_Components_File, ".csv")), header = TRUE, stringsAsFactors = FALSE)
 Audio_Component_Input_Directory <- file.path(Root_Directory, Input_Audio_Component_Folder)
 Sentential_Connectives <- data.frame(Because = c("Because", "Therefore", "Very"), IF = c("IF", "Then", "Will"))
-Sentential_Connective_1 <- Sentential_Connectives[1, Test_Stimuli[row, "Sentential_Connective"]]
+Sentential_Connective_1 <- Sentential_Connectives[1, Test_Stimuli_File[Test_Stimuli_Row, "Sentential_Connective"]]
 Sentential_Connective_1_Audio_Name <- Sentential_Components[Sentential_Components$Component_Image == Sentential_Connective_1, "Component_Audio"]
 Sentential_Connective_1_Audio_File <- tuneR::readWave(file.path(Audio_Component_Input_Directory, paste0(Sentential_Connective_1_Audio_Name, ".wav")))
 Box_In_Audio_Audio_File <- tuneR::readWave(file.path(Audio_Component_Input_Directory, "XiangZiLi.wav"))
 IS_Audio_File <- tuneR::readWave(file.path(Audio_Component_Input_Directory, "Shi.wav"))
-Mentioned_Object <- Test_Stimuli[row, grepl(paste0(Test_Stimuli[row, "Mentioned_Object"], "_Image"), colnames(Test_Stimuli))]
+Mentioned_Object <- Test_Stimuli_File[Test_Stimuli_Row, grepl(paste0(Test_Stimuli_File[Test_Stimuli_Row, "Mentioned_Object"], "_Image"), colnames(Test_Stimuli_File))]
 Mentioned_Object_Audio_Name <- Sentential_Components[Sentential_Components$Component_Image == Mentioned_Object, "Component_Audio"]
 Mentioned_Object_Audio_File_0 <- tuneR::readWave(file.path(Audio_Component_Input_Directory, paste0(Mentioned_Object_Audio_Name, ".wav")))
 Mentioned_Object_Audio_File_0_Length <- ((length(Mentioned_Object_Audio_File_0 @ left) / Mentioned_Object_Audio_File_0 @ samp.rate))
@@ -305,14 +277,14 @@ if (Mentioned_Object_Audio_Silence_Length > 0) {
   } else {
       Mentioned_Object_Audio_File <- Mentioned_Object_Audio_File_0
   }
-Sentential_Connective_2 <- Sentential_Connectives[2, Test_Stimuli[row, "Sentential_Connective"]]
+Sentential_Connective_2 <- Sentential_Connectives[2, Test_Stimuli_File[Test_Stimuli_Row, "Sentential_Connective"]]
 Sentential_Connective_2_Audio_Name <- Sentential_Components[Sentential_Components$Component_Image == Sentential_Connective_2, "Component_Audio"]
 Sentential_Connective_2_Audio_File <- tuneR::readWave(file.path(Audio_Component_Input_Directory, paste0(Sentential_Connective_2_Audio_Name, ".wav")))
 Agent_Name_Audio_File <- tuneR::readWave(file.path(Audio_Component_Input_Directory, "XiaoMing.wav"))
-Sentential_Connective_3 <- Sentential_Connectives[3, Test_Stimuli[row, "Sentential_Connective"]]
+Sentential_Connective_3 <- Sentential_Connectives[3, Test_Stimuli_File[Test_Stimuli_Row, "Sentential_Connective"]]
 Sentential_Connective_3_Audio_Name <- Sentential_Components[Sentential_Components$Component_Image == Sentential_Connective_3, "Component_Audio"]
 Sentential_Connective_3_Audio_File <- tuneR::readWave(file.path(Audio_Component_Input_Directory, paste0(Sentential_Connective_3_Audio_Name, ".wav")))
-Agent_Mood <- Test_Stimuli[row, "Agent_Mood"]
+Agent_Mood <- Test_Stimuli_File[Test_Stimuli_Row, "Agent_Mood"]
 Agent_Mood_Audio_Name <- Sentential_Components[Sentential_Components$Component_Image == Agent_Mood, "Component_Audio"]
 Agent_Mood_Audio_File <- tuneR::readWave(file.path(Audio_Component_Input_Directory, paste0(Agent_Mood_Audio_Name, ".wav")))
 Test_Sentence_Audio <- tuneR::bind(
@@ -320,8 +292,44 @@ Test_Sentence_Audio <- tuneR::bind(
     Sentential_Connective_2_Audio_File, Agent_Name_Audio_File, Sentential_Connective_3_Audio_File, Agent_Mood_Audio_File)
 Test_Audios_Output_Directory <- file.path(Root_Directory, Output_Test_Audio_Folder)
 dir.create(Test_Audios_Output_Directory, showWarnings = FALSE)
-Test_Audios_Output_Name <- file.path(Test_Audios_Output_Directory, Test_Stimuli[row, "Test_Audio"])
-print(Test_Stimuli[row, "Test_Audio"])
+Test_Audios_Output_Name <- file.path(Test_Audios_Output_Directory, Test_Stimuli_File[Test_Stimuli_Row, "Test_Audio"])
+print(Test_Stimuli_File[Test_Stimuli_Row, "Test_Audio"])
 tuneR::writeWave(Test_Sentence_Audio, Test_Audios_Output_Name)
 #tuneR::play(Test_Sentence_Audio, player = '/usr/bin/afplay')
 }
+
+####################################################################################################################################################################
+########  Conditional_Information_Generator
+###################################################################################################################################################################
+Conditional_Full <- function(
+Root_Directory = "~/Desktop/Conditional_New",
+Sentential_Components_File = "Important_Originals/Sentential_Components",
+Input_Audio_Component_Folder = "Important_Originals/Objects_Audios",
+Input_Objects_Folder = "Important_Originals/Objects_Images",
+Input_Boxes_Folder = "Important_Originals/Boxes",
+Output_Test_Image_Folder = "Test_Images",
+Output_Test_Audio_Folder = "Test_Audios",
+Mentioned_Object_Expected_Length = 1400
+){
+Conditional_Test_Stimuli_Data <- Conditional_Information_Generator(Root_Directory, Input_Audio_Component_Folder, Sentential_Components_File)
+Audio_File_Information <- Conditional_Test_Stimuli_Data $Audio_File_Information
+print("========== Audio Info ==========")
+print(Audio_File_Information)
+Test_Image_File <- Conditional_Test_Stimuli_Data $ Test_Images_Information
+Test_Stimuli_File <- Conditional_Test_Stimuli_Data $ Test_Stimuli_Full
+Test_Stimuli <- Conditional_Test_Stimuli_Data $ Test_Stimuli
+write.csv(Test_Stimuli, file.path(Root_Directory, "Test_Stimuli.csv"), row.names = FALSE)
+write.table(Test_Stimuli, file.path(Root_Directory, "Test_Stimuli.txt"), sep = "\t", row.names = FALSE)
+
+Conditional_Test_Image_Generator_Function <- function(i) Conditional_Test_Image_Generator(Test_Image_Row = i, 
+    Root_Directory, Input_Objects_Folder, Input_Boxes_Folder, Output_Test_Image_Folder, Test_Image_File)
+print("========== Test Images ==========")
+invisible(sapply(1:nrow(Test_Image_File), Conditional_Test_Image_Generator_Function))
+
+Conditional_Test_Audio_Generator_Function <- function(i) Conditional_Test_Audio_Generator(Test_Stimuli_Row = i, 
+    Root_Directory, Input_Audio_Component_Folder,  Output_Test_Audio_Folder, Sentential_Components_File, Test_Stimuli_File, Mentioned_Object_Expected_Length)
+print("========== Test Audios ==========")
+invisible(sapply(1:nrow(Test_Stimuli_File), Conditional_Test_Audio_Generator_Function))	
+}
+
+
