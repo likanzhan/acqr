@@ -11,36 +11,36 @@
 Conditional_Test_Image_Generator <- function(
     row = 1,
     Root_Directory = "~/Desktop/Conditional_New",
-    Input_Objects_Folder = "Objects_Images",
-    Input_Boxes_Folder = "Boxes",
+    Input_Objects_Folder = "Important_Originals/Objects_Images",
+    Input_Boxes_Folder = "Important_Originals/Boxes",
     Output_Test_Image_Folder = "Test_Images",
-    Test_Images_Info = NULL
+    Test_Images_Information = NULL
 ){
 suppressMessages(library(magick))
-if (is.null(Test_Images_Info)) {
-	Test_Images <- as.data.frame(Test_Images)
+if (is.null(Test_Images_Information)) {
+	Test_Images <- as.data.frame(get("Test_Images_Information", envir = parent.env(environment()))) # .GlobalEnv
 } else {
-    Test_Images <- read.csv(paste0(Root_Directory, "/", Test_Images_Info, ".csv"), header = TRUE, stringsAsFactors = FALSE)	
+    Test_Images <- read.csv(file.path(Root_Directory, paste0(Test_Images_Information, ".csv")), header = TRUE, stringsAsFactors = FALSE)	
 }
 ########## 1. Read Objects into R ####################################################################################################
-Object_Same_File <- paste0(Root_Directory, "/", Input_Objects_Folder, "/", Test_Images[row, "Object_Same_Image"], ".png")
+Object_Same_File <- file.path(Root_Directory, Input_Objects_Folder, paste0(Test_Images[row, "Object_Same_Image"], ".png"))
 Object_Same <- magick::image_read(Object_Same_File)
 Object_Same <- magick::image_resize(Object_Same, geometry = geometry_size_percent(width = 200/600 * 100))
 Brand_Same  <- magick::image_resize(Object_Same, geometry = geometry_size_percent(width = 70/200 * 100))
 
-Object_Different_File <- paste0(Root_Directory, "/", Input_Objects_Folder, "/", Test_Images[row, "Object_Different_Image"], ".png")
+Object_Different_File <- file.path(Root_Directory, Input_Objects_Folder, paste0(Test_Images[row, "Object_Different_Image"], ".png"))
 Object_Different <- magick::image_read(Object_Different_File)
 Object_Different <- magick::image_resize(Object_Different, geometry = geometry_size_percent(width = 200/600 * 100))
 Brand_Different  <- magick::image_resize(Object_Different, geometry = geometry_size_percent(width = 70/200 * 100))
 
 ########## 2. Read Boxes into R and Define offsets ####################################################################################################
-Box_Open_File <- paste0(Root_Directory, "/", Input_Boxes_Folder, "/", "Box_Open.pdf")
+Box_Open_File <- file.path(Root_Directory, Input_Boxes_Folder, "Box_Open.pdf")
 Box_Open    <- magick::image_read_pdf(Box_Open_File,   density = 323)
 Box_Open <- magick::image_transparent(Box_Open, color = "white") # Remove background
-Box_Closed_File <- paste0(Root_Directory, "/", Input_Boxes_Folder, "/", "Box_Closed.pdf")
+Box_Closed_File <- file.path(Root_Directory, Input_Boxes_Folder, "Box_Closed.pdf")
 Box_Closed  <- magick::image_read_pdf(Box_Closed_File, density = 323)
 Box_Closed <- magick::image_transparent(Box_Closed, color = "white")
-Box_Cover_File <- paste0(Root_Directory, "/", Input_Boxes_Folder, "/", "Box_Cover.pdf")
+Box_Cover_File <- file.path(Root_Directory, Input_Boxes_Folder, "Box_Cover.pdf")
 Box_Cover   <- magick::image_read_pdf(Box_Cover_File,  density = 323)
 
 Box_Open_Width   <- magick::image_info(Box_Open)$width   # Box_Open_Width  <- 320
@@ -147,7 +147,7 @@ Image_Add_Numbers <- Image_Add_Brands %>%
 File_Path <- file.path(Root_Directory, Output_Test_Image_Folder)
 dir.create(File_Path, showWarnings = FALSE)
 print(Test_Images[row, "Test_Image"])
-magick::image_write(Image_Add_Numbers, paste0(File_Path, "/", Test_Images[row, "Test_Image"]))		
+magick::image_write(Image_Add_Numbers, file.path(File_Path, Test_Images[row, "Test_Image"]))		
 }
 ########## 7. Run the function to draw the image ####################################################################################################
 #Conditional_Test_Image_Generator()
