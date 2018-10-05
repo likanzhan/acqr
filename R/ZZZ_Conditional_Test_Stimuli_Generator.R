@@ -1,6 +1,6 @@
-####################################################################################################################################################################
+################################################################################
 ########  Conditional_Information_Generator
-####################################################################################################################################################################
+################################################################################
 Conditional_Information_Generator <- function(
     Root_Directory, Input_Audio_Component_Folder, Sentential_Components_File
 ){
@@ -108,9 +108,9 @@ Conditional_Information_Generator <- function(
     return(Full_Information)              
 }
 
-####################################################################################################################################################################
+################################################################################
 ########  Conditional_Test_Image_Generator
-####################################################################################################################################################################
+################################################################################
 ## Notes: 
 ## This function requires 
 ## 1. A Root_Directory,
@@ -120,12 +120,12 @@ Conditional_Information_Generator <- function(
 ##    b. Input_Boxes_Foler: Boxes and the covers used to concatenate the test images.
 ##    c. Output_Test_Image_Folder: The folder used to store the created test images.
 
-############ 0. Define the Function ################################################################################################
+############ 0. Define the Function ###################################################################################
 Conditional_Test_Image_Generator <- function(
     Test_Image_Row, Root_Directory, Input_Objects_Folder, Input_Boxes_Folder, Output_Test_Image_Folder, Test_Image_File
 ){
 
-########## 1. Read Objects into R ####################################################################################################
+########## 1. Read Objects into R ###################################################################################
     suppressMessages(library(magick))
     Object_Same_File <- file.path(Root_Directory, Input_Objects_Folder, 
                                   paste0(Test_Image_File[Test_Image_Row, "Object_Same_Image"], ".png"))
@@ -143,7 +143,7 @@ Conditional_Test_Image_Generator <- function(
     Brand_Different       <- magick::image_resize(Object_Different, 
                                                   geometry = geometry_size_percent(width = 70 / 200 * 100))
 
-########## 2. Read Boxes into R and Define offsets ####################################################################################################
+########## 2. Read Boxes into R and Define offsets ###################################################################
     Box_Open_File   <- file.path(Root_Directory, Input_Boxes_Folder, "Box_Open.pdf")
     Box_Open        <- magick::image_read_pdf(Box_Open_File,   density = 323)
     Box_Open        <- magick::image_transparent(Box_Open, color = "white") # Remove background
@@ -179,7 +179,7 @@ Conditional_Test_Image_Generator <- function(
     Offset_Bottom_Right_Box_Closed <- paste0("+", Box_Open_Right_Offset_X, 
                                              "+", Box_Open_Bottom_Offset_Y + Height_Difference_Open_Closed)
 
-########## 3. Define objects offsets ####################################################################################################
+########## 3. Define objects offsets #########################################################################
     Object_x_Adjust <- 60
     Object_y_Adjust <- 5
     Offset_Object_Top_Left     <- paste0("+",  Box_Open_Left_Offset_X   + Object_x_Adjust, 
@@ -216,7 +216,7 @@ Conditional_Test_Image_Generator <- function(
                                         "+", Box_Open_Bottom_Offset_Y + Height_Difference_Open_Cover + 
                                              Height_Difference_Open_Brand / 2)
 
-########## 4. Define annotation locations ####################################################################################################
+########## 4. Define annotation locations ####################################################################
     Annotation_x_Adjust <- 180
     Annotation_y_Adjust <- 15
     Annotation_Offset_Top_Left     <- paste0("+", Box_Open_Left_Offset_X   + Annotation_x_Adjust, 
@@ -232,7 +232,7 @@ Conditional_Test_Image_Generator <- function(
                                              "+", Box_Open_Bottom_Offset_Y + Height_Difference_Open_Cover + 
                                                   Height_Difference_Open_Brand / 2 + Annotation_y_Adjust)
 
-########## 5. Combine All information into a Data frame ####################################################################################################
+########## 5. Combine All information into a Data frame #####################################################
     Image_Information <- data.frame(
         Spatial_Order        = c("CS_DD_SD_SS", "SD_SS_CS_DD", "DD_CS_SS_SD", "SS_SD_DD_CS"),
         Box_Top_Left         = c( "Box_Closed",    "Box_Open",    "Box_Open",    "Box_Open"),
@@ -260,7 +260,7 @@ Conditional_Test_Image_Generator <- function(
         stringsAsFactors = FALSE)
     rownames(Image_Information) <- Image_Information$Spatial_Order
 
-########## 6. Combine different elements together ####################################################################################################
+########## 6. Combine different elements together ################################################################
     Condition <- Test_Image_File[Test_Image_Row, "Spatial_Order"]
     `%>%` <- magrittr::`%>%`
     Image_Add_Boxes <- magick::image_blank(width = 1024, height = 768, color = "lightgray") %>%
@@ -302,15 +302,16 @@ Conditional_Test_Image_Generator <- function(
     magick::image_write(Image_Add_Numbers, file.path(File_Path, Test_Image_File[Test_Image_Row, "Test_Image"]))		
 }
 
-####################################################################################################################################################################
+################################################################################
 ########  Conditional_Test_Audio_Generator
-####################################################################################################################################################################
+################################################################################
 #### Notes: 
 ## 1. The root directory: Root_Directory
-## 3. Two Files Stored in the Root Directory and their Required Columns:
+## 2. Two Files Stored in the Root Directory and their Required Columns:
 ##    a. Sentential_Compoents: Component_Image, Component_Audio
-##    b. Test_Stimuli: Sentential_Connective, Mentioned_Object, Agent_Mood, Object_Same_Image, Object_Different_Image, Test_Audio, Test_Image
-## 2. Two folders in the root directory: 
+##    b. Test_Stimuli: Sentential_Connective, Mentioned_Object, Agent_Mood, Object_Same_Image, 
+##      Object_Different_Image, Test_Audio, Test_Image
+## 3. Two folders in the root directory: 
 ##    a. Input_Audio_Component_Folder: The Folder storing the audio elements that are going to be concatenated to form the test audios. 
 ##       The names of the components should be the same as the column of "Component_Audio" in the "Sentential_Components" file.
 ##    b. Output_Test_Audio_Folder (Created one if it does not exist): 
@@ -331,13 +332,19 @@ Conditional_Test_Audio_Generator <- function(
     Box_In_Audio_Audio_File <- tuneR::readWave(file.path(Audio_Component_Input_Directory, "XiangZiLi.wav"))
     IS_Audio_File <- tuneR::readWave(file.path(Audio_Component_Input_Directory, "Shi.wav"))
     Mentioned_Object <- Test_Stimuli_File[Test_Stimuli_Row, 
-         grepl(paste0(Test_Stimuli_File[Test_Stimuli_Row, "Mentioned_Object"], "_Image"), colnames(Test_Stimuli_File))]
-    Mentioned_Object_Audio_Name <- Sentential_Components[Sentential_Components$Component_Image == Mentioned_Object, "Component_Audio"]
-    Mentioned_Object_Audio_File_0 <- tuneR::readWave(file.path(Audio_Component_Input_Directory, paste0(Mentioned_Object_Audio_Name, ".wav")))
-    Mentioned_Object_Audio_File_0_Length <- ((length(Mentioned_Object_Audio_File_0 @ left) / Mentioned_Object_Audio_File_0 @ samp.rate))
-    Mentioned_Object_Audio_Silence_Length <- Mentioned_Object_Expected_Length / 1000 - Mentioned_Object_Audio_File_0_Length
+         grepl(paste0(Test_Stimuli_File[Test_Stimuli_Row, "Mentioned_Object"], "_Image"), 
+               colnames(Test_Stimuli_File))]
+    Mentioned_Object_Audio_Name <- 
+        Sentential_Components[Sentential_Components$Component_Image == Mentioned_Object, "Component_Audio"]
+    Mentioned_Object_Audio_File_0 <- tuneR::readWave(
+        file.path(Audio_Component_Input_Directory, paste0(Mentioned_Object_Audio_Name, ".wav")))
+    Mentioned_Object_Audio_File_0_Length <- 
+        ((length(Mentioned_Object_Audio_File_0 @ left) / Mentioned_Object_Audio_File_0 @ samp.rate))
+    Mentioned_Object_Audio_Silence_Length <- 
+        Mentioned_Object_Expected_Length / 1000 - Mentioned_Object_Audio_File_0_Length
     if (Mentioned_Object_Audio_Silence_Length > 0) {
-          Mentioned_Object_Audio_Silence <- tuneR::silence(Mentioned_Object_Audio_Silence_Length, xunit = "time", pcm = TRUE, bit = 16)
+          Mentioned_Object_Audio_Silence <- tuneR::silence(
+              Mentioned_Object_Audio_Silence_Length, xunit = "time", pcm = TRUE, bit = 16)
           Mentioned_Object_Audio_File <- tuneR::bind(Mentioned_Object_Audio_File_0, Mentioned_Object_Audio_Silence)	
     } else {
           Mentioned_Object_Audio_File <- Mentioned_Object_Audio_File_0
@@ -368,9 +375,9 @@ Conditional_Test_Audio_Generator <- function(
     #tuneR::play(Test_Sentence_Audio, player = '/usr/bin/afplay')
 }
 
-####################################################################################################################################################################
+################################################################################
 ########  A Wrap-up of the Conditional Test Stimuli Generator
-###################################################################################################################################################################
+################################################################################
 Conditional_Full <- function(
     Root_Directory = "~/Desktop/Conditional_New",
     Sentential_Components_File = "Important_Originals/Sentential_Components",
