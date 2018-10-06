@@ -1,11 +1,12 @@
 ################################################################################
 ########  Conditional_Information_Generator
 ################################################################################
+
 Conditional_Information_Generator <- function(
     Root_Directory, Input_Audio_Component_Folder, Sentential_Components_File
 ){
 
-#################################### 1. Explore the length of the Audio Files ###########################
+############## 1. Explore the length of the Audio Files #########################
 ### a. Read the Audio Files ###########################
     library(tuneR)
     Audio_File_Directory <- file.path(Root_Directory, Input_Audio_Component_Folder)
@@ -31,10 +32,13 @@ Conditional_Information_Generator <- function(
         "XiaoMing", "XiaoMing",
         "Hen", "Jiu", 
         "GaoXing", "ShangXin")
-    Other_Elements_Information <- merge(Other_Elements_Audio, Other_Elements_Name, by = "File_Name", all.y = TRUE)
+    Other_Elements_Information <- merge(
+        Other_Elements_Audio, Other_Elements_Name, by = "File_Name", all.y = TRUE)
     Other_Elements_Information <- Other_Elements_Information[
-        order(Other_Elements_Information$Position, Other_Elements_Information$Condition, decreasing = c(FALSE, TRUE)), ]
-    Other_Elements_Information$File_Length <- round(Other_Elements_Information$File_Length * 1000)
+        order(Other_Elements_Information$Position, 
+              Other_Elements_Information$Condition, decreasing = c(FALSE, TRUE)), ]
+    Other_Elements_Information$File_Length <- 
+        round(Other_Elements_Information$File_Length * 1000)
 
 ### d. Combine the Information Together ###########################
     Audio_File_Information <- list(
@@ -42,11 +46,15 @@ Conditional_Information_Generator <- function(
         Object_Audio_File_Max_Length = Object_Audio_File_Max_Length,
         Other_Elements_Information = Other_Elements_Information)
 
-#################################### 2. Generate the Test Images Information ############################
+############### 2. Generate the Test Images Information ########################
+################################################################################
+
     `%>%` <- magrittr::`%>%`
     suppressMessages(library(dplyr))
-    Sentential_Components_File_Directory <- file.path(Root_Directory, paste0(Sentential_Components_File, ".csv"))
-    Sentential_Components <- read.csv(Sentential_Components_File_Directory, header = TRUE, stringsAsFactors = FALSE)
+    Sentential_Components_File_Directory <- 
+        file.path(Root_Directory, paste0(Sentential_Components_File, ".csv"))
+    Sentential_Components <- 
+        read.csv(Sentential_Components_File_Directory, header = TRUE, stringsAsFactors = FALSE)
     Test_Images_Information <- Sentential_Components %>% 
         filter(Component_Category != "Z_Shared") %>%
         filter(!Component_Image %in% c("FengChe", "XiaoDao", "JianDao", "ZhiLou")) %>%
@@ -58,7 +66,8 @@ Conditional_Information_Generator <- function(
         ungroup() %>% 
         mutate(Object_Different_Audio = pull(.[match(Object_Different_Image, Object_Same_Image), 
                                                "Object_Same_Audio"])) %>%
-        mutate(Spatial_Order = rep(c("CS_DD_SD_SS", "SD_SS_CS_DD", "DD_CS_SS_SD", "SS_SD_DD_CS"), 84 / 4)) %>%
+        mutate(Spatial_Order = 
+            rep(c("CS_DD_SD_SS", "SD_SS_CS_DD", "DD_CS_SS_SD", "SS_SD_DD_CS"), 84 / 4)) %>%
         mutate(Temporal_Order = rep(c("Different", "Same"), 84 / 2)) %>%
         mutate(Test_Image = paste0(sprintf("%02d", 1:nrow(.)), ".png")) %>%
         arrange(Component_Category)
@@ -69,8 +78,9 @@ Conditional_Information_Generator <- function(
         Sentential_Connective = c("Because", "IF"), 
         Mentioned_Object      = c("Different", "Same"),
         Agent_Mood            = c("Happy", "Sad"),
-        stringsAsFactors = FALSE)      
-    Experimental_Manipulation <- Experimental_Manipulation[-5, ] # Remove the illicite Condition, i.e., Because-Different-Sad
+        stringsAsFactors = FALSE)   
+    # Remove the illicite Condition, i.e., Because-Different-Sad   
+    Experimental_Manipulation <- Experimental_Manipulation[-5, ] 
     Test_Stimuli_Full <- Experimental_Manipulation %>%
         merge(Test_Images_Information) %>%
         mutate(Split = rep(as.vector(t(acqr::Create_Latin_Square_Matrix(7))), 6)) %>%
@@ -114,7 +124,8 @@ Conditional_Information_Generator <- function(
 ## Notes: 
 ## This function requires 
 ## 1. A Root_Directory,
-## 2. A Test_Images_Info File in the root directory with the following required columns: Object_Same_Image, Object_Different_Image, Spatial_Order, Test_Image
+## 2. A Test_Images_Info File in the root directory with the following required columns: 
+##    Object_Same_Image, Object_Different_Image, Spatial_Order, Test_Image
 ## 3. Three foulders in the Root_Directory:
 ##    a. Input_Objects_Folder: Objects used to concatenate the Test images
 ##    b. Input_Boxes_Foler: Boxes and the covers used to concatenate the test images.
@@ -312,8 +323,10 @@ Conditional_Test_Image_Generator <- function(
 ##    b. Test_Stimuli: Sentential_Connective, Mentioned_Object, Agent_Mood, Object_Same_Image, 
 ##      Object_Different_Image, Test_Audio, Test_Image
 ## 3. Two folders in the root directory: 
-##    a. Input_Audio_Component_Folder: The Folder storing the audio elements that are going to be concatenated to form the test audios. 
-##       The names of the components should be the same as the column of "Component_Audio" in the "Sentential_Components" file.
+##    a. Input_Audio_Component_Folder: The Folder storing the audio elements 
+##       that are going to be concatenated to form the test audios. 
+##       The names of the components should be the same as the column of 
+##       "Component_Audio" in the "Sentential_Components" file.
 ##    b. Output_Test_Audio_Folder (Created one if it does not exist): 
 
 Conditional_Test_Audio_Generator <- function(
