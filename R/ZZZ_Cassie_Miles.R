@@ -4,5 +4,5 @@ mls <- function(path = "~/Downloads/mls") {
     datafr <- do.call("rbind", datalist)
     datafr[, "佣金总和"] <- as.numeric(datafr[, "佣金总和"])
     SMR <- aggregate(datafr["佣金总和"], datafr["商户名（producer）"], sum)
-    readr::write_excel_csv(SMR, dir.create(path, "Miles.csv"))	
+    readr::write_excel_csv(SMR, file.path(path, "Miles.csv"))	
 }
