@@ -7,6 +7,8 @@
 #' @param vls values to be draw
 #' @examples
 #' Plot_Factor_Relation()
+#'
+#' @export
 
 Plot_Factor_Relation <- function(
     R = 2, C = 3,

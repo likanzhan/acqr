@@ -1,3 +1,6 @@
+#' Mean shift
+#' @export
+
 MeanShift <- function(formula, data) {
   if (class(formula) == "lm") {
     fmO <- formula

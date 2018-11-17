@@ -5,6 +5,9 @@
 #' @param Root_Directory The directory that contains the sound files
 #' @examples
 #' Draw_Soundwave_Graph()
+#' @export
+#' @importFrom tuneR readWave
+#' @importFrom seewave oscillo
 
 Plot_Soundwave_Graph <- function(
 Root_Directory = "~/Desktop/Conditional_New/Important_Information/Experiment_Structure"

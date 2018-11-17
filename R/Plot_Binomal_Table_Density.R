@@ -13,6 +13,9 @@
   return(res)
 }
 
+#' Plot the density of binomial 
+#' @export
+
 Binomial_Density <- function(
                              n,
                              frequency = TRUE,

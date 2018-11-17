@@ -1,3 +1,6 @@
+#' Plot F Distribution
+#' @export
+
 Plot_F_Distribution <- function(
                                 df1 = 1, df2 = 14, alpha_level = 0.05,
                                 x_range = c(0, 7), y_range = NULL,

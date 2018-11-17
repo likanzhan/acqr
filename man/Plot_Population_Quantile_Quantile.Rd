@@ -21,4 +21,5 @@ Plot the theoretical quantile-quantile plot (q-q plot)
 Plot_Population_Quantile_Quantile("c", df = 3)
 Plot_Population_Quantile_Quantile("t", df = 3)
 Plot_Population_Quantile_Quantile("f", df1 = 5, df2 = 3, adj = TRUE)
+
 }

@@ -1,3 +1,7 @@
+#' List Audio files in a Directory
+#' @importFrom tuneR readWave
+#' @export
+
 List_Audio_Files <- function(Audio_File_Directory){
 	library(tuneR)
     Audio_File_List <- list.files(Audio_File_Directory)

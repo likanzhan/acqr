@@ -1,3 +1,5 @@
+#' @export
+
 Create_Correlation_Data <- function(rr = 1, number = 50, nrm = TRUE){
 if (nrm) {
   set.seed(2)

@@ -1,3 +1,9 @@
+#' List all samples
+#' @examples
+#' x <- c(2, 4, 6, 8, 11, 15, 50, 60)
+#' xx <- Sampling_Grid(x, size = 3)[["Sampled_Grid"]][["Statistic"]]
+#' @export
+
 Sampling_Grid <- function(data, size = NA, fun = NA, bp = 0.5) {
   if (length(data) == 1) {
     ln <- list(0:1)
@@ -21,5 +27,3 @@ Sampling_Grid <- function(data, size = NA, fun = NA, bp = 0.5) {
   return(Res)
 }
 
-# x <- c(2, 4, 6, 8, 11, 15, 50, 60)
-# xx <- Sampling_Grid(x, size = 3)[["Sampled_Grid"]][["Statistic"]]

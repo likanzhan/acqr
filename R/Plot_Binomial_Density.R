@@ -1,3 +1,8 @@
+#' Plot the density of a binomial distribution
+#' @examples
+#' Plot_Binomial_Density()
+# @export
+
 Plot_Binomial_Density <- function (
 xx = 0:10,
 size = 10,
@@ -44,4 +49,3 @@ axis(1, lwd = 0, lwd.ticks = 1)
 mtext(text = bquote(bold(atop("CDF (cumulative distribution function)", italic(P(X<=x[i]))))),
   side = 3, at = 0.75, las = 1, outer = TRUE)
 }
-#Plot_Binomial_Density()

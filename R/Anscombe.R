@@ -1,3 +1,6 @@
+#' Anscombe
+#' @export
+
 Anscombe <- function(model, q = 0.05) {
   k <- model[["rank"]]
   n <- k + model[["df.residual"]]

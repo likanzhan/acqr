@@ -1,3 +1,8 @@
+#' Extract Sound Fragment
+#'
+#' @import tuneR seewave
+#' @export
+
 Extract_Sound_Fragment <- function(
   Original_File = "NaMe",
   Start_Offset = 0,

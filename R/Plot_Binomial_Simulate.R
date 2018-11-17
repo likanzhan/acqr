@@ -1,3 +1,8 @@
+#' Plot the data stimulating the binomial distribution
+#' @examples
+#' Plot_Binomial_Simulate(pi = 0.3, size = 5)
+#' @export
+
 Plot_Binomial_Simulate <- function(
    samples = 10000, 
    size = 20, 
@@ -25,4 +30,3 @@ Plot_Binomial_Simulate <- function(
   lines(x, fx, type = "p", pch = 16, col = "#ff033e")
   # list(simulated.distribution = a1, theoretical.distribution = b1)
 }
-# Plot_Binomial_Simulate(pi = 0.3, size = 5)

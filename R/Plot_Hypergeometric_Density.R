@@ -1,3 +1,6 @@
+#' Plot the density of a hypergeometric distribution
+#' @export
+
 Plot_Hypergeometric_Density <- function (
 m = c(10, 40, 60),
 n = 10,

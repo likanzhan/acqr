@@ -1,3 +1,6 @@
+#' R to latex
+#' @export
+
 R2LateX <- function(
                     TeXFile,
                     Options = "12pt, a4paper",

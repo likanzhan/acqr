@@ -1,4 +1,6 @@
-# https://en.wikipedia.org/wiki/Birthday_problem
+#' Birthday Problem
+#' @references \url{https://en.wikipedia.org/wiki/Birthday_problem}
+#' @export
 
 Birthday_Problem <- function(size, days = 366) {
   if (!suppressMessages(require("Brobdingnag"))) stop("The package `Brobdingnag` was not installed")

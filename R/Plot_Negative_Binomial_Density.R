@@ -1,3 +1,6 @@
+#' Plot the density of a negative binomial distribution
+#' @export
+
 Plot_Negative_Binomial_Density <- function (
 r = c(1, 3, 5),
 pi = c(0.4, 0.6),

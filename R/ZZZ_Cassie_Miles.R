@@ -1,3 +1,8 @@
+#' Miles for Cassie
+#' @export
+#' @importFrom openxlsx read.xlsx
+#' @importFrom readr write_excel_csv
+
 mls <- function(Directory = "~/Downloads/mls") {
 	if (!dir.exists(Directory)) stop(paste0("路径 ",  dirname(Directory), " 下，文件夹 ",  basename(Directory), " 不存在"))
     filelist <- list.files(Directory, pattern = "^餐饮专票", recursive = FALSE, full.names = TRUE)

@@ -1,3 +1,6 @@
+#' Plot Bayes Factors
+#' @export
+
 ############################
 pBF <- function(
                 type1 = 0.05, # alpha level is 0.05/2

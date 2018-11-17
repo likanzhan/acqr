@@ -1,3 +1,6 @@
+#' Plot the density of a Poisson distribution
+#' @export
+
 Plot_Poisson_Density <- function (
 xx = 0:20,
 #lambda = 4

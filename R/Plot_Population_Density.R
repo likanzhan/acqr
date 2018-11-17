@@ -1,3 +1,6 @@
+#' Plot density distributions of two populations
+#' @export
+
 ####### Plot_Population_Density_with_Two_Distributions
 Plot_Population_Density <- function(
                                     m0 = 0,

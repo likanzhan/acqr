@@ -1,3 +1,9 @@
+#' Plot the Number of lines in R source Code
+#' @examples
+#' Plot_R_Source_Code()
+#' @importFrom R.utils countLines
+#' @export
+
 Plot_R_Source_Code <- function (
 directory = "~/Documents/ADMIN/R-Source-Code/R-3.5.1/src"
 ){
@@ -20,4 +26,3 @@ text(x = 0.5 + 0.2 + 1.2 * (0:2), y = propnum, labels = numbers, pos = 1)
 barplot(propline, names.arg = c("r", "C", "Fortran"), main = "Code Lines")
 text(x = 0.5 + 0.2 + 1.2 * (0:2), y = propline, labels = lines, pos = 1)
 }
-#Plot_R_Source_Code()

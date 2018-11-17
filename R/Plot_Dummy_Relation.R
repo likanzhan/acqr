@@ -7,6 +7,12 @@
 #' @param Interaction Wheter the effects of the dummy variable and the quantative variable are interacted
 #' @examples
 #' Plot_Dummy_Relation()
+#' 
+#' importFrom scales alpha
+#' importFrom ggsci pal_lancet
+#' importFrom nlme lmList
+#'
+#' export
 
 Plot_Dummy_Relation <- function(
 Adj_X = 0,

@@ -1,3 +1,7 @@
+#' Print help information on console
+#' @import tools
+#' @export
+
 print_help_console <- function(
                                topic,
                                format = c("text", "html", "latex", "Rd"),

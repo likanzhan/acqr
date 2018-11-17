@@ -1,3 +1,6 @@
+#' RegCod
+#' @export
+
 RegCod <-
   function(
              RowLevel = 2,

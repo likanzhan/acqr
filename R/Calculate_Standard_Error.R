@@ -1,3 +1,6 @@
+#' Calculate Standard Error
+#' @export
+
 StdErr <- function(
                    sample_size = 1000,
                    sample_number = 1000,

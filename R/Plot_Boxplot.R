@@ -6,6 +6,7 @@
 #' @examples
 #' fat <- c(PASWR::Bodyfat[["fat"]], 60)
 #' Plot_Boxplot(fat)
+#' @export
 
 Plot_Boxplot <- function(data){
 fvnm <- fivenum(data)

@@ -1,3 +1,10 @@
+#' Plot the sample frequency
+#' @examples
+#' sample1 <- c(11, 9, 4, 5, 6, 7, 12, 10)
+#' sample2 <- c(7, 13, 14, 16, 9, 11, 15, 11)
+#' Plot_Sample_Frequency(sample1, sample2, show_sample_deviation = F, show_SST = F)
+#' @export
+
 Plot_Sample_Frequency <- function(
                                   sample1, sample2 = NULL,
                                   x_range = NULL,
@@ -163,7 +170,3 @@ Plot_Sample_Frequency <- function(
     lines(zx, zy, col = "#cf232a", lwd = 2)
   }
 }
-
-sample1 <- c(11, 9, 4, 5, 6, 7, 12, 10)
-sample2 <- c(7, 13, 14, 16, 9, 11, 15, 11)
-# Plot_Sample_Frequency(sample1, sample2, show_sample_deviation = F, show_SST = F)

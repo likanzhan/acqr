@@ -1,3 +1,6 @@
+#' Download pdf files from Frontiers for Youn Minds
+#' @export
+
 dp <- function(id, year = 2018){
     id <- formatC(id, width = 2, format = "d", flag = "0")
     web <- "https://www.frontiersin.org/articles/10.3389/frym."

@@ -1,3 +1,6 @@
+#' LeverageDiscrepancyInfluence
+#' @export
+
 LeverageDiscrepancyInfluence <- function(
                                          Points = c(mean(1:5), 1),
                                          n = 5,

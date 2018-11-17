@@ -1,3 +1,7 @@
+#' Calculate_Kernel_Density
+#' 
+#' @export
+
 Calculate_Kernel_Density <- function(
   x, h = 1,
   x0 = seq(min(x), max(x), length = length(x)),

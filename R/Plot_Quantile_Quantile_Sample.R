@@ -36,6 +36,7 @@ ECDF <- function (data) {
 #' norm100 <- rnorm(100, mean = 50, sd = 10)
 #' qql(nrm100)
 #' Plot_Quantile_Quantile_Sample(nrm100)
+#' @export
 
 Plot_Quantile_Quantile_Sample <- function(data) {
 DECDF <- ECDF(data)

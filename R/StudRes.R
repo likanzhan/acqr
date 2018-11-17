@@ -1,3 +1,6 @@
+#' Student Res
+#' @export
+
 StudRes <- function(formula, data) {
   if (class(formula) == "lm") {
     fm <- formula

@@ -1,3 +1,6 @@
+#' Draw a graph to compare the binomial and Possion distribution
+#' @export
+
 Plot_Compare_Binomial_Poisson <- function(
 pi = 0.1,
 size = 100

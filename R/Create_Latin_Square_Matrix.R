@@ -1,3 +1,6 @@
+#' Create a Latin Squared Matrix
+#' @export
+
 Create_Latin_Square_Matrix <- function(n = 5, Latin = TRUE) {
   mtrx <- matrix(1:n, n, n, byrow = TRUE)
   if (Latin) {

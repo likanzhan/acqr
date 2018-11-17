@@ -1,3 +1,6 @@
+#' Plot FPR
+#' @export
+
 ############
 pFPR <- function() {
   # graph margins

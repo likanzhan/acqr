@@ -1,3 +1,7 @@
+#' Create an Index HTML file
+#' Create a HTML file listing the files in the current directory
+#' @export
+
 Create_Index_Html <- function(
   path = "~/Dropbox/Apps/updog/appendix"
 ){
