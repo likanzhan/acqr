@@ -2,14 +2,15 @@
 % Please edit documentation in R/Merge_Right_Eye_Data_Into_Left.R
 \name{Merge_Right_Eye_Data_Into_Left}
 \alias{Merge_Right_Eye_Data_Into_Left}
-\title{Merge data obtained from Right eye into relevant columns of left columns}
+\title{Merge data obtained from Right eye into relevant columns of left columns
+Merge eye tracing data with eyelink}
 \usage{
-Merge_Right_Eye_Data_Into_Left(EDF)
+Merge_Right_Eye_Data_Into_Left(Eyelink_Data_File)
 }
 \arguments{
-\item{EDF}{Data outputed from Data Viewer samping report
-Merge_Right_Eye_Data_Into_Left()}
+\item{Eyelink_Data_File}{Data outputed from Data Viewer samping report}
 }
 \description{
+Merge data obtained from Right eye into relevant columns of left columns
 Merge eye tracing data with eyelink
 }

@@ -1,7 +1,8 @@
-#' RegCod
+#' Restrict Over-parameterized model
+#' Restrict the overparameterized model into appropriate one
 #' @export
 
-RegCod <-
+Restrict_Overparameterized_Model <-
   function(
              RowLevel = 2,
              ColLevel = 3,

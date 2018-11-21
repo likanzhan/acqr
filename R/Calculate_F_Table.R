@@ -8,8 +8,9 @@
 #' @export
 
 Calculate_F_Table <- function(model) {
-Response_Term <- as.character(formula(model)[2])
-Response <- model[["model"]][[Response_Term]]
+# Response_Term <- as.character(formula(model)[2])
+# Response <- model[["model"]][[Response_Term]]
+Response <- model.response(model.frame(model))
 SSR <- sum((predict(model) - mean(Response)) ^ 2)
 SSE <- deviance(model)
 # SSE <- sum((residuals(model)) ^ 2)
