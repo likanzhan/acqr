@@ -1,14 +1,8 @@
-This r package is only for testing.
+This in progress r package containes a bounch of functions I wrote when I used R to do data analyses, to design behavioral experiments, or to teach statistics.
 
-To install this package,
+To install the `acqr` package, please run the following R code:
 
-First, you need to install the `r` package `devtools`
 ```r
 install.packages("devtools")
-```
-
-Second, you will use the installed package `devtools` to install this `acqr` package from github:
-
-```r
 devtools::install_github('likanzhan/acqr')
 ```

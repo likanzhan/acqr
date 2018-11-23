@@ -1,5 +1,6 @@
 #' Restrict Over-parameterized model
 #' Restrict the overparameterized model into appropriate one
+#' @importFrom MASS fractions
 #' @export
 
 Restrict_Overparameterized_Model <-
@@ -16,7 +17,7 @@ Restrict_Overparameterized_Model <-
     ColLen <- nlevels(ColData)
     RowCol <- expand.grid(C = ColData, R = RowData)
     RowCol <- RowCol[, c(2, 1)]
-    rownames(RowCol) <- paste("mu", RowCol[, "R"], RowCol[, "C"], sep = "")
+    rownames(RowCol) <- paste("mu:", RowCol[, "R"], RowCol[, "C"], sep = "")
 
     ## Overparameterized model matrix
 
@@ -71,6 +72,9 @@ Restrict_Overparameterized_Model <-
     mm <- RowCol[, -c(1:2)]
     mm <- cbind(mu0 = 1, mm)
     mminv <- solve(mm)
+    if (!Dummy) {
+    	mminv <- MASS::fractions(mminv)
+    }
 
     name <- ifelse(Dummy, "Dummy_Coded", "Deviation_Coded")
     res[[paste(name, "Row_Col", sep = "_")]] <- RowCol
