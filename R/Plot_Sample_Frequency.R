@@ -2,24 +2,29 @@
 #' @examples
 #' sample1 <- c(11, 9, 4, 5, 6, 7, 12, 10)
 #' sample2 <- c(7, 13, 14, 16, 9, 11, 15, 11)
-#' Plot_Sample_Frequency(sample1, sample2, show_sample_deviation = F, show_SST = F)
+#' Plot_Sample_Frequency(sample1, sample2, show_sample_deviation = T, deviation_from_population_mean = F)
 #' @export
 
 Plot_Sample_Frequency <- function(
-                                  sample1, sample2 = NULL,
+                                  sample1, 
+                                  sample2 = NULL,
                                   x_range = NULL,
                                   show_sample_deviation = FALSE,
                                   show_sample_grid = TRUE,
                                   show_sample_sigma = FALSE,
-                                  AHZ = FALSE, AVD = TRUE,
+                                  show_sample_variation_range = FALSE,
+                                  standarized_x_axis = FALSE,
+                                  standarized_y_axis = FALSE,
                                   show_population_curve = FALSE,
                                   population_mean = mean(c(sample1, sample2)),
                                   population_sd = sd(c(sample1, sample2)),
-                                  show_SST = TRUE,
-                                  xlab = "", ylab = "Frequency",
+                                  deviation_from_population_mean = TRUE,
+                                  xlab = "", 
+                                  ylab = "Frequency", 
+                                  main = "",
                                   ...) {
   ##### 0. Define colors ######
-  sample1_col <- c("#f8cea2", "#b78135")
+  sample1_col <- c("#f8cea2", "#b78135", "#cf232a")
   sample2_col <- c("#a0d5cf", "#009f9b")
   ##### 1. Calculate the required value ######
   sample_tidy <- function(sample) {
@@ -27,6 +32,8 @@ Plot_Sample_Frequency <- function(
     Table <- as.data.frame(table(sample, dnn = "data"))
     names(Table)[names(Table) == "Freq"] <- "Frequency"
     Table[, "data"] <- as.numeric(as.character(Table[, "data"]))
+    Table[, "data_deviation_rank"] <- rank(abs(scale(Table[, "data"])))
+    Table[, "data_deviation_sign"] <- sign(scale(Table[, "data"]))    
     Table_Unique <- Table[Table[, "data"] != Mean, ]
     res <- list(Table = Table, Table_Unique = Table_Unique, Mean = Mean)
     return(res)
@@ -40,7 +47,11 @@ Plot_Sample_Frequency <- function(
   sample_total_unique_x <- sort(sample_total_unique_x)
   sample_total_unique_frequency <- sample_total_tidy[["Table_Unique"]][["Frequency"]]
   sample_total_unique_length <- nrow(sample_total_tidy[["Table_Unique"]])
-
+  sample_total_deviation_rank <- sample_total_tidy[["Table_Unique"]]$data_deviation_rank
+  sample_total_deviation_rank_range <- sample_total_tidy[["Table_Unique"]][sample_total_deviation_rank %in% range(sample_total_deviation_rank), ]
+  sample_total_deviation_rank_range <- sample_total_deviation_rank_range[!duplicated(sample_total_deviation_rank_range $ data_deviation_sign), ]
+  sample_total_deviation_rank_range <- sample_total_deviation_rank_range[order(sample_total_deviation_rank_range $ data_deviation_rank), ]
+ 
   sample_1_tidy <- sample_tidy(sample1)
   sample_1_values_x <- sample_total_values_x[sample_total_values_x %in% sample1]
   sample_1_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_1_values_x, "Frequency"]
@@ -64,12 +75,11 @@ Plot_Sample_Frequency <- function(
   xzlabel <- round((xlabel - population_mean) / population_sd, 2)
   ylabel <- seq(0, max(sample_total_frequency_x), by = 1)
   ydensitylabel <- format(ylabel / length(sample_total), digits = 2)
-
   ##### 2. Do the plotting ######
   par(mar = c(5, 4, 4, 5) + 0.1)
   hist(sample_total,
     ylim = ylim, xlim = xlim, breaks = breaks, font.lab = 2,
-    col = sample1_col[1], border = sample1_col[2], main = "", xlab = xlab, ylab = ylab,
+    col = sample1_col[1], border = sample1_col[2], main = main, xlab = xlab, ylab = ylab,
     yaxs = "i", xaxs = "i", xaxt = "n", yaxt = "n", ...
   )
   mtext(expression(italic("X")), side = 1, line = 0, adj = 0.99)
@@ -79,13 +89,13 @@ Plot_Sample_Frequency <- function(
   axis(2, at = ylabel, labels = ylabel, lwd = 0, lwd.ticks = 1, las = 1)
 
   ##### 3. Add more axes ######
-  if (AVD) {
+  if (standarized_y_axis) { # AXZ
     axis(4, at = ylim, labels = c("", ""), lwd.ticks = 0)
     axis(4, at = ylabel, labels = ydensitylabel, lwd = 0, lwd.ticks = 1, las = 1)
     mtext("Density", side = 4, line = 4, padj = -1)
   }
 
-  if (AHZ) {
+  if (standarized_x_axis) { # AYD
     axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0, line = 2.5)
     axis(1, at = xlabel, labels = xzlabel, lwd = 0, lwd.ticks = 1, line = 2.5, padj = -0.5)
     mtext(expression(italic("z")), side = 1, line = 2.5, adj = 0.99)
@@ -132,6 +142,20 @@ Plot_Sample_Frequency <- function(
     }
   }
 
+  if (show_sample_variation_range) {
+  	segments(sample_total_deviation_rank_range[, "data"], sample_total_deviation_rank_range[, "Frequency"], 
+  	         sample_total_deviation_rank_range[, "data"], max(sample_total_frequency_x) + 0.5, 
+  	         col = sample1_col[3], lwd = 2, lty = "dashed") 
+  	abline(v = mean(sample_total), col = sample1_col[3], lwd = 2)
+  	arrows(mean(sample_total), max(sample_total_frequency_x) + 0.5, 
+  	       sample_total_deviation_rank_range[, "data"], ,
+  	       col = sample1_col[3], lwd = 2, length = 0.1, code = 3 ) 
+    mtext(side = 3, at = mean(sample_total), text = bquote(italic(M) == .(round(mean(sample_total), 2))), col = sample1_col[3])
+    text(x = (sample_total_deviation_rank_range[, "data"] + mean(sample_total)) / 2, 
+         y = max(sample_total_frequency_x) + 0.5, 
+         label = round(abs(sample_total_deviation_rank_range[, "data"] - mean(sample_total)), 2), pos = 3, col = sample1_col[3])   
+  }
+
   add_vertical_horizontal_lines <- function(sample, center = mean(sample), values, frequency, length, color, start, end) {
     ## vertical line above mu
     segments(x0 = center, y0 = length(frequency[frequency == center]), y1 = max(frequency) + 1, col = "gray")
@@ -154,7 +178,7 @@ Plot_Sample_Frequency <- function(
   }
 
   if (show_sample_deviation) {
-    if (show_SST) {
+    if (deviation_from_population_mean) {
       add_lines_together(population_mean, population_mean)
       mtext(side = 3, at = population_mean, text = bquote(italic(mu[0]) == .(population_mean)), line = 1)
     } else {

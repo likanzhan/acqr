@@ -4,7 +4,7 @@
 ####### Plot_Population_Density_with_Two_Distributions
 Plot_Population_Density <- function(
                                     m0 = 0,
-                                    m1 = 4,
+                                    m1 = m0 + 4,
                                     sigma = 1,
                                     sigma_range = 4,
                                     x_range = NULL,

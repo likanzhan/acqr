@@ -6,10 +6,12 @@
 \usage{
 Plot_Sample_Frequency(sample1, sample2 = NULL, x_range = NULL,
   show_sample_deviation = FALSE, show_sample_grid = TRUE,
-  show_sample_sigma = FALSE, AHZ = FALSE, AVD = TRUE,
-  show_population_curve = FALSE, population_mean = mean(c(sample1,
-  sample2)), population_sd = sd(c(sample1, sample2)), show_SST = TRUE,
-  xlab = "", ylab = "Frequency", ...)
+  show_sample_sigma = FALSE, Standarized_X_Axis = FALSE,
+  Standarized_Y_Axis = FALSE, show_population_curve = FALSE,
+  population_mean = mean(c(sample1, sample2)),
+  population_sd = sd(c(sample1, sample2)),
+  deviation_from_population_mean = TRUE, xlab = "",
+  ylab = "Frequency", main = "", ...)
 }
 \description{
 Plot the sample frequency
@@ -17,5 +19,5 @@ Plot the sample frequency
 \examples{
 sample1 <- c(11, 9, 4, 5, 6, 7, 12, 10)
 sample2 <- c(7, 13, 14, 16, 9, 11, 15, 11)
-Plot_Sample_Frequency(sample1, sample2, show_sample_deviation = F, show_SST = F)
+Plot_Sample_Frequency(sample1, sample2, show_sample_deviation = T, deviation_from_population_mean = F)
 }
