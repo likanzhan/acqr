@@ -6,10 +6,10 @@
 \usage{
 Plot_Sample_Frequency(sample1, sample2 = NULL, x_range = NULL,
   show_sample_deviation = FALSE, show_sample_grid = TRUE,
-  show_sample_sigma = FALSE, Standarized_X_Axis = FALSE,
-  Standarized_Y_Axis = FALSE, show_population_curve = FALSE,
-  population_mean = mean(c(sample1, sample2)),
-  population_sd = sd(c(sample1, sample2)),
+  show_sample_sigma = FALSE, show_sample_variation_range = FALSE,
+  standarized_x_axis = FALSE, standarized_y_axis = FALSE,
+  show_population_curve = FALSE, population_mean = mean(c(sample1,
+  sample2)), population_sd = sd(c(sample1, sample2)),
   deviation_from_population_mean = TRUE, xlab = "",
   ylab = "Frequency", main = "", ...)
 }
