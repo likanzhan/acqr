@@ -18,15 +18,18 @@ Plot_Population_Density <- function(
                                     show_hypothesis_alternative = TRUE, 
                                     show_hit = TRUE, 
                                     show_miss = TRUE,
-                                    show_sigma = TRUE,
+                                    show_sigma_value = TRUE,
+                                    show_sigma_size = FALSE,
                                     add_fill_color = TRUE,
                                     show_decision = TRUE,
                                     show_axis_x = TRUE,
                                     show_axis_x_label = TRUE,
                                     show_axis_z = FALSE,
+                                    show_axis_z_label = FALSE,
                                     data_points = NULL,
-                                    show_arrow = FALSE,
-                                    color_area = NULL) {
+                                    color_fill_area = NULL,
+                                    color_fill_area_label = NULL
+                                    ) {
   #### Define the colors
   plot_colors <- c("#008744", "#0057e7", "#d62d20", "#ffa700") # google
   # plot_colors <- c("#008744", "#0057e7", "#d62d20", "#ffa700")
@@ -131,7 +134,7 @@ Plot_Population_Density <- function(
       }
     }
     lines(Xs, Y0s, col = "#cf232a", lwd = 2)
-    if (show_sigma) {
+    if (show_sigma_value) {
       abline(v = mean_null, lwd = 1)
       arrows(
         x0 = mean_null, y0 = dnorm(mean_null + sigma_m, mean_null, sigma_m),
@@ -148,6 +151,7 @@ Plot_Population_Density <- function(
         }
       )
       if (show_hypothesis_alternative) mtext(expression(H[0]), side = 3, at = mean_null)
+     mtext(bquote(mu == .(round(mean_null, 2))), side = 1, at = mean_null, col = "gray")
     }
   }
 
@@ -173,7 +177,7 @@ Plot_Population_Density <- function(
       }
     }
     lines(Xs, Y1s, col = "#d5493a", lwd = 2)
-    if (show_sigma) {
+    if (show_sigma_value) {
       abline(v = mean_alternative, lwd = 1, col = "gray")
       mtext(expression(H[1]), side = 3, at = mean_alternative)
       mtext(text = bquote("Cohen's d" == .(d) ~ ", n" == .(n)), side = 3, at = (mean_null + mean_alternative) / 2, padj = -2)
@@ -197,14 +201,14 @@ Plot_Population_Density <- function(
 
   if (show_axis_x) {
     if (n == 1) show_axis(0, "X", show_label = show_axis_x_label) else show_axis(0, "M", show_label = show_axis_x_label)
-    if (show_axis_z) show_axis(2.5, "z")
+    if (show_axis_z) show_axis(2.5, "z", show_label = show_axis_z_label)
   } else {
-    if (show_axis_z) show_axis(0, "z") else show_axis(0, "z", show_label = FALSE)
+    if (show_axis_z) show_axis(0, "z", show_label = show_axis_z_label) else show_axis(0, "z", show_label = show_axis_z_label)
   }
   ####### Add an area
-  if (!is.null(color_area)) {
-    p1 <- color_area[1]
-    p2 <- color_area[2]
+  color_fill_area_function <- function(color_fill_area_element, color_fill_area_label) {
+    p1 <- color_fill_area_element[1]
+    p2 <- color_fill_area_element[2]
     cnvtp <- function(pp) if (pp == Inf) mean_null + sigma_range * sigma_m else if (pp == -Inf) mean_null - sigma_range * sigma_m else pp
     if (!is.na(p1) & !is.na(p2)) {
       pt1 <- cnvtp(p1)
@@ -224,8 +228,27 @@ Plot_Population_Density <- function(
         pnorm(p2, mean_null, sigma_m) - pnorm(p1, mean_null, sigma_m)
       }
       area_size <- percent(area_size, 2)
-      text(x = mean(c(pt1, pt2)), y = dnorm(mean_null + 2 * sigma_m, mean_null, sigma_m), label = area_size, pos = 1)
-    }
+      labell <- ifelse(is.null(color_fill_area_label), area_size, color_fill_area_label)
+      text(x = mean(c(pt1, pt2)), y = dnorm(mean_null + 2 * sigma_m, mean_null, sigma_m), label = labell, pos = 1, col = "blue")
+      if ((!show_axis_x_label) | (!show_axis_x)) {
+      	for (point in color_fill_area_element[is.finite(color_fill_area_element)]) mtext(round(point, 2), side = 1, at = point, col = "blue")
+      	}
+      if (show_axis_z && show_axis_x && !show_axis_x_label) {
+      	for (point in color_fill_area_element[is.finite(color_fill_area_element)]) {
+      		mtext(round(point, 2), side = 1, at = point, col = "blue")
+            axis(1, at = point, label = "", lwd = 0, lwd.ticks = 1, line = 2.5) 
+            axis(1, at = point, label = round((point - mean_null) / sigma_m, 2), lwd = 0, lwd.ticks = 0, line = 2, col = "blue",col.axis = "blue")    		
+      		}
+      	}
+    }  	
+  }
+  
+  if (is.list(color_fill_area)) {
+  	for (i in 1:length(color_fill_area)) {
+  		color_fill_area_function(color_fill_area[[i]], color_fill_area_label)
+  	}
+  } else if (!is.null(color_fill_area)) {
+        color_fill_area_function(color_fill_area, color_fill_area_label)
   }
 
   ###### add some data points
@@ -261,7 +284,7 @@ Plot_Population_Density <- function(
   }
 
   ####### Add the arrow showing the standard errors
-  if (show_arrow) {
+  if (show_sigma_size) {
     segments(
       x0 = seq(mean_null - 2 * sigma_m, mean_null + 2 * sigma_m, by = sigma_m), y0 = 0,
       y1 = c(
@@ -280,9 +303,19 @@ Plot_Population_Density <- function(
 ###########################################
 #' Plot density distributions of one population
 #' @export
-Plot_Population_Density_Single <- function(m, s, p = NULL, show_arrow = TRUE, show_decision = FALSE, two_tails = TRUE, alpha_level = 0.05, ...){
+Plot_Population_Density_Single <- function(
+    m = 0, s = 1, p = NULL, 
+    show_sigma_size = TRUE, 
+    show_decision = FALSE, 
+    two_tails = TRUE, 
+    alpha_level = 0.05,  
+    show_alpha_level = FALSE,
+    show_false_alarm = FALSE,
+    show_correct_reject = FALSE,
+    ...
+    ){
 	Plot_Population_Density(
     mean_null = m, mean_alternative = m, sigma = s, data_point = p, 
-    show_hypothesis_alternative = FALSE, two_tails = two_tails, alpha_level = alpha_level, show_alpha_level = FALSE, 
-    show_decision = show_decision, show_false_alarm = FALSE, show_correct_reject = FALSE, show_arrow = show_arrow, ...)	
+    show_hypothesis_alternative = FALSE, two_tails = two_tails, alpha_level = alpha_level, show_alpha_level = show_alpha_level, 
+    show_decision = show_decision, show_false_alarm = show_false_alarm, show_correct_reject = show_correct_reject, show_sigma_size = show_sigma_size, ...)	
 }

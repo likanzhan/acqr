@@ -4,7 +4,9 @@
 \alias{Plot_Population_Density_Single}
 \title{Plot density distributions of one population}
 \usage{
-Plot_Population_Density_Single(m, s, p = NULL, show_arrow = TRUE, ...)
+Plot_Population_Density_Single(m = 0, s = 1, p = NULL,
+  show_sigma_size = TRUE, show_decision = FALSE, two_tails = TRUE,
+  alpha_level = 0.05, ...)
 }
 \description{
 Plot density distributions of one population

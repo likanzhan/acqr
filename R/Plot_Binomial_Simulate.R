@@ -12,7 +12,7 @@ Plot_Binomial_Simulate <- function(
   value.mat <- matrix(values, ncol = size)
   Successes <- apply(value.mat, 1, sum)
   a1 <- round((table(Successes) / samples), 3)
-  b1 <- round(dbinom(0:n, size, pi), 3)
+  b1 <- round(dbinom(0:size, size, pi), 3)
   names(b1) <- 0:size
   breaks <-  c((-0.5 + 0):(size + 0.5))
   hist(Successes, breaks = breaks, freq = FALSE, axes = FALSE,

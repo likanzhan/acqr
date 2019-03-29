@@ -1,4 +1,6 @@
 #' Plot the sample frequency
+#' @param add_fill_color    Logical or a numeric value, To fill or not, or specifiy the cells to be filled.
+#' @param sample1, sample2  numeric vectors to be drawn, sample2 can be NULL.
 #' @examples
 #' sample1 <- c(11, 9, 4, 5, 6, 7, 12, 10)
 #' sample2 <- c(7, 13, 14, 16, 9, 11, 15, 11)
@@ -19,6 +21,7 @@ Plot_Sample_Frequency <- function(
                                   population_mean = mean(c(sample1, sample2)),
                                   population_sd = sd(c(sample1, sample2)),
                                   deviation_from_population_mean = TRUE,
+                                  add_fill_color = TRUE,
                                   xlab = "", 
                                   ylab = "Frequency", 
                                   main = "",
@@ -26,7 +29,8 @@ Plot_Sample_Frequency <- function(
   ##### 0. Define colors ######
   sample1_col <- c("#f8cea2", "#b78135", "#cf232a")
   sample2_col <- c("#a0d5cf", "#009f9b")
-  ##### 1. Calculate the required value ######
+  ######## 1. Calculate the required value ######
+
   sample_tidy <- function(sample) {
     Mean <- mean(sample)
     Table <- as.data.frame(table(sample, dnn = "data"))
@@ -48,18 +52,22 @@ Plot_Sample_Frequency <- function(
   sample_total_unique_frequency <- sample_total_tidy[["Table_Unique"]][["Frequency"]]
   sample_total_unique_length <- nrow(sample_total_tidy[["Table_Unique"]])
   sample_total_deviation_rank <- sample_total_tidy[["Table_Unique"]]$data_deviation_rank
-  sample_total_deviation_rank_range <- sample_total_tidy[["Table_Unique"]][sample_total_deviation_rank %in% range(sample_total_deviation_rank), ]
-  sample_total_deviation_rank_range <- sample_total_deviation_rank_range[!duplicated(sample_total_deviation_rank_range $ data_deviation_sign), ]
-  sample_total_deviation_rank_range <- sample_total_deviation_rank_range[order(sample_total_deviation_rank_range $ data_deviation_rank), ]
- 
+  sample_total_deviation_rank_range <- 
+      sample_total_tidy[["Table_Unique"]][sample_total_deviation_rank %in% range(sample_total_deviation_rank), ]
+  sample_total_deviation_rank_range <- 
+      sample_total_deviation_rank_range[!duplicated(sample_total_deviation_rank_range $ data_deviation_sign), ]
+  sample_total_deviation_rank_range <- 
+      sample_total_deviation_rank_range[order(sample_total_deviation_rank_range $ data_deviation_rank), ]
   sample_1_tidy <- sample_tidy(sample1)
   sample_1_values_x <- sample_total_values_x[sample_total_values_x %in% sample1]
-  sample_1_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_1_values_x, "Frequency"]
+  sample_1_values_frequency <- 
+      sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_1_values_x, "Frequency"]
   sample_1_valus_length <- length(sample_1_values_x)
 
   sample_2_tidy <- if (!is.null(sample2)) sample_tidy(sample2) else sample_1_tidy
   sample_2_values_x <- sample_total_values_x[sample_total_values_x %in% sample2]
-  sample_2_values_frequency <- sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_2_values_x, "Frequency"]
+  sample_2_values_frequency <- 
+      sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_2_values_x, "Frequency"]
   sample_2_valus_length <- length(sample_2_values_x)
 
   bin_width <- min(sample_total_values_x[-1] - sample_total_values_x[-length(sample_total_values_x)])
@@ -79,7 +87,8 @@ Plot_Sample_Frequency <- function(
   par(mar = c(5, 4, 4, 5) + 0.1)
   hist(sample_total,
     ylim = ylim, xlim = xlim, breaks = breaks, font.lab = 2,
-    col = sample1_col[1], border = sample1_col[2], main = main, xlab = xlab, ylab = ylab,
+    col =  ifelse(is.logical(add_fill_color) && add_fill_color, sample1_col[1], "white"), 
+    border = sample1_col[2], main = main, xlab = xlab, ylab = ylab,
     yaxs = "i", xaxs = "i", xaxt = "n", yaxt = "n", ...
   )
   mtext(expression(italic("X")), side = 1, line = 0, adj = 0.99)
@@ -114,7 +123,12 @@ Plot_Sample_Frequency <- function(
     hist(x = sample1, breaks = breaks, col = sample2_col[1], border = sample2_col[2], add = TRUE)
     legend("topleft", lwd = 10, col = c(sample1_col[1], sample2_col[1]), bty = "n", legend = c("Condition A", "Condition B"))
   }
-
+  
+  if (!is.logical(add_fill_color)) {
+     values_to_be_colored = sample_total[sample_total >= add_fill_color]
+     hist(x = values_to_be_colored, breaks = breaks, col = sample1_col[1], border = sample1_col[2], add = TRUE)
+  }
+  
   if (show_sample_grid) {
     if (is.null(sample2)) {
       plot_grids(sample_total_tidy, sample_total_frequency_x, sample_total_values_x, sample1_col[2])
@@ -126,11 +140,15 @@ Plot_Sample_Frequency <- function(
 
   ##### Add legends if two sampels are included
   sample_sigma <- function(sample_total, y_adj = 0.5, color = sample1_col[2]) {
-    segments(x0 = mean(sample_total), y0 = ylim[2] - 1, x1 = mean(sample_total), y1 = max(sample_total_frequency_x) + 1, col = color)
-    arrows(mean(sample_total) - sd(sample_total), ylim[2] - y_adj, mean(sample_total) + sd(sample_total), ylim[2] - y_adj, code = 3, length = 0.1, col = color)
+    segments(x0 = mean(sample_total), y0 = ylim[2] - 1, 
+             x1 = mean(sample_total), y1 = max(sample_total_frequency_x) + 1, col = color)
+    arrows(mean(sample_total) - sd(sample_total), ylim[2] - y_adj, mean(sample_total) + sd(sample_total), 
+        ylim[2] - y_adj, code = 3, length = 0.1, col = color)
     mtext(side = 3, at = mean(sample_total), text = bquote(italic(M) == .(round(mean(sample_total), 2))), col = color)
-    text(x = mean(sample_total) + sd(sample_total) / 2, y = ylim[2] - y_adj - 0.05, label = bquote(s == .(round(sd(sample_total), 2))), pos = 3, col = color)
-    text(x = mean(sample_total) - sd(sample_total) / 2, y = ylim[2] - y_adj - 0.05, label = bquote(s == .(round(sd(sample_total), 2))), pos = 3, col = color)
+    text(x = mean(sample_total) + sd(sample_total) / 2, y = ylim[2] - y_adj - 0.05, 
+        label = bquote(s == .(round(sd(sample_total), 2))), pos = 3, col = color)
+    text(x = mean(sample_total) - sd(sample_total) / 2, y = ylim[2] - y_adj - 0.05, 
+        label = bquote(s == .(round(sd(sample_total), 2))), pos = 3, col = color)
   }
 
   if (show_sample_sigma) {
@@ -162,7 +180,8 @@ Plot_Sample_Frequency <- function(
     ## vertical lines above each unique observation
     segments(x0 = values, y0 = frequency, y1 = seq(max(frequency) + start, max(frequency) + end, length.out = length), col = "gray")
     ## horizontal lines connecting the vertical lines and the population mean
-    segments(x0 = values, y0 = seq(max(frequency) + start, max(frequency) + end, length.out = length), x1 = rep(center, sample_total_unique_length), col = color)
+    segments(x0 = values, y0 = seq(max(frequency) + start, max(frequency) + end, length.out = length), 
+        x1 = rep(center, sample_total_unique_length), col = color)
     ##
     mtext(side = 3, at = mean(sample), text = bquote(italic(M) == .(round(mean(sample), 2))))
   }
@@ -170,10 +189,13 @@ Plot_Sample_Frequency <- function(
   add_lines_together <- function(center1, center2) {
     break_point <- (sample_1_valus_length / sample_total_unique_length) * 0.8
     if (is.null(sample2)) {
-      add_vertical_horizontal_lines(sample = sample1, center = center1, values = sample_1_values_x, frequency = sample_1_values_frequency, length = sample_1_valus_length, color = "red", start = 0.1, end = break_point)
+      add_vertical_horizontal_lines(sample = sample1, center = center1, values = sample_1_values_x, 
+          frequency = sample_1_values_frequency, length = sample_1_valus_length, color = "red", start = 0.1, end = break_point)
     } else {
-      add_vertical_horizontal_lines(sample1, center1, sample_1_values_x, sample_1_values_frequency, sample_1_valus_length, color = "blue", 0.1, break_point)
-      add_vertical_horizontal_lines(sample2, center2, sample_2_values_x, sample_2_values_frequency, sample_2_valus_length, color = "red", break_point, 0.9)
+      add_vertical_horizontal_lines(sample1, center1, sample_1_values_x, sample_1_values_frequency, 
+          sample_1_valus_length, color = "blue", 0.1, break_point)
+      add_vertical_horizontal_lines(sample2, center2, sample_2_values_x, sample_2_values_frequency, 
+          sample_2_valus_length, color = "red", break_point, 0.9)
     }
   }
 

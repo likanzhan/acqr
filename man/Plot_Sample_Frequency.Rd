@@ -10,8 +10,13 @@ Plot_Sample_Frequency(sample1, sample2 = NULL, x_range = NULL,
   standarized_x_axis = FALSE, standarized_y_axis = FALSE,
   show_population_curve = FALSE, population_mean = mean(c(sample1,
   sample2)), population_sd = sd(c(sample1, sample2)),
-  deviation_from_population_mean = TRUE, xlab = "",
-  ylab = "Frequency", main = "", ...)
+  deviation_from_population_mean = TRUE, add_fill_color = TRUE,
+  xlab = "", ylab = "Frequency", main = "", ...)
+}
+\arguments{
+\item{sample1, }{sample2  numeric vectors to be drawn, sample2 can be NULL.}
+
+\item{add_fill_color}{Logical or a numeric value, To fill or not, or specifiy the cells to be filled.}
 }
 \description{
 Plot the sample frequency
