@@ -5,7 +5,7 @@
 \title{Plot density distributions of two populations}
 \usage{
 Plot_Population_Density(mean_null = 0, mean_alternative = mean_null +
-  4, sigma = 1, sigma_range = 4, x_range = NULL, n = 1,
+  4, sigma = 1, sigma_range = 4, x_range = NULL, sample_size = 1,
   alpha_level = 0.05, two_tails = TRUE, show_alpha_level = TRUE,
   show_hypothesis_null = TRUE, show_correct_reject = TRUE,
   show_false_alarm = TRUE, show_hypothesis_alternative = TRUE,

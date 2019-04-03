@@ -8,7 +8,7 @@ Plot_Population_Density <- function(
                                     sigma = 1,
                                     sigma_range = 4,
                                     x_range = NULL,
-                                    n = 1,
+                                    sample_size = 1,
                                     alpha_level = 0.05,
                                     two_tails = TRUE,
                                     show_alpha_level = TRUE,
@@ -40,7 +40,7 @@ Plot_Population_Density <- function(
   }
 
   #### Calculate critical values
-  sigma_m <- sigma / sqrt(n)
+  sigma_m <- sigma / sqrt(sample_size)
   d <- (mean_alternative - mean_null) / sigma
   ### X and Ys
   X0s <- seq(mean_null - sigma_range * sigma_m, mean_null + sigma_range * sigma_m, by = 0.01 * sigma_m)
@@ -144,7 +144,7 @@ Plot_Population_Density <- function(
       if (show_axis_x | (!show_axis_x & !show_axis_z)) sigma_mm <- sigma_m else sigma_mm <- 1
       text(
         x = mean_null + sigma_m / 2, y = dnorm(mean_null + sigma_m, mean_null, sigma_m), pos = 1,
-        labels = if (n == 1) {
+        labels = if (sample_size == 1) {
           bquote(sigma == .(round(sigma_mm, 2)))
         } else {
           bquote(sigma[M] == .(round(sigma_mm, 2)))
@@ -180,7 +180,7 @@ Plot_Population_Density <- function(
     if (show_sigma_value) {
       abline(v = mean_alternative, lwd = 1, col = "gray")
       mtext(expression(H[1]), side = 3, at = mean_alternative)
-      mtext(text = bquote("Cohen's d" == .(d) ~ ", n" == .(n)), side = 3, at = (mean_null + mean_alternative) / 2, padj = -2)
+      mtext(text = bquote("Cohen's d" == .(d) ~ ", n" == .(sample_size)), side = 3, at = (mean_null + mean_alternative) / 2, padj = -2)
     }
   }
 
@@ -200,7 +200,7 @@ Plot_Population_Density <- function(
   }
 
   if (show_axis_x) {
-    if (n == 1) show_axis(0, "X", show_label = show_axis_x_label) else show_axis(0, "M", show_label = show_axis_x_label)
+    if (sample_size == 1) show_axis(0, "X", show_label = show_axis_x_label) else show_axis(0, "M", show_label = show_axis_x_label)
     if (show_axis_z) show_axis(2.5, "z", show_label = show_axis_z_label)
   } else {
     if (show_axis_z) show_axis(0, "z", show_label = show_axis_z_label) else show_axis(0, "z", show_label = show_axis_z_label)
@@ -305,7 +305,7 @@ Plot_Population_Density <- function(
 #' @export
 Plot_Population_Density_Single <- function(
     m = 0, s = 1, p = NULL, 
-    show_sigma_size = TRUE, 
+    show_sigma_size = FALSE, 
     show_decision = FALSE, 
     two_tails = TRUE, 
     alpha_level = 0.05,  

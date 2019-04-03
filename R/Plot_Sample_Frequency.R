@@ -91,7 +91,7 @@ Plot_Sample_Frequency <- function(
     border = sample1_col[2], main = main, xlab = xlab, ylab = ylab,
     yaxs = "i", xaxs = "i", xaxt = "n", yaxt = "n", ...
   )
-  mtext(expression(italic("X")), side = 1, line = 0, adj = 0.99)
+  mtext(expression(italic("X")), side = 1, adj = 1.03, line = -0.6)
   axis(1, at = xlim, labels = c("", ""), lwd.ticks = 0)
   axis(1, at = xlabel, labels = xlabel, lwd = 0, lwd.ticks = 1, padj = -0.5)
   axis(2, at = ylim, labels = c("", ""), lwd.ticks = 0)
