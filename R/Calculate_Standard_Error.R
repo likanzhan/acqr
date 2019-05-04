@@ -1,12 +1,12 @@
 #' Calculate Standard Error
-
-
 StdErr <- function(
                    sample_size = 1000,
                    sample_number = 1000,
                    mean = 0,
                    sd = 10) {
-  data <- rnorm(sample_size * sample_number, mean = mean, sd = sd)
+  data <- rnorm(sample_size * sample_number) 
+  data <- scale(data)
+  data <- mean + sd * data
   mdat <- matrix(data, nrow = sample_number)
   em <- rowMeans(mdat)
   ss <- sum(em^2) - (sum(em))^2 / sample_number

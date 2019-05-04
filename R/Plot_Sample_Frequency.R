@@ -11,6 +11,7 @@ Plot_Sample_Frequency <- function(
                                   sample1, 
                                   sample2 = NULL,
                                   x_range = NULL,
+                                  bin_width = NULL,
                                   show_sample_deviation = FALSE,
                                   show_sample_grid = TRUE,
                                   show_sample_sigma = FALSE,
@@ -70,7 +71,11 @@ Plot_Sample_Frequency <- function(
       sample_total_tidy[["Table"]][sample_total_tidy[["Table"]][["data"]] %in% sample_2_values_x, "Frequency"]
   sample_2_valus_length <- length(sample_2_values_x)
 
-  bin_width <- min(sample_total_values_x[-1] - sample_total_values_x[-length(sample_total_values_x)])
+  if (is.null(bin_width)) {
+    bin_width <- min(sample_total_values_x[-1] - sample_total_values_x[-length(sample_total_values_x)])	
+  } else {
+  	bin_width <- bin_width
+  }
 
   if (is.null(x_range)) {
     xlim <- c(min(sample_total_values_x) - bin_width, max(sample_total_values_x) + bin_width)

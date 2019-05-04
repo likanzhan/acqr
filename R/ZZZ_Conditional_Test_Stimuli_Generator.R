@@ -547,6 +547,7 @@ Conditional_Full <- function(
     Test_Image_File <- Conditional_Test_Stimuli_Data $ Test_Images_Information
     Test_Stimuli_File <- Conditional_Test_Stimuli_Data $ Test_Stimuli_Full
     Test_Stimuli <- Conditional_Test_Stimuli_Data $ Test_Stimuli
+    Test_Stimuli <- Test_Stimuli[order(Test_Stimuli$Split), ]
     write.csv(Test_Stimuli, file.path(Root_Directory, "Test_Stimuli.csv"), row.names = FALSE)
     write.table(Test_Stimuli, file.path(Root_Directory, "Test_Stimuli.txt"), sep = "\t", quote = FALSE, row.names = FALSE)
     
