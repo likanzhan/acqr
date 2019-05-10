@@ -20,8 +20,9 @@ Plot_Population_Density <- function(
                                     show_hit = TRUE, 
                                     show_miss = TRUE,
                                     show_sigma_value = TRUE,
-                                    show_sigma_size = FALSE,
+                                    show_sigma_grid = FALSE,
                                     add_fill_color = TRUE,
+                                    show_cohen_d = TRUE,
                                     show_decision = TRUE,
                                     show_axis_x = TRUE,
                                     show_axis_x_label = TRUE,
@@ -29,7 +30,8 @@ Plot_Population_Density <- function(
                                     show_axis_z_label = FALSE,
                                     data_points = NULL,
                                     color_fill_area = NULL,
-                                    color_fill_area_label = NULL
+                                    color_fill_area_label = NULL,
+                                    hide_mean_alternative_value = FALSE
                                     ) {
   #### Define the colors
   # plot_colors <- ggsci::pal_npg("nrc", alpha = 1)(10)
@@ -165,12 +167,12 @@ Plot_Population_Density <- function(
           bquote(sigma[M] == .(round(sigma_mm, 2)))
         }
       )
-      if (show_hypothesis_alternative) {
-        mtext(expression(H[0]), side = 3, at = mean_null)	
-      } else {
+      if (!show_hypothesis_alternative & show_cohen_d) {
         mtext(text = bquote("n" == .(if(is.null(sample_size)) 1 else sample_size)), side = 3, at = mean_null)
+      } else {
+        mtext(expression(H[0]), side = 3, at = mean_null)	        
       }
-     mtext(bquote(mu == .(round(mean_null, 2))), side = 1, at = mean_null, col = "gray")
+     mtext(bquote(mu[0] == .(round(mean_null, 2))), side = 1, at = mean_null, col = "gray")
     }
   }
 
@@ -197,9 +199,26 @@ Plot_Population_Density <- function(
     }
     lines(Xs, Y1s, col = "#d5493a", lwd = 2)
     if (show_sigma_value) {
-      abline(v = mean_alternative, lwd = 1, col = "gray")
+      abline(v = mean_alternative, lwd = 1, col = "gray")    	
+      arrows(
+        x0 = mean_alternative, y0 = dnorm(mean_alternative + sigma_m, mean_alternative, sigma_m),
+        x1 = mean_alternative + sigma_m, y1 = dnorm(mean_alternative + sigma_m, mean_alternative, sigma_m),
+        length = 0.1, col = "gray"
+      )
+      if (show_axis_x | (!show_axis_x & !show_axis_z)) sigma_mm <- sigma_m else sigma_mm <- 1
+      text(
+        x = mean_alternative + sigma_m / 2, y = dnorm(mean_alternative + sigma_m, mean_alternative, sigma_m), pos = 1,
+        labels = if (is.null(sample_size)) {
+          bquote(sigma == .(round(sigma_mm, 2)))
+        } else {
+          bquote(sigma[M] == .(round(sigma_mm, 2)))
+        }
+      )    	
       mtext(expression(H[1]), side = 3, at = mean_alternative)
-      mtext(text = bquote("Cohen's d" == .(d) ~ ", n" == .(if(is.null(sample_size)) 1 else sample_size)), side = 3, at = (mean_null + mean_alternative) / 2, padj = -2)
+      if (show_cohen_d) {
+      mtext(text = bquote("Cohen's d" == .(d) ~ ", n" == .(if(is.null(sample_size)) 1 else sample_size)), side = 3, at = (mean_null + mean_alternative) / 2, padj = -2)      	
+      }
+     mtext(bquote(mu[1] == .(if (hide_mean_alternative_value) "?" else round(mean_alternative, 2))), side = 1, at = mean_alternative, col = "gray")      
     }
   }
 
@@ -288,7 +307,9 @@ Plot_Population_Density <- function(
   if (!is.null(data_points)) {
     for (point in data_points) {
       mtext(bquote(.(if (is.null(sample_size)) "X" else "M") == ~.(point)), side = 1, at = point, line = if (show_axis_z) 4 else 2, col = data_points_color)
-      arrows(point, (if (show_axis_z) line2user(3.5, 1) else line2user(8.5, 1)), point, 0, xpd = TRUE, length = 0.08, col = data_points_color)
+      par(xpd = TRUE)
+      arrows(point, (if (show_axis_z) line2user(3.5, 1) else line2user(8.5, 1)), point, 0, length = 0.08, col = data_points_color)
+      par(xpd = FALSE)
 #     arrows(point, -dnorm(mean_null + sigma_m, mean_null, sigma_m) / (if (show_axis_z) 3.5 else 8.5), point, 0, xpd = TRUE, length = 0.08, col = data_points_color)
     }
   }
@@ -318,7 +339,7 @@ Plot_Population_Density <- function(
   }
 
   ####### Add the arrow showing the standard errors
-  if (show_sigma_size) {
+  if (show_sigma_grid) {
     segments(
       x0 = seq(mean_null - 2 * sigma_m, mean_null + 2 * sigma_m, by = sigma_m), y0 = 0,
       y1 = c(
@@ -339,7 +360,7 @@ Plot_Population_Density <- function(
 #' @export
 Plot_Population_Density_Single <- function(
     m = 0, s = 1, p = NULL, 
-    show_sigma_size = FALSE, 
+    show_sigma_grid = FALSE, 
     show_decision = FALSE, 
     two_tails = TRUE, 
     alpha_level = 0.05,  
@@ -351,7 +372,7 @@ Plot_Population_Density_Single <- function(
 	Plot_Population_Density(
     mean_null = m, mean_alternative = m, sigma = s, data_point = p, 
     show_hypothesis_alternative = FALSE, two_tails = two_tails, alpha_level = alpha_level, show_alpha_level = show_alpha_level, 
-    show_decision = show_decision, show_false_alarm = show_false_alarm, show_correct_reject = show_correct_reject, show_sigma_size = show_sigma_size, ...)	
+    show_decision = show_decision, show_false_alarm = show_false_alarm, show_correct_reject = show_correct_reject, show_sigma_grid = show_sigma_grid, ...)	
 }
 
 ###########################################
