@@ -15,7 +15,8 @@ Plot_Population_Density(mean_null = 0, mean_alternative = mean_null +
   show_axis_x = TRUE, show_axis_x_label = TRUE, show_axis_z = FALSE,
   show_axis_z_label = FALSE, data_points = NULL,
   color_fill_area = NULL, color_fill_area_label = NULL,
-  hide_mean_alternative_value = FALSE)
+  hide_mean_alternative_value = FALSE,
+  hide_sigma_alternative_value = FALSE)
 }
 \description{
 Plot density distributions of two populations

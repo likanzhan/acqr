@@ -31,7 +31,8 @@ Plot_Population_Density <- function(
                                     data_points = NULL,
                                     color_fill_area = NULL,
                                     color_fill_area_label = NULL,
-                                    hide_mean_alternative_value = FALSE
+                                    hide_mean_alternative_value = FALSE,
+                                    hide_sigma_alternative_value = FALSE                                    
                                     ) {
   #### Define the colors
   # plot_colors <- ggsci::pal_npg("nrc", alpha = 1)(10)
@@ -162,9 +163,9 @@ Plot_Population_Density <- function(
       text(
         x = mean_null + sigma_m / 2, y = dnorm(mean_null + sigma_m, mean_null, sigma_m), pos = 1,
         labels = if (is.null(sample_size)) {
-          bquote(sigma == .(round(sigma_mm, 2)))
+          bquote(sigma == .(if (hide_sigma_alternative_value) "?" else round(sigma_mm, 2)))
         } else {
-          bquote(sigma[M] == .(round(sigma_mm, 2)))
+          bquote(sigma[M] == .(if (hide_sigma_alternative_value) "?" else round(sigma_mm, 2)))
         }
       )
       if (!show_hypothesis_alternative & show_cohen_d) {
@@ -209,9 +210,9 @@ Plot_Population_Density <- function(
       text(
         x = mean_alternative + sigma_m / 2, y = dnorm(mean_alternative + sigma_m, mean_alternative, sigma_m), pos = 1,
         labels = if (is.null(sample_size)) {
-          bquote(sigma == .(round(sigma_mm, 2)))
+          bquote(sigma == .(if (hide_sigma_alternative_value) "?" else round(sigma_mm, 2)))
         } else {
-          bquote(sigma[M] == .(round(sigma_mm, 2)))
+          bquote(sigma[M] == .(if (hide_sigma_alternative_value) "?" else round(sigma_mm, 2)))
         }
       )    	
       mtext(expression(H[1]), side = 3, at = mean_alternative)

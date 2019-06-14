@@ -1,6 +1,7 @@
 #' Extract Sound Fragment
 #'
-#' @import tuneR seewave
+#' @import tuneR
+#' @importFrom seewave oscillo
 #' @export
 
 Extract_Sound_Fragment <- function(
