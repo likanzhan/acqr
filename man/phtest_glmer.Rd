@@ -7,9 +7,9 @@
 phtest_glmer(glmerMod, glmMod, ...)
 }
 \arguments{
-\item{glmerMod}{}
+\item{glmerMod}{Model}
 
-\item{glmMod}{}
+\item{glmMod}{Model}
 }
 \description{
 Conduct a Hausman test to see if a variable is treated as a fixed effect or a random effect

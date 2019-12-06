@@ -4,9 +4,15 @@
 \alias{Plot_F_Distribution}
 \title{Plot F Distribution}
 \usage{
-Plot_F_Distribution(df1 = 1, df2 = 14, alpha_level = 0.05,
-  x_range = c(0, 7), y_range = NULL, fill_critical_region = TRUE,
-  show_t_curve = FALSE)
+Plot_F_Distribution(
+  df1 = 1,
+  df2 = 14,
+  alpha_level = 0.05,
+  x_range = c(0, 7),
+  y_range = NULL,
+  fill_critical_region = TRUE,
+  show_t_curve = FALSE
+)
 }
 \description{
 Plot F Distribution

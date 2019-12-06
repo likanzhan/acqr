@@ -4,15 +4,24 @@
 \alias{Plot_t_Distribution}
 \title{Plot t distributon}
 \usage{
-Plot_t_Distribution(mean = 13, sd = 1, df = 14, alpha_level = 0.05,
-  sigma_range = 6, alternative = "two.sided",
-  show_critical_region = FALSE, fill_critical_region = FALSE,
-  fill_confidence_interval = FALSE, show_normal_curve = TRUE,
-  show_x_value = FALSE, data_points = NULL)
+Plot_t_Distribution(
+  mean = 13,
+  sd = 1,
+  df = 14,
+  alpha_level = 0.05,
+  sigma_range = 6,
+  alternative = "two.sided",
+  show_critical_region = FALSE,
+  fill_critical_region = FALSE,
+  fill_confidence_interval = FALSE,
+  show_normal_curve = TRUE,
+  show_x_value = FALSE,
+  data_points = NULL
+)
 }
 \description{
 Plot t distributon
 }
 \examples{
-Plot_t_Distribution(n=9, show_critical_region=T, fill_critical_region=T, show_normal_curve=F, data_points= 2.5)
+Plot_t_Distribution(n = 9, show_critical_region = T, fill_critical_region = T, show_normal_curve = F, data_points = 2.5)
 }

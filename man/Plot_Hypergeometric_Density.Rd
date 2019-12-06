@@ -4,8 +4,13 @@
 \alias{Plot_Hypergeometric_Density}
 \title{Plot the density of a hypergeometric distribution}
 \usage{
-Plot_Hypergeometric_Density(m = c(10, 40, 60), n = 10, k = c(5, 20),
-  xx = 0:20, plot_density_function = TRUE)
+Plot_Hypergeometric_Density(
+  m = c(10, 40, 60),
+  n = 10,
+  k = c(5, 20),
+  xx = 0:20,
+  plot_density_function = TRUE
+)
 }
 \description{
 Plot the density of a hypergeometric distribution

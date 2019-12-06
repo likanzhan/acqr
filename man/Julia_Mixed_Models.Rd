@@ -4,8 +4,14 @@
 \alias{Julia_Mixed_Models}
 \title{Fit General Linear and Generalized Linear Mixed models from Julia}
 \usage{
-Julia_Mixed_Models(formula, data, fast = FALSE, time = TRUE,
-  family = "Binomial()", model = "glmm")
+Julia_Mixed_Models(
+  formula,
+  data,
+  fast = FALSE,
+  time = TRUE,
+  family = "Binomial()",
+  model = "glmm"
+)
 }
 \description{
 Fit General Linear and Generalized Linear Mixed models from Julia

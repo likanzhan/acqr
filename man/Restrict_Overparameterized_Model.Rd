@@ -5,8 +5,13 @@
 \title{Restrict Over-parameterized model
 Restrict the overparameterized model into appropriate one}
 \usage{
-Restrict_Overparameterized_Model(RowLevel = 2, ColLevel = 3,
-  Dummy = TRUE, RowNumber = 1, ColNumber = 1)
+Restrict_Overparameterized_Model(
+  RowLevel = 2,
+  ColLevel = 3,
+  Dummy = TRUE,
+  RowNumber = 1,
+  ColNumber = 1
+)
 }
 \description{
 Restrict Over-parameterized model

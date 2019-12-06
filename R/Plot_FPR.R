@@ -15,10 +15,10 @@ pFPR <- function() {
   df <- data.frame(pow, alpha, pi0, lty, col, stringsAsFactors = FALSE)
 
   ddata <- function(
-                      pow = "pow1",
-                      alpha = 0.005,
-                      pi0 = 5 / 6,
-                      id) {
+                    pow = "pow1",
+                    alpha = 0.005,
+                    pi0 = 5 / 6,
+                    id) {
     N <- 10^6
     pow <- eval(parse(text = pow))
     # yy = alpha * N * pi0 / (alpha * N * pi0 + pow[id] * (1 - pi0) * N)

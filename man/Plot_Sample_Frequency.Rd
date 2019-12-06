@@ -4,15 +4,27 @@
 \alias{Plot_Sample_Frequency}
 \title{Plot the sample frequency}
 \usage{
-Plot_Sample_Frequency(sample1, sample2 = NULL, x_range = NULL,
-  bin_width = NULL, show_sample_deviation = FALSE,
-  show_sample_grid = TRUE, show_sample_sigma = FALSE,
-  show_sample_variation_range = FALSE, standarized_x_axis = FALSE,
-  standarized_y_axis = FALSE, show_population_curve = FALSE,
+Plot_Sample_Frequency(
+  sample1,
+  sample2 = NULL,
+  x_range = NULL,
+  bin_width = NULL,
+  show_sample_deviation = FALSE,
+  show_sample_grid = TRUE,
+  show_sample_sigma = FALSE,
+  show_sample_variation_range = FALSE,
+  standarized_x_axis = FALSE,
+  standarized_y_axis = FALSE,
+  show_population_curve = FALSE,
   population_mean = mean(c(sample1, sample2)),
   population_sd = sd(c(sample1, sample2)),
-  deviation_from_population_mean = TRUE, add_fill_color = TRUE,
-  xlab = "", ylab = "Frequency", main = "", ...)
+  deviation_from_population_mean = TRUE,
+  add_fill_color = TRUE,
+  xlab = "",
+  ylab = "Frequency",
+  main = "",
+  ...
+)
 }
 \arguments{
 \item{sample1, }{sample2  numeric vectors to be drawn, sample2 can be NULL.}

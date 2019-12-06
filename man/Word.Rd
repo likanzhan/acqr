@@ -4,8 +4,7 @@
 \alias{Word}
 \title{Add words to my dictionary}
 \usage{
-
-  Word(Stored_Data_File = "~/Documents/ADMIN/Academic_Words/Word_Database.csv")
+Word(Stored_Data_File = "~/Documents/ADMIN/Academic_Words/Word_Database.csv")
 }
 \description{
 Add words to my dictionary

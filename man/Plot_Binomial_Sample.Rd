@@ -4,8 +4,12 @@
 \alias{Plot_Binomial_Sample}
 \title{Plot The Sample Frequency of a Binomial Distribution}
 \usage{
-Plot_Binomial_Sample(number_of_toss, show_density = TRUE,
-  show_smooth_curve = FALSE, ...)
+Plot_Binomial_Sample(
+  number_of_toss,
+  show_density = TRUE,
+  show_smooth_curve = FALSE,
+  ...
+)
 }
 \arguments{
 \item{number_of_toss}{Number of toss}

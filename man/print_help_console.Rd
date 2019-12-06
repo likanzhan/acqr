@@ -4,8 +4,13 @@
 \alias{print_help_console}
 \title{Print help information on console}
 \usage{
-print_help_console(topic, format = c("text", "html", "latex", "Rd"),
-  lines = NULL, before = NULL, after = NULL)
+print_help_console(
+  topic,
+  format = c("text", "html", "latex", "Rd"),
+  lines = NULL,
+  before = NULL,
+  after = NULL
+)
 }
 \description{
 Print help information on console

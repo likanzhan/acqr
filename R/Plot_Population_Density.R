@@ -13,11 +13,11 @@ Plot_Population_Density <- function(
                                     alpha_level = 0.05,
                                     two_tails = TRUE,
                                     show_alpha_level = TRUE,
-                                    show_hypothesis_null = TRUE, 
-                                    show_correct_reject = TRUE, 
+                                    show_hypothesis_null = TRUE,
+                                    show_correct_reject = TRUE,
                                     show_false_alarm = TRUE,
-                                    show_hypothesis_alternative = TRUE, 
-                                    show_hit = TRUE, 
+                                    show_hypothesis_alternative = TRUE,
+                                    show_hit = TRUE,
                                     show_miss = TRUE,
                                     show_sigma_value = TRUE,
                                     show_sigma_grid = FALSE,
@@ -32,8 +32,7 @@ Plot_Population_Density <- function(
                                     color_fill_area = NULL,
                                     color_fill_area_label = NULL,
                                     hide_mean_alternative_value = FALSE,
-                                    hide_sigma_alternative_value = FALSE                                    
-                                    ) {
+                                    hide_sigma_alternative_value = FALSE) {
   #### Define the colors
   # plot_colors <- ggsci::pal_npg("nrc", alpha = 1)(10)
   # plot_colors <- plot_colors[c(1, 5, 2, 6)]
@@ -48,7 +47,7 @@ Plot_Population_Density <- function(
   }
 
   #### Calculate critical values
-  sigma_m <- sigma / sqrt(if(is.null(sample_size)) 1 else sample_size)
+  sigma_m <- sigma / sqrt(if (is.null(sample_size)) 1 else sample_size)
   d <- (mean_alternative - mean_null) / sigma
   ### X and Ys
   X0s <- seq(mean_null - sigma_range * sigma_m, mean_null + sigma_range * sigma_m, by = 0.01 * sigma_m)
@@ -59,9 +58,9 @@ Plot_Population_Density <- function(
   Y1s <- dnorm(Xs, mean = mean_alternative, sd = sigma_m)
 
   #### Calculate values for Null Hypothesis
-    percent <- function(x, digits = 2, format = "f", ...) {
-      paste0(formatC(100 * x, format = format, digits = digits, ...), "%")
-    }
+  percent <- function(x, digits = 2, format = "f", ...) {
+    paste0(formatC(100 * x, format = format, digits = digits, ...), "%")
+  }
 
   if (two_tails) {
     X_min <- qnorm(alpha_level / 2, mean = mean_null, sd = sigma_m, lower.tail = TRUE)
@@ -81,7 +80,7 @@ Plot_Population_Density <- function(
   } else {
     X_max <- qnorm(alpha_level, mean = mean_null, sd = sigma_m, lower.tail = FALSE)
     high_tail <- seq(X_max, max(Xs), by = sigma_m * 0.001)
-    #alpha_value <- sub("^0\\.", ".", formatC(alpha_level, digits = 2, format = "fg"))
+    # alpha_value <- sub("^0\\.", ".", formatC(alpha_level, digits = 2, format = "fg"))
     alpha_value <- percent(alpha_level / 2)
     # correct_reject_value <- sub("^0\\.", ".", formatC(1 - alpha_level, digits = 2, format = "fg"))
     correct_reject_value <- percent(1 - alpha_level)
@@ -97,12 +96,12 @@ Plot_Population_Density <- function(
 
   #### Calculate values for Alternative Hypothesis
   beta_value <- pnorm(q = high_tail, mean = mean_alternative, sd = sigma_m)
-  #beta_value <- formatC(beta_value, digits = 2, format = "fg")
-  #beta_value <- sub("^0\\.", ".", beta_value)
+  # beta_value <- formatC(beta_value, digits = 2, format = "fg")
+  # beta_value <- sub("^0\\.", ".", beta_value)
   beta_value <- percent(beta_value)
   power_value <- pnorm(q = high_tail, mean = mean_alternative, sd = sigma_m, lower.tail = FALSE)
-  #power_value <- formatC(power_value, digits = 4, format = "f")
-  #power_value <- sub("^0\\.", ".", power_value)
+  # power_value <- formatC(power_value, digits = 4, format = "f")
+  # power_value <- sub("^0\\.", ".", power_value)
   power_value <- percent(power_value)
   beta_range <- seq(min(min(X1s), X_max), max(min(X1s), X_max), by = sigma_m * 0.001)
   beta_x <- c(min(X1s), beta_range, X_max)
@@ -115,7 +114,7 @@ Plot_Population_Density <- function(
 
   Xss <- c(Xs, data_points)
   label_pos <- seq(min(Xss), max(Xss), by = sigma_m)
-  #label_pos <- unique(c(label_pos, data_points))
+  # label_pos <- unique(c(label_pos, data_points))
 
   ######## Do the plot
   plot(NULL, NULL,
@@ -169,11 +168,11 @@ Plot_Population_Density <- function(
         }
       )
       if (!show_hypothesis_alternative & show_cohen_d) {
-        mtext(text = bquote("n" == .(if(is.null(sample_size)) 1 else sample_size)), side = 3, at = mean_null)
+        mtext(text = bquote("n" == .(if (is.null(sample_size)) 1 else sample_size)), side = 3, at = mean_null)
       } else {
-        mtext(expression(H[0]), side = 3, at = mean_null)	        
+        mtext(expression(H[0]), side = 3, at = mean_null)
       }
-     mtext(bquote(mu[0] == .(round(mean_null, 2))), side = 1, at = mean_null, col = "gray")
+      mtext(bquote(mu[0] == .(round(mean_null, 2))), side = 1, at = mean_null, col = "gray")
     }
   }
 
@@ -200,7 +199,7 @@ Plot_Population_Density <- function(
     }
     lines(Xs, Y1s, col = "#d5493a", lwd = 2)
     if (show_sigma_value) {
-      abline(v = mean_alternative, lwd = 1, col = "gray")    	
+      abline(v = mean_alternative, lwd = 1, col = "gray")
       arrows(
         x0 = mean_alternative, y0 = dnorm(mean_alternative + sigma_m, mean_alternative, sigma_m),
         x1 = mean_alternative + sigma_m, y1 = dnorm(mean_alternative + sigma_m, mean_alternative, sigma_m),
@@ -214,12 +213,12 @@ Plot_Population_Density <- function(
         } else {
           bquote(sigma[M] == .(if (hide_sigma_alternative_value) "?" else round(sigma_mm, 2)))
         }
-      )    	
+      )
       mtext(expression(H[1]), side = 3, at = mean_alternative)
       if (show_cohen_d) {
-      mtext(text = bquote("Cohen's d" == .(d) ~ ", n" == .(if(is.null(sample_size)) 1 else sample_size)), side = 3, at = (mean_null + mean_alternative) / 2, padj = -2)      	
+        mtext(text = bquote("Cohen's d" == .(d) ~ ", n" == .(if (is.null(sample_size)) 1 else sample_size)), side = 3, at = (mean_null + mean_alternative) / 2, padj = -2)
       }
-     mtext(bquote(mu[1] == .(if (hide_mean_alternative_value) "?" else round(mean_alternative, 2))), side = 1, at = mean_alternative, col = "gray")      
+      mtext(bquote(mu[1] == .(if (hide_mean_alternative_value) "?" else round(mean_alternative, 2))), side = 1, at = mean_alternative, col = "gray")
     }
   }
 
@@ -235,7 +234,7 @@ Plot_Population_Density <- function(
       axis(1, at = label_pos, label = rep("", length(label_pos)), lwd = 0, lwd.ticks = 1, line = Baseline)
       axis(1, at = label_pos, label = llabel, lwd = 0, lwd.ticks = 0, line = Baseline - 0.5)
     }
-      mtext(text = bquote(italic(.(Axis))), side = 1, adj = 1.03, line = Baseline - 0.6)
+    mtext(text = bquote(italic(.(Axis))), side = 1, adj = 1.03, line = Baseline - 0.6)
   }
 
   if (show_axis_x) {
@@ -270,48 +269,49 @@ Plot_Population_Density <- function(
       labell <- ifelse(is.null(color_fill_area_label), area_size, color_fill_area_label)
       text(x = mean(c(pt1, pt2)), y = dnorm(mean_null + 2 * sigma_m, mean_null, sigma_m), label = labell, pos = 1, col = "blue")
       if ((!show_axis_x_label) | (!show_axis_x)) {
-      	for (point in color_fill_area_element[is.finite(color_fill_area_element)]) mtext(round(point, 2), side = 1, at = point, col = "blue")
-      	}
+        for (point in color_fill_area_element[is.finite(color_fill_area_element)]) mtext(round(point, 2), side = 1, at = point, col = "blue")
+      }
       if (show_axis_z && show_axis_x && !show_axis_x_label) {
-      	for (point in color_fill_area_element[is.finite(color_fill_area_element)]) {
-      		mtext(round(point, 2), side = 1, at = point, col = "blue")
-            axis(1, at = point, label = "", lwd = 0, lwd.ticks = 1, line = 2.5) 
-            axis(1, at = point, label = round((point - mean_null) / sigma_m, 2), lwd = 0, lwd.ticks = 0, line = 2, col = "blue",col.axis = "blue")    		
-      		}
-      	}
-    }  	
+        for (point in color_fill_area_element[is.finite(color_fill_area_element)]) {
+          mtext(round(point, 2), side = 1, at = point, col = "blue")
+          axis(1, at = point, label = "", lwd = 0, lwd.ticks = 1, line = 2.5)
+          axis(1, at = point, label = round((point - mean_null) / sigma_m, 2), lwd = 0, lwd.ticks = 0, line = 2, col = "blue", col.axis = "blue")
+        }
+      }
+    }
   }
-  
+
   if (is.list(color_fill_area)) {
-  	for (i in 1:length(color_fill_area)) {
-  		color_fill_area_function(color_fill_area[[i]], color_fill_area_label)
-  	}
+    for (i in 1:length(color_fill_area)) {
+      color_fill_area_function(color_fill_area[[i]], color_fill_area_label)
+    }
   } else if (!is.null(color_fill_area)) {
-        color_fill_area_function(color_fill_area, color_fill_area_label)
+    color_fill_area_function(color_fill_area, color_fill_area_label)
   }
 
   ###### add some data points
-   ## express line locations in npc coordinates rather than user coordinates,
-     ##   https://stackoverflow.com/questions/30765866/get-margin-line-locations-in-log-space/30835971#30835971
+  ## express line locations in npc coordinates rather than user coordinates,
+  ##   https://stackoverflow.com/questions/30765866/get-margin-line-locations-in-log-space/30835971#30835971
   line2user <- function(line, side) {
-  lh <- par('cin')[2] * par('cex') * par('lheight')
-  x_off <- diff(grconvertX(c(0, lh), 'inches', 'npc'))
-  y_off <- diff(grconvertY(c(0, lh), 'inches', 'npc'))
-  switch(side,
-         `1` = grconvertY(-line * y_off, 'npc', 'user'),
-         `2` = grconvertX(-line * x_off, 'npc', 'user'),
-         `3` = grconvertY(1 + line * y_off, 'npc', 'user'),
-         `4` = grconvertX(1 + line * x_off, 'npc', 'user'),
-         stop("Side must be 1, 2, 3, or 4", call.=FALSE))
-   }
-  
+    lh <- par("cin")[2] * par("cex") * par("lheight")
+    x_off <- diff(grconvertX(c(0, lh), "inches", "npc"))
+    y_off <- diff(grconvertY(c(0, lh), "inches", "npc"))
+    switch(side,
+      `1` = grconvertY(-line * y_off, "npc", "user"),
+      `2` = grconvertX(-line * x_off, "npc", "user"),
+      `3` = grconvertY(1 + line * y_off, "npc", "user"),
+      `4` = grconvertX(1 + line * x_off, "npc", "user"),
+      stop("Side must be 1, 2, 3, or 4", call. = FALSE)
+    )
+  }
+
   if (!is.null(data_points)) {
     for (point in data_points) {
-      mtext(bquote(.(if (is.null(sample_size)) "X" else "M") == ~.(point)), side = 1, at = point, line = if (show_axis_z) 4 else 2, col = data_points_color)
+      mtext(bquote(.(if (is.null(sample_size)) "X" else "M") == ~ .(point)), side = 1, at = point, line = if (show_axis_z) 4 else 2, col = data_points_color)
       par(xpd = TRUE)
       arrows(point, (if (show_axis_z) line2user(3.5, 1) else line2user(8.5, 1)), point, 0, length = 0.08, col = data_points_color)
       par(xpd = FALSE)
-#     arrows(point, -dnorm(mean_null + sigma_m, mean_null, sigma_m) / (if (show_axis_z) 3.5 else 8.5), point, 0, xpd = TRUE, length = 0.08, col = data_points_color)
+      #     arrows(point, -dnorm(mean_null + sigma_m, mean_null, sigma_m) / (if (show_axis_z) 3.5 else 8.5), point, 0, xpd = TRUE, length = 0.08, col = data_points_color)
     }
   }
 
@@ -349,7 +349,7 @@ Plot_Population_Density <- function(
       ), lty = 5
     )
     arrows(
-      x0 = c(mean_null, mean_null, mean_null + sigma_m, mean_null - sigma_m), 
+      x0 = c(mean_null, mean_null, mean_null + sigma_m, mean_null - sigma_m),
       y0 = dnorm(mean_null + sigma_m, mean_null, sigma_m),
       x1 = c(mean_null + sigma_m, mean_null - sigma_m, mean_null + 2 * sigma_m, mean_null - 2 * sigma_m), length = 0.08
     )
@@ -360,41 +360,42 @@ Plot_Population_Density <- function(
 #' Plot density distributions of one population
 #' @export
 Plot_Population_Density_Single <- function(
-    m = 0, s = 1, p = NULL, 
-    show_sigma_grid = FALSE, 
-    show_decision = FALSE, 
-    two_tails = TRUE, 
-    alpha_level = 0.05,  
-    show_alpha_level = FALSE,
-    show_false_alarm = FALSE,
-    show_correct_reject = FALSE,
-    ...
-    ){
-	Plot_Population_Density(
-    mean_null = m, mean_alternative = m, sigma = s, data_point = p, 
-    show_hypothesis_alternative = FALSE, two_tails = two_tails, alpha_level = alpha_level, show_alpha_level = show_alpha_level, 
-    show_decision = show_decision, show_false_alarm = show_false_alarm, show_correct_reject = show_correct_reject, show_sigma_grid = show_sigma_grid, ...)	
+                                           m = 0, s = 1, p = NULL,
+                                           show_sigma_grid = FALSE,
+                                           show_decision = FALSE,
+                                           two_tails = TRUE,
+                                           alpha_level = 0.05,
+                                           show_alpha_level = FALSE,
+                                           show_false_alarm = FALSE,
+                                           show_correct_reject = FALSE,
+                                           ...) {
+  Plot_Population_Density(
+    mean_null = m, mean_alternative = m, sigma = s, data_point = p,
+    show_hypothesis_alternative = FALSE, two_tails = two_tails, alpha_level = alpha_level, show_alpha_level = show_alpha_level,
+    show_decision = show_decision, show_false_alarm = show_false_alarm, show_correct_reject = show_correct_reject, show_sigma_grid = show_sigma_grid, ...
+  )
 }
 
 ###########################################
 #' Plot density distributions of one population with criteria
 #' @export
 Plot_Population_Density_Single_Critical_Region <- function(
-    m = 0,
-    s = 1,
-    n = NULL,
-    alpha = 0.05,
-    two_tails = TRUE,
-    p = 1.65
-    ){
- if (two_tails) {
-  low_boundary  <- m + s / sqrt(if (is.null(n)) 1 else n) * qnorm(alpha/2)
-  high_boundary <- m + s / sqrt(if (is.null(n)) 1 else n) * qnorm(1-alpha/2)
-  area = list(c(-Inf, low_boundary), c(high_boundary, +Inf))	
- } else {
-  high_boundary  <- m + s / sqrt(if (is.null(n)) 1 else n) * qnorm(1 - alpha)
-  area = list(c(high_boundary, +Inf))
- }
-  Plot_Population_Density_Single(m = m, s = s, sample_size = n, show_axis_x_label = FALSE, show_axis_z=TRUE, show_decision = TRUE, show_false_alarm = FALSE,
-    show_alpha_level = TRUE, alpha_level = alpha, color_fill_area = area, p = p)
+                                                           m = 0,
+                                                           s = 1,
+                                                           n = NULL,
+                                                           alpha = 0.05,
+                                                           two_tails = TRUE,
+                                                           p = 1.65) {
+  if (two_tails) {
+    low_boundary <- m + s / sqrt(if (is.null(n)) 1 else n) * qnorm(alpha / 2)
+    high_boundary <- m + s / sqrt(if (is.null(n)) 1 else n) * qnorm(1 - alpha / 2)
+    area <- list(c(-Inf, low_boundary), c(high_boundary, +Inf))
+  } else {
+    high_boundary <- m + s / sqrt(if (is.null(n)) 1 else n) * qnorm(1 - alpha)
+    area <- list(c(high_boundary, +Inf))
+  }
+  Plot_Population_Density_Single(
+    m = m, s = s, sample_size = n, show_axis_x_label = FALSE, show_axis_z = TRUE, show_decision = TRUE, show_false_alarm = FALSE,
+    show_alpha_level = TRUE, alpha_level = alpha, color_fill_area = area, p = p
+  )
 }

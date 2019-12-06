@@ -5,11 +5,11 @@
 
 Restrict_Overparameterized_Model <-
   function(
-             RowLevel = 2,
-             ColLevel = 3,
-             Dummy = TRUE,
-             RowNumber = 1,
-             ColNumber = 1) {
+           RowLevel = 2,
+           ColLevel = 3,
+           Dummy = TRUE,
+           RowNumber = 1,
+           ColNumber = 1) {
     Baseline <- ifelse(Dummy, 0, -1)
     RowData <- gl(RowLevel, RowNumber)
     ColData <- gl(ColLevel, ColNumber)
@@ -35,11 +35,13 @@ Restrict_Overparameterized_Model <-
       }
     }
     if (RowLen >= 2 & ColLen >= 2) {
-      for (i in 1:(RowLen)) for (j in 1:(ColLen)) {
+      for (i in 1:(RowLen)) {
+        for (j in 1:(ColLen)) {
           RowColOver[, paste("R", i, "C", j, sep = "")] <-
             RowColOver[, paste("R", i, sep = "")] *
               RowColOver[, paste("C", j, sep = "")]
         }
+      }
     }
     res <- list("Over_Parameterized_Coding" = RowColOver)
 
@@ -62,18 +64,20 @@ Restrict_Overparameterized_Model <-
       }
     }
     if (RowLen >= 2 & ColLen >= 2) {
-      for (i in 1:(RowLen - 1)) for (j in 1:(ColLen - 1)) {
+      for (i in 1:(RowLen - 1)) {
+        for (j in 1:(ColLen - 1)) {
           RowCol[, paste("R", i, "C", j, sep = "")] <-
             RowCol[, paste("R", i, sep = "")] *
               RowCol[, paste("C", j, sep = "")]
         }
+      }
     }
 
     mm <- RowCol[, -c(1:2)]
     mm <- cbind(mu0 = 1, mm)
     mminv <- solve(mm)
     if (!Dummy) {
-    	mminv <- MASS::fractions(mminv)
+      mminv <- MASS::fractions(mminv)
     }
 
     name <- ifelse(Dummy, "Dummy_Coded", "Deviation_Coded")

@@ -14,5 +14,4 @@ Calculate_F_Table
 }
 \examples{
 Calculate_F_Table()
-
 }

@@ -4,8 +4,12 @@
 \alias{Plot_Negative_Binomial_Density}
 \title{Plot the density of a negative binomial distribution}
 \usage{
-Plot_Negative_Binomial_Density(r = c(1, 3, 5), pi = c(0.4, 0.6),
-  plot_density_function = TRUE, xx = 0:20)
+Plot_Negative_Binomial_Density(
+  r = c(1, 3, 5),
+  pi = c(0.4, 0.6),
+  plot_density_function = TRUE,
+  xx = 0:20
+)
 }
 \description{
 Plot the density of a negative binomial distribution

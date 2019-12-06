@@ -4,10 +4,19 @@
 \alias{Plot_Population_Density_Single}
 \title{Plot density distributions of one population}
 \usage{
-Plot_Population_Density_Single(m = 0, s = 1, p = NULL,
-  show_sigma_grid = FALSE, show_decision = FALSE, two_tails = TRUE,
-  alpha_level = 0.05, show_alpha_level = FALSE,
-  show_false_alarm = FALSE, show_correct_reject = FALSE, ...)
+Plot_Population_Density_Single(
+  m = 0,
+  s = 1,
+  p = NULL,
+  show_sigma_grid = FALSE,
+  show_decision = FALSE,
+  two_tails = TRUE,
+  alpha_level = 0.05,
+  show_alpha_level = FALSE,
+  show_false_alarm = FALSE,
+  show_correct_reject = FALSE,
+  ...
+)
 }
 \description{
 Plot density distributions of one population

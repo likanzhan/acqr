@@ -4,8 +4,14 @@
 \alias{Plot_Population_Density_Single_Critical_Region}
 \title{Plot density distributions of one population with criteria}
 \usage{
-Plot_Population_Density_Single_Critical_Region(m = 0, s = 1,
-  n = NULL, alpha = 0.05, two_tails = TRUE, p = 1.65)
+Plot_Population_Density_Single_Critical_Region(
+  m = 0,
+  s = 1,
+  n = NULL,
+  alpha = 0.05,
+  two_tails = TRUE,
+  p = 1.65
+)
 }
 \description{
 Plot density distributions of one population with criteria

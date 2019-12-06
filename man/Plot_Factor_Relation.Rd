@@ -18,5 +18,4 @@ Illisturate different possible relations between two factors
 }
 \examples{
 Plot_Factor_Relation()
-
 }

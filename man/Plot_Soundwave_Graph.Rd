@@ -4,8 +4,10 @@
 \alias{Plot_Soundwave_Graph}
 \title{Plot the sound wave graph}
 \usage{
-
-  Plot_Soundwave_Graph(Root_Directory = "~/Desktop/Conditional_New/Important_Information/Experiment_Structure")
+Plot_Soundwave_Graph(
+ 
+    Root_Directory = "~/Desktop/Conditional_New/Important_Information/Experiment_Structure"
+)
 }
 \arguments{
 \item{Root_Directory}{The directory that contains the sound files}

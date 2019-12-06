@@ -4,8 +4,12 @@
 \alias{Calculate_Kernel_Density}
 \title{Calculate_Kernel_Density}
 \usage{
-Calculate_Kernel_Density(x, h = 1, x0 = seq(min(x), max(x), length =
-  length(x)), kernel = c("rectangle", "triangle", "gauss"))
+Calculate_Kernel_Density(
+  x,
+  h = 1,
+  x0 = seq(min(x), max(x), length = length(x)),
+  kernel = c("rectangle", "triangle", "gauss")
+)
 }
 \description{
 Calculate_Kernel_Density

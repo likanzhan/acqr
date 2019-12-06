@@ -4,8 +4,11 @@
 \alias{Plot_Population_Quantile_Quantile}
 \title{Plot the theoretical quantile-quantile plot (q-q plot)}
 \usage{
-Plot_Population_Quantile_Quantile(family = c("c", "f", "g", "t", "n"),
-  ..., adj = FALSE)
+Plot_Population_Quantile_Quantile(
+  family = c("c", "f", "g", "t", "n"),
+  ...,
+  adj = FALSE
+)
 }
 \arguments{
 \item{family}{= c("c", "f", "g", "t", "n").}
@@ -21,5 +24,4 @@ Plot the theoretical quantile-quantile plot (q-q plot)
 Plot_Population_Quantile_Quantile("c", df = 3)
 Plot_Population_Quantile_Quantile("t", df = 3)
 Plot_Population_Quantile_Quantile("f", df1 = 5, df2 = 3, adj = TRUE)
-
 }

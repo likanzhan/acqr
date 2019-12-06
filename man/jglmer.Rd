@@ -4,8 +4,7 @@
 \alias{jglmer}
 \title{Generalized Linear Mixed Effect Moddels}
 \usage{
-jglmer(formula, data, fast = TRUE, time = FALSE,
-  family = "Binomial()", ...)
+jglmer(formula, data, fast = TRUE, time = FALSE, family = "Binomial()", ...)
 }
 \description{
 Generalized Linear Mixed Effect Moddels

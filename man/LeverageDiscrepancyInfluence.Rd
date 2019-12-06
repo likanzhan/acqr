@@ -4,8 +4,12 @@
 \alias{LeverageDiscrepancyInfluence}
 \title{LeverageDiscrepancyInfluence}
 \usage{
-LeverageDiscrepancyInfluence(Points = c(mean(1:5), 1), n = 5,
-  slope = 1, adj = 1)
+LeverageDiscrepancyInfluence(
+  Points = c(mean(1:5), 1),
+  n = 5,
+  slope = 1,
+  adj = 1
+)
 }
 \description{
 LeverageDiscrepancyInfluence

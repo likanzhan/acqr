@@ -4,9 +4,13 @@
 \alias{R2LateX}
 \title{R to latex}
 \usage{
-R2LateX(TeXFile, Options = "12pt, a4paper", class = "article",
+R2LateX(
+  TeXFile,
+  Options = "12pt, a4paper",
+  class = "article",
   packages = c("ctex", "[a4paper, tmargin=1in]{geometry}"),
-  moreoptions = c("\\\\setCJKmainfont{Source Han Serif SC}"))
+  moreoptions = c("\\\\setCJKmainfont{Source Han Serif SC}")
+)
 }
 \description{
 R to latex

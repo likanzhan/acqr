@@ -11,4 +11,5 @@ Plot the density of a binomial distribution
 }
 \examples{
 Plot_Binomial_Density()
+# @export
 }

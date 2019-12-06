@@ -4,11 +4,22 @@
 \alias{Word2}
 \title{Add words to my dictionary}
 \usage{
-Word2(Word_Name, Word_Sound, Word_Meaning, Word_Context, Source_Page,
-  Source_DOI, Source_Author = NA, Source_Title = NA,
-  Source_Year = NA, Source_Journal = NA, Source_Volume = NA,
-  Source_Issue = NA, Source_Pages = NA,
-  Stored_Data_File = "~/Documents/ADMIN/Academic_Words/Word_Database.csv")
+Word2(
+  Word_Name,
+  Word_Sound,
+  Word_Meaning,
+  Word_Context,
+  Source_Page,
+  Source_DOI,
+  Source_Author = NA,
+  Source_Title = NA,
+  Source_Year = NA,
+  Source_Journal = NA,
+  Source_Volume = NA,
+  Source_Issue = NA,
+  Source_Pages = NA,
+  Stored_Data_File = "~/Documents/ADMIN/Academic_Words/Word_Database.csv"
+)
 }
 \description{
 Add words to my dictionary

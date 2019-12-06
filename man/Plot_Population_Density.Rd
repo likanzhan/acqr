@@ -4,19 +4,37 @@
 \alias{Plot_Population_Density}
 \title{Plot density distributions of two populations}
 \usage{
-Plot_Population_Density(mean_null = 0, mean_alternative = mean_null +
-  4, sigma = 1, sigma_range = 4, x_range = NULL,
-  sample_size = NULL, alpha_level = 0.05, two_tails = TRUE,
-  show_alpha_level = TRUE, show_hypothesis_null = TRUE,
-  show_correct_reject = TRUE, show_false_alarm = TRUE,
-  show_hypothesis_alternative = TRUE, show_hit = TRUE,
-  show_miss = TRUE, show_sigma_value = TRUE, show_sigma_grid = FALSE,
-  add_fill_color = TRUE, show_cohen_d = TRUE, show_decision = TRUE,
-  show_axis_x = TRUE, show_axis_x_label = TRUE, show_axis_z = FALSE,
-  show_axis_z_label = FALSE, data_points = NULL,
-  color_fill_area = NULL, color_fill_area_label = NULL,
+Plot_Population_Density(
+  mean_null = 0,
+  mean_alternative = mean_null + 4,
+  sigma = 1,
+  sigma_range = 4,
+  x_range = NULL,
+  sample_size = NULL,
+  alpha_level = 0.05,
+  two_tails = TRUE,
+  show_alpha_level = TRUE,
+  show_hypothesis_null = TRUE,
+  show_correct_reject = TRUE,
+  show_false_alarm = TRUE,
+  show_hypothesis_alternative = TRUE,
+  show_hit = TRUE,
+  show_miss = TRUE,
+  show_sigma_value = TRUE,
+  show_sigma_grid = FALSE,
+  add_fill_color = TRUE,
+  show_cohen_d = TRUE,
+  show_decision = TRUE,
+  show_axis_x = TRUE,
+  show_axis_x_label = TRUE,
+  show_axis_z = FALSE,
+  show_axis_z_label = FALSE,
+  data_points = NULL,
+  color_fill_area = NULL,
+  color_fill_area_label = NULL,
   hide_mean_alternative_value = FALSE,
-  hide_sigma_alternative_value = FALSE)
+  hide_sigma_alternative_value = FALSE
+)
 }
 \description{
 Plot density distributions of two populations

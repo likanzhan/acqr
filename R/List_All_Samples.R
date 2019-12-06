@@ -26,9 +26,8 @@ List_All_Samples <- function(data, size = NA, fun = NA, bp = 0.5, format = NA) {
   Statistic <- paste0(toupper(substr(fun, 1, 1)), substr(fun, 2, nchar(fun)))
   Sampled_Grid[Statistic] <- apply(Sampled_Grid, 1, fun)
   if (!is.na(format) && format == "xtable") {
-     Sampled_Grid <- xtable::xtable(Sampled_Grid, digits = c(rep(0, size + 1), 2))	
-    }
+    Sampled_Grid <- xtable::xtable(Sampled_Grid, digits = c(rep(0, size + 1), 2))
+  }
   Res <- list("Sampled_Grid" = Sampled_Grid, "Mean" = Mean, "SD" = SD)
   return(Res)
 }
-
