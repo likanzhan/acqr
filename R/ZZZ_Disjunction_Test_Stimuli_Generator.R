@@ -261,13 +261,15 @@ Generate_Test_Image <- function(
 		magick::image_annotate("D", font = "Times", size = 30, gravity = "Center", location = Annotate_Location_D)
 	
 	if (Add_Grid_Lines) {
-	IMAGE_BG <- magick::image_blank(width = 1024+80, height = 768+40, color = "white")
+	Rgh_Size <- 60
+	Btm_Size <- Rgh_Size / 2
+	IMAGE_BG <- magick::image_blank(width = 1024 + Rgh_Size, height = 768 + Btm_Size, color = "white")
 	IMAGE    <- magick::image_composite(IMAGE_BG, IMAGE)
 	IMAGE    <- image_draw(IMAGE)
 	invisible(sapply(HP, function(LL) abline(h = LL, col = 'blue', lwd = 1, lty = "dashed")))
 	invisible(sapply(VP, function(LL) abline(v = LL, col = 'blue', lwd = 1, lty = "dashed")))
-	f1 <- function(N)text(1024 + 80 / 2, HL_Pos[N]   , paste0(round(HL[N+1]), "px"), cex = 1)
-	f2 <- function(N)text(VL_Pos[N]    , 768 + 40 / 2, paste0(round(VL[N+1]), "px"), cex = 1)
+	f1 <- function(N)text(1024 + Rgh_Size / 2, HL_Pos[N]         , paste0(round(HL[N+1]), "px"), cex = 1)
+	f2 <- function(N)text(VL_Pos[N]          , 768 + Btm_Size / 2, paste0(round(VL[N+1]), "px"), cex = 1)
 	sapply(1:length(HL_Pos), f1)
 	sapply(1:length(VL_Pos), f2)
 	rect(VP[2], HP[2], VP[5], HP[5], border = "red", lwd = 2)
