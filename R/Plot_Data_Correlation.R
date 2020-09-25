@@ -1,5 +1,4 @@
 #' @export
-
 Create_Correlation_Data <- function(rr = 1, number = 50, nrm = TRUE) {
   if (nrm) {
     set.seed(2)
@@ -19,6 +18,7 @@ Create_Correlation_Data <- function(rr = 1, number = 50, nrm = TRUE) {
   return(df)
 }
 
+#' @export
 Plot_Data_Correlation <- function(rr = 1, number = 50, nrm = TRUE) {
   df <- Create_Correlation_Data(rr = rr, number = number, nrm = nrm)
   rr <- cor(df[, "X"], df[, "Y"])

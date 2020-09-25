@@ -5,7 +5,7 @@
 #' @export
 
 Plot_R_Source_Code <- function(
-                               directory = "~/Documents/ADMIN/R-Source-Code/R-3.5.1/src") {
+                               directory = "/Users/lzhan/Documents/ADMIN/Works/Teachings/RModelVis/OLD/r-source-trunk/src") {
   # dir <- "https://github.com/wch/r-source/src"
   rfile <- list.files(path = directory, full.names = TRUE, recursive = TRUE, pattern = "\\.R$")
   cfile <- list.files(path = directory, full.names = TRUE, recursive = TRUE, pattern = "\\.c$")

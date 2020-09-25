@@ -587,8 +587,8 @@ Cnd_Tst_Aud_Gnr <- function(
 ########  Add IAs on a sample test image
 ################################################################################
 Draw_IA_on_Sample_Image <- function(
-                                    Sample_Image_Name = "00_Example_Image.png",
-                                    Root_Directory = "~/Desktop/Conditional_New",
+                                    Sample_Image_Name = "00_Example_Image_Fan-Zither_Fan-Fan_Closed-Fan_Zither-Zither.png",
+                                    Root_Directory = "~/Documents/ADMIN/Works/Conditional_New_Results/Conditionals_New/Original",
                                     Input_Sample_Image_Folder = "Test_Images",
                                     Output_Sample_Image_Folder = "Important_Information/Experiment_Interest_Areas",
                                     Output_Sample_Image_Name = "Test_Image_Example.png") {
@@ -604,6 +604,11 @@ Draw_IA_on_Sample_Image <- function(
   hlength <- c(0, Margin_Space[2], Area_Size[2], Middle_Space[2], Area_Size[2], Margin_Space[2])
   vlines <- cumsum(vlength)
   hlines <- cumsum(hlength)
+  
+  IA_Set <- gsub("(.*(Image_))|(\\.png$)", "", Sample_Image_Name)
+  IA_Start <- c(1, gregexpr("_", IA_Set)[[1]] + 1)
+  IA_End <- c(gregexpr("_", IA_Set)[[1]] - 1, nchar(IA_Set))
+  IA_Name <- function(i) substr(IA_Set, IA_Start[i], IA_End[i])
 
   #### Add the ploting area
   png(Output_Directory, width = 1024 * 1.05, height = 768 * 1.03)
@@ -632,13 +637,14 @@ Draw_IA_on_Sample_Image <- function(
 
   #### Add areas of Interest
   adj <- 5
-  IA <- function(x1, x2, y1, y2, ...) {
+  IA <- function(x1, x2, y1, y2, label, ...) {
     rect(vlines[x1] - adj, hlines[y1] - adj, vlines[x2] + adj, hlines[y2] + adj, lwd = 2, ...)
+    text(mean(vlines[c(x1, x2)]), hlines[y1] - adj, label = label, cex = 2, col = "blue", pos = 1)
   }
-  IA(2, 3, 2, 3, border = "blue")
-  IA(4, 5, 2, 3, border = "blue")
-  IA(2, 3, 4, 5, border = "blue")
-  IA(4, 5, 4, 5, border = "blue")
+  IA(2, 3, 4, 5, label = IA_Name(1), border = "blue") # Top-left
+  IA(4, 5, 4, 5, label = IA_Name(2), border = "blue") # Top-right
+  IA(2, 3, 2, 3, label = IA_Name(3), border = "blue") # bottom-left
+  IA(4, 5, 2, 3, label = IA_Name(4), border = "blue") # bottom-right
 
   invisible(dev.off())
   print(Output_Sample_Image_Name)
@@ -648,7 +654,7 @@ Draw_IA_on_Sample_Image <- function(
 ########  A Wrap-up of the Conditional Test Stimuli Generator
 ################################################################################
 Conditional_Full <- function(
-                             Root_Directory = "~/Desktop/Conditional_New",
+                             Root_Directory = "~/Documents/ADMIN/Works/Conditional_New_Results/Conditionals_New/Original",
                              Sentential_Components_File = "Important_Originals/Sentential_Components",
                              Input_Audio_Component_Folder = "Important_Originals/Objects_Audios",
                              Input_Objects_Folder = "Important_Originals/Objects_Images",
@@ -673,7 +679,7 @@ Conditional_Full <- function(
   Cnd_Tst_Img_Gnr(
     Root_Directory, Input_Objects_Folder, Input_Boxes_Folder, Output_Test_Image_Folder,
     Object_Same_Image_Name = "ShanZi", Object_Different_Image_Name = "GuZheng",
-    Spatial_Order = "SD_SS_CS_DD", Test_Image_Name = "00_Example_Image.png"
+    Spatial_Order = "SD_SS_CS_DD", Test_Image_Name = "00_Example_Image_SD_SS_CS_DD.png"
   )
 
   print("======= Sample Image with IAs ==========")

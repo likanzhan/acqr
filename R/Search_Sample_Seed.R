@@ -6,11 +6,11 @@
 #' sample(1:5)
 #' @export
 
-Create_Sample <- function(vector) {
+Search_Sample_Seed <- function(vector, Seed_Initial = 1) {
   if (length(vector) == 1) stop("The data should be longer than 2 !")
   V1 <- 1:length(vector)
   V2 <- V1
-  seed <- 1
+  seed <- Seed_Initial
   while (sum(V1 == V2) > 0) {
     seed <- seed + 1
     set.seed(seed)
@@ -18,6 +18,3 @@ Create_Sample <- function(vector) {
   }
   seed
 }
-
-#' @export
-Search_Sample_Seed <- Create_Sample
