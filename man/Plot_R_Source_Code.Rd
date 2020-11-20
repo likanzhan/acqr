@@ -4,7 +4,10 @@
 \alias{Plot_R_Source_Code}
 \title{Plot the Number of lines in R source Code}
 \usage{
-Plot_R_Source_Code(directory = "~/Documents/ADMIN/R-Source-Code/R-3.5.1/src")
+Plot_R_Source_Code(
+ 
+    directory = "/Users/lzhan/Documents/ADMIN/Works/Teachings/RModelVis/OLD/r-source-trunk/src"
+)
 }
 \description{
 Plot the Number of lines in R source Code
