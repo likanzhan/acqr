@@ -12,7 +12,7 @@
 #' importFrom ggsci pal_lancet
 #' importFrom nlme lmList
 #'
-#' export
+#' @export
 
 Plot_Dummy_Relation <- function(
 Adj_X = 0,
